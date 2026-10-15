@@ -9,17 +9,14 @@
     />
     <meta name="theme-color" content="#f9f8f6" />
     <title>SILENCE — Let silence speak</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
+    <script type="module" src="js/main.js"></script>
   </head>
-  <body>
+
+  <body class="is-loading">
+    <div class="loader"></div>
     <a class="skip-link" href="#main">Skip to content</a>
+
     <header class="site-header">
       <a class="wordmark" href="#home" aria-label="SILENCE home">SILENCE</a>
       <button
@@ -32,38 +29,45 @@
         <span></span><span></span>
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-        <a href="#philosophy">Philosophy</a>
+        <a href="#philosophy">The philosophy</a>
         <a href="#experience">The experience</a>
+        <a href="#journeys">The journeys</a>
         <a href="#brazil">Brazil</a>
         <a href="#for-you">Who it’s for</a>
+        <a href="#faq">FAQ</a>
         <a class="nav-invitation" href="#invitation">Request an invitation <span aria-hidden="true">↗</span></a>
       </nav>
     </header>
 
     <main id="main">
       <section class="hero" id="home" aria-labelledby="hero-title">
+        <!-- Full-bleed hero film via Vimeo background mode (autoplay + loop + muted + no controls).
+             dnt=1 = do-not-track. Swap for a self-hosted <video> before launch: an iframe
+             costs ~250KB of third-party JS and delays LCP. -->
+        <div class="hero-video-frame" aria-hidden="true">
+          <iframe
+            src="https://player.vimeo.com/video/1235961242?background=1&autoplay=1&muted=1&loop=1&dnt=1&badge=0&byline=0&title=0&portrait=0"
+            title="Praia de Algodões, Bahia — slow water over sand at golden hour"
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            referrerpolicy="strict-origin-when-cross-origin"
+          ></iframe>
+        </div>
         <div class="hero-copy">
           <p class="eyebrow">Curated slow travel in Brazil</p>
-          <h1 id="hero-title">Let silence<br /><em>speak.</em></h1>
+          <h1 id="hero-title">Experience<br />the <em>(un)spoken.</em></h1>
           <p class="hero-description">
             A boutique travel company creating curated, slow travel experiences
             in Brazil for mental health professionals.
           </p>
-          <a class="button button-dark" href="#invitation">Request an invitation <span aria-hidden="true">↗</span></a>
-          <p class="hero-tagline">Thoughtful journeys. Room to listen.</p>
+          <a class="button button-light" href="#invitation">Request an invitation <span aria-hidden="true">↗</span></a>
+          <p class="hero-tagline">Let silence speak.</p>
         </div>
-        <figure class="hero-visual">
-          <img
-            src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1800&q=85"
-            alt="Soft Atlantic waves meeting a quiet stretch of Brazilian coastline"
-            fetchpriority="high"
-          />
-          <figcaption><span>Bahia, Brazil</span><span>01 / 01</span></figcaption>
-        </figure>
         <div class="hero-pillars" aria-label="The SILENCE approach">
           <span><b>01</b> Slow</span>
           <span><b>02</b> Small</span>
           <span><b>03</b> Brazil</span>
+          <span class="hero-place">Algodões, Bahia</span>
         </div>
       </section>
 
@@ -108,9 +112,9 @@
             <h2 id="experience-title">A week, with room<br />around the edges.</h2>
           </div>
           <p class="experience-intro">
-            Seven nights, eight days, and a small group of six to eight
-            professionals. The journey has a shape, but the hours are not all
-            spoken for.
+            Seven nights, eight days, and a small group of eight to ten
+            professionals. The group size holds for every SILENCE journey. The
+            shape of the week is set; the hours are not all spoken for.
           </p>
         </div>
 
@@ -131,8 +135,9 @@
           </div>
 
           <aside class="journey-details" aria-label="Journey details">
+            <p class="experience-intro">The same group size and pace hold for every SILENCE journey — the Vila Oyá flagship and future destinations alike.</p>
             <div class="detail-pair"><span>Duration</span><strong>7 nights / 8 days</strong></div>
-            <div class="detail-pair"><span>Group</span><strong>6–8 guests</strong></div>
+            <div class="detail-pair"><span>Group</span><strong>8–10 guests</strong></div>
             <div class="detail-pair"><span>Language</span><strong>English</strong></div>
             <div class="included-block">
               <p class="eyebrow">Included in the journey</p>
@@ -184,9 +189,22 @@
         </div>
       </section>
 
+      <section class="journeys section-shell" id="journeys" aria-labelledby="journeys-title">
+        <div class="journeys-heading">
+          <p class="section-number">04 / The journeys</p>
+          <h2 id="journeys-title">Three places,<br />one pace.</h2>
+          <p>
+            Each SILENCE journey stays with one region — a considered base, a
+            small group, and unhurried days. A few destinations to begin with,
+            each with its own character.
+          </p>
+        </div>
+        <div class="journeys-grid" id="journeys-grid"></div>
+      </section>
+
       <section class="audience section-shell" id="for-you" aria-labelledby="audience-title">
         <div class="audience-heading">
-          <p class="section-number">04 / Who it’s for</p>
+          <p class="section-number">05 / Who it’s for</p>
           <h2 id="audience-title">For those whose work<br />begins with <em>listening.</em></h2>
           <p>
             For psychologists, psychotherapists, psychoanalysts, and
@@ -219,7 +237,7 @@
 
       <section class="faq section-shell" id="faq" aria-labelledby="faq-title">
         <div class="faq-heading">
-          <p class="section-number">05 / A few clear answers</p>
+          <p class="section-number">06 / A few clear answers</p>
           <h2 id="faq-title">Before you <em>ask.</em></h2>
         </div>
         <div class="faq-list">
@@ -233,7 +251,7 @@
           </details>
           <details>
             <summary>How many people travel together?</summary>
-            <p>Each journey is designed for a group of six to eight guests.</p>
+            <p>Each journey is designed for a group of eight to ten guests.</p>
           </details>
           <details>
             <summary>How much of the day is planned?</summary>
@@ -248,7 +266,7 @@
 
       <section class="invitation" id="invitation" aria-labelledby="invitation-title">
         <div class="invitation-intro">
-          <p class="section-number">06 / Request an invitation</p>
+          <p class="section-number">07 / Request an invitation</p>
           <h2 id="invitation-title">Begin with a<br /><em>conversation.</em></h2>
           <p>
             Share a little about your practice and the kinds of places and
