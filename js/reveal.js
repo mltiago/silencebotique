@@ -1,10 +1,28 @@
-// reveal.js — scroll-triggered animations
-// Exports: initReveal(targetSelector: string) => void
+// @ts-check
+// reveal.js — Scroll-triggered fade-in animations.
 
-export function initReveal(
-  targetSelector =
-    ".philosophy-content, .experience-heading, .timeline, .journey-details, .brazil-copy, .journeys-heading, .journeys-grid, .audience-heading, .selection, .faq-heading, .faq-list, .invitation-intro, .invitation-form-wrap"
-) {
+const DEFAULT_REVEAL_TARGETS = [
+  ".philosophy-content",
+  ".experience-heading",
+  ".timeline",
+  ".journey-details",
+  ".brazil-copy",
+  ".journeys-heading",
+  ".journeys-grid",
+  ".audience-heading",
+  ".selection",
+  ".faq-heading",
+  ".faq-list",
+  ".invitation-intro",
+  ".invitation-form-wrap",
+].join(", ");
+
+/**
+ * Observes content blocks and reveals them smoothly as they enter the viewport.
+ * @param {string} [targetSelector=DEFAULT_REVEAL_TARGETS]
+ * @returns {void}
+ */
+export function initReveal(targetSelector = DEFAULT_REVEAL_TARGETS) {
   const revealTargets = document.querySelectorAll(targetSelector);
   const prefersReducedMotion =
     "matchMedia" in window &&

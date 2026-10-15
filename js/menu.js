@@ -1,16 +1,31 @@
-// menu.js — mobile menu toggle
-// Exports: initMenu(toggleSelector: string, navSelector: string) => void
+// @ts-check
+// menu.js — Mobile navigation drawer controller.
 
-export function initMenu(
-  toggleSelector = ".menu-toggle",
-  navSelector = "#site-nav"
-) {
-  const menuToggle = document.querySelector(toggleSelector);
-  const siteNav = document.querySelector(navSelector);
-  const siteHeader = menuToggle ? menuToggle.closest(".site-header") : null;
+/**
+ * Initializes the mobile navigation toggle, keyboard Escape handling, and resize reset.
+ * @param {string} [headerSelector=".site-header"]
+ * @returns {void}
+ */
+export function initMenu(headerSelector = ".site-header") {
+  const siteHeader = /** @type {HTMLElement | null} */ (
+    document.querySelector(headerSelector)
+  );
+  if (!siteHeader) return;
+
+  const menuToggle = /** @type {HTMLButtonElement | null} */ (
+    siteHeader.querySelector(".menu-toggle")
+  );
+  const siteNav = /** @type {HTMLElement | null} */ (
+    siteHeader.querySelector(".site-nav")
+  );
 
   if (!menuToggle || !siteNav) return;
 
+  /**
+   * Updates menu open/closed state and ARIA attributes.
+   * @param {boolean} isOpen
+   * @param {{ restoreFocus?: boolean }} [options]
+   */
   function setMenuState(isOpen, { restoreFocus = false } = {}) {
     menuToggle.setAttribute("aria-expanded", String(isOpen));
     menuToggle.setAttribute(
@@ -18,9 +33,8 @@ export function initMenu(
       isOpen ? "Close navigation" : "Open navigation"
     );
     siteNav.classList.toggle("is-open", isOpen);
-    if (siteHeader) {
-      siteHeader.classList.toggle("is-menu-open", isOpen);
-    }
+    siteHeader.classList.toggle("is-menu-open", isOpen);
+
     if (!isOpen && restoreFocus) {
       menuToggle.focus();
     }
@@ -32,7 +46,8 @@ export function initMenu(
   });
 
   siteNav.addEventListener("click", (event) => {
-    if (event.target.closest("a")) {
+    const target = /** @type {HTMLElement | null} */ (event.target);
+    if (target && target.closest("a")) {
       setMenuState(false);
     }
   });
@@ -47,10 +62,11 @@ export function initMenu(
   });
 
   document.addEventListener("click", (event) => {
+    const target = /** @type {Node | null} */ (event.target);
     if (
       menuToggle.getAttribute("aria-expanded") === "true" &&
-      siteHeader &&
-      !siteHeader.contains(event.target)
+      target &&
+      !siteHeader.contains(target)
     ) {
       setMenuState(false);
     }

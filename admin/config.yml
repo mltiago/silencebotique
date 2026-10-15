@@ -1,0 +1,44 @@
+# Decap CMS (Git-Based CMS — Option A) configuration for SILENCE
+# Edits data/journeys.json directly via Git commits on the repository.
+backend:
+  name: git-gateway
+  branch: main
+
+local_backend: true
+
+media_folder: "assets/images/journeys"
+public_folder: "assets/images/journeys"
+
+collections:
+  - name: "catalog"
+    label: "SILENCE Journeys Catalog"
+    files:
+      - name: "journeys"
+        label: "Travel Packages (The Journeys)"
+        file: "data/journeys.json"
+        description: "Manage SILENCE destinations. Guardrail: never use clinical/wellness words (retreat, therapy, healing, burnout, detox, transformation)."
+        fields:
+          - label: "Journeys"
+            name: "journeys"
+            widget: "list"
+            summary: "{{fields.order}} · {{fields.name}} ({{fields.region}}) — {{fields.status}}"
+            fields:
+              - { label: "Slug ID", name: "id", widget: "string", pattern: ["^[a-z0-9-]+$", "Use lowercase letters, numbers, and hyphens only."] }
+              - { label: "Display Order", name: "order", widget: "number", value_type: "int", min: 1, default: 1 }
+              - { label: "Status", name: "status", widget: "select", options: ["published", "coming_soon", "archived"], default: "published" }
+              - { label: "Flagship (Inaugural Journey)", name: "flagship", widget: "boolean", default: false }
+              - { label: "Destination Name", name: "name", widget: "string" }
+              - { label: "Region / State", name: "region", widget: "string" }
+              - { label: "Accommodation", name: "accommodation", widget: "string" }
+              - { label: "Duration", name: "duration", widget: "string", default: "7 nights / 8 days" }
+              - { label: "Group Size", name: "groupSize", widget: "string", default: "8–10 guests" }
+              - { label: "Edition / Timing Note", name: "editionDates", widget: "string", required: false }
+              - { label: "Cover Image Path (or empty for gradient placeholder)", name: "image", widget: "image", required: false }
+              - { label: "Image Alt Text (WCAG AA descriptive)", name: "imageAlt", widget: "string", required: false }
+              - {
+                  label: "Description",
+                  name: "description",
+                  widget: "text",
+                  pattern: ["^(?!.*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa)\\b).*$", "Brand voice violation: avoid therapy, retreat, healing, burnout, detox, transformation, cure, or spa."]
+                }
+              - { label: "CTA Label", name: "ctaLabel", widget: "string", default: "Enquire about this journey" }

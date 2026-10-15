@@ -1,6 +1,6 @@
 # CONTEXT — SILENCE
 
-Referência central do projeto. Glossário, linguagem ubíqua e tokens de design.
+Referência central do projeto. Glossário, linguagem ubíqua, tokens de design, **SOP de Engenharia** e **Arquitetura do Catálogo Administrativo (Git-Based CMS)**.
 Fonte anterior (`silence.md`, briefing de 15 páginas) removida do worktree; histórico em `git show HEAD:silence.md`.
 
 ## Termos-chave
@@ -68,8 +68,8 @@ Fonte anterior (`silence.md`, briefing de 15 páginas) removida do worktree; his
   | `--text-on-green` | `#E2E4DB` | textos sobre fundo verde |
 
   Contraste WCAG AA obrigatório para **texto**. `--earth` (3.94:1) e `--line` (1.37:1) são tokens de **forma** — nunca aplicar a texto legível.
-- **Tipografia** – Display/wordmark: serifada editorial (Playfair Display). Corpo/UI: sans geométrica (DM Sans). Wordmark em caixa alta, tracking `0.15em`–`0.25em`.
-- **Movimento** – transições lentas (`ease-out`, ~700ms), fades sutis na rolagem. `prefers-reduced-motion` desliga tudo.
+- **Tipografia** – Display/wordmark: serifada editorial (Playfair Display). Corpo/UI: sans geométrica (DM Sans). Wordmark em caixa alta, tracking `0.15em`–`0.25em`. Escala em `rem` (base `16px`), com inputs de formulário a `1rem` (`16px`) no mobile para evitar auto-zoom no iOS Safari.
+- **Movimento** – transições lentas (`--transition-slow: 700ms ease-out`), fades sutis na rolagem. `prefers-reduced-motion` desliga tudo e exibe o poster estático (`assets/video/hero-poster.jpg`).
 - **Hero** – imagem/vídeo lento em loop, sem som, tipografia surgindo após breve respiro.
 
 ### Direção de fotografia e vídeo
@@ -93,13 +93,13 @@ Fonte anterior (`silence.md`, briefing de 15 páginas) removida do worktree; his
 - Institucional, sensorial, sóbria. Frases curtas. Verbos de convite ("invites", "creates space"), nunca de promessa ("transforms", "heals", "fixes").
 - Assinatura global: **Let silence speak.**
 
-|| Preferir | Evitar |
-|| --- | --- |
-|| space, room, pause, presence, listening, curated, small-scale | healing, therapy, treatment, recovery, burnout cure, detox |
-|| "those who care for others" | "stressed/exhausted therapists" |
-|| "creates the conditions for something to happen" | "you will discover / become / transform" |
-|| "boutique travel company" | "wellness retreat", "therapy trip", "retreat" |
-|| quiet luxury | luxury, exclusive, VIP (ostensivo) |
+| Preferir | Evitar |
+| --- | --- |
+| space, room, pause, presence, listening, curated, small-scale | healing, therapy, treatment, recovery, burnout cure, detox |
+| "those who care for others" | "stressed/exhausted therapists" |
+| "creates the conditions for something to happen" | "you will discover / become / transform" |
+| "boutique travel company" | "wellness retreat", "therapy trip", "retreat" |
+| quiet luxury | luxury, exclusive, VIP (ostensivo) |
 
 ## Checklist de "não pode"
 
@@ -116,11 +116,11 @@ Fonte anterior (`silence.md`, briefing de 15 páginas) removida do worktree; his
 
 ## Tecnologia
 
-- **Performance** – Mobile-first, LCP < 2,5 s, CLS < 0,1, INP < 200 ms, Lighthouse mobile > 90. CDN global, AVIF/WebP, srcset, lazy loading, dimensões declaradas.
+- **Performance** – Mobile-first, LCP < 2,5 s, CLS < 0,1, INP < 200 ms, Lighthouse mobile > 90. CDN global, AVIF/WebP, srcset, lazy loading, dimensões declaradas, `<link rel="preload">` para fontes primárias e `<link rel="modulepreload">` para módulos ES.
 - **Acessibilidade** – WCAG 2.2 AA: contraste, teclado completo, foco visível, alt descritivo, erros gentis, áudio/vídeo nunca automáticos.
 - **SEO de categoria** – Mirar "curated travel Brazil", "slow travel Brazil", "boutique travel for psychologists/therapists", "small-group travel Brazil". Nunca "therapy retreat", "wellness retreat", "travel therapy".
-- **Formulário** – Anti-spam discreto (honeypot/Turnstile), sem CAPTCHA irritante.
-- **Plataforma** – Framer/Webflow ou Astro. Decisão do TI.
+- **Formulário** – Anti-spam discreto (honeypot `name="website"` / Turnstile), sem CAPTCHA irritante.
+- **Plataforma** – Vanilla HTML/CSS/ESM + Git-Based CMS (`data/journeys.json`).
 
 ## Fases de lançamento
 
@@ -150,7 +150,7 @@ Um site lento no ritmo e rápido no carregamento: poucas páginas, muito espaço
 
 ## The Journeys (seção da landing)
 
-**Propósito** – Seção da landing que apresenta todos os destinos SILENCE com estrutura consistente, dentro do scroll de `index.html`. O visitante compara destinos e escolhe o que mais interesa, mantendo o tom contemplativo e a curadoria.
+**Propósito** – Seção da landing que apresenta todos os destinos SILENCE com estrutura consistente, dentro do scroll de `index.html`. O visitante compara destinos e escolhe o que mais interessa, mantendo o tom contemplativo e a curadoria.
 
 **Estrutura da seção**
 
@@ -158,13 +158,13 @@ Um site lento no ritmo e rápido no carregamento: poucas páginas, muito espaço
    - Título: "Three places, one pace."
    - Intro: "Each SILENCE journey stays with one region — a considered base, a small group, and unhurried days."
 
-2. **Grid de destinos (3-col)** – Cada card contém:
+2. **Grid de destinos (3-col)** – Renderizado a partir de `<template id="journey-card-template">` e `data/journeys.json` (com fallback estático no HTML para SEO). Cada card contém:
    - Imagem destacada (ou placeholder com gradiente)
    - Eyebrow: "The inaugural journey" (flagship) ou região
    - Nome do destino em H3
    - Subtítulo com acomodações
    - Breve descrição (campo `description`)
-   - Link CTA: "Enquire about this journey" (para #invitation)
+   - Link CTA: "Enquire about this journey" (`href="#invitation" data-journey="{id}"`, que pré-seleciona o destino no formulário de convite)
 
 3. **Encerramento** – Transição suave para a seção de convite.
 
@@ -207,32 +207,51 @@ Um site lento no ritmo e rápido no carregamento: poucas páginas, muito espaço
 - `alt="{name}"` em imagens reais
 - Foco visível em links (<200ms INP)
 
-**Checklist de "não pode"**
-
-- Nenhuna imagem de agência de turismo padrão
-- Nenhuna estatística de burnout
-- Nenhuna menção de terapia/tratamento/cura/retiro/transformação
-- Assinatura "Let silence speak." transmitida
-- Grupo 8–10 em todos os destinos
-- Flagship destacado só Vila Oyá
-
-**Numeração das seções** (espelha o HTML real)
+**Numeração das seções** (espelha o HTML real e a ordem da `<nav>`)
 
 - 01 / The philosophy · 02 / The experience · 03 / Brazil
 - 04 / The Journeys · 05 / Who it's for · 06 / A few clear answers · 07 / Request an invitation
 - The Founder não tem número (seção institucional curta, fora da numeração) e **não entra na nav** (nav enxuta; quem se interessa encontra no scroll).
 
-**Pendências técnicas para o launch**
+## Arquitetura de Catálogo e Plataforma Administrativa (Opção A — Git-Based CMS)
 
-- Hero video: iframe Vimeo (background mode, `background=1&autoplay=1&muted=1&loop=1&dnt=1`) mantido. Referência do vídeo está em `assets/video/README.md`.
-- Anti-spam do formulário (honeypot/Turnstile) — adiar para o soft launch, quando o form realmente transmitir (hoje o protótipo não envia).
-- Tracking privado (Plausible) — idem, fase soft launch (site de vendas real).
-- SEO/social: sem OG/Twitter cards, sem schema.org, sem canonical no `<head>` — adicionar na preparação de conteúdo oficial.
+Para permitir que o fundador ou a agência modifique pacotes de viagem sem editar código JavaScript e sem custo mensal de banco de dados ou exposição a servidores de terceiros, o projeto adota a **Opção A (Git-Based CMS)**:
 
-**Arquitetura de destinos (data-driven)**
+1. **Fonte Única da Verdade (`data/journeys.json`):**
+   - Todos os pacotes residem em `data/journeys.json` sob a chave `"journeys"`.
+   - Campos de cada pacote (`JourneyPackage`): `id`, `order`, `status` (`"published"`, `"coming_soon"`, `"archived"`), `flagship`, `name`, `region`, `accommodation`, `duration`, `groupSize`, `editionDates`, `image`, `imageAlt`, `description`, `ctaLabel`.
+   - O módulo `js/journeys.js` busca `./data/journeys.json`, filtra pacotes com `status !== "archived"`, ordena por `order`, clona o `<template id="journey-card-template">` e sincroniza automaticamente o `<select name="journey">` da Etapa 3 do formulário.
 
-- Fonte da verdade: `js/journeys.js` – array `LOCATIONS` (const interna do módulo).
-- Acrescentar/remover destino = editar o array; o DOM se atualiza via `renderJourneys(container)` em `js/journeys.js`.
-- Estrutura de produto: `id`, `name`, `region`, `accommodation`, `flagship`, `image`, `description`.
-- Flagship: `flagship: true` – Vila Oyá; destaque visual (borda verde), eyebrow "The inaugural journey".
-- Imagens: campo `image: null` = placeholder (bloco com gradiente). Atribuir URL real antes do launch.
+2. **Três Interfaces de Edição Compatíveis (Zero Lock-in):**
+   - **Estúdio Curatorial Local/Web (`admin/index.html` + `admin/admin.js`):** Painel visual na estética do SILENCE acessível em `/admin/index.html`. Permite adicionar, editar, reordenar e arquivar pacotes, validar automaticamente o *Checklist de "não pode"* (bloqueando termos clínicos/wellness como *retreat, therapy, healing, burnout, detox, transformation*), visualizar o preview dos cards em tempo real e salvar diretamente no `data/journeys.json` local (via *File System Access API*) ou baixar o arquivo pronto para commit.
+   - **Decap CMS (`admin/config.yml`):** Configuração pronta para Git Gateway (Netlify / Cloudflare) com validação por expressão regular contra palavras banidas da marca.
+   - **Pages CMS (`.pages.yml`):** Configuração pronta para edição direta conectada ao repositório GitHub via Pages CMS.
+
+## Standard Operating Procedure (SOP) de Engenharia e Readability
+
+Todo código e Pull Request neste repositório deve obedecer às 5 diretrizes operacionais abaixo:
+
+### 1. Formatação Diff-Friendly e Legibilidade (HTML & CSS)
+- **CSS (`styles.css`):** Escrever **exatamente uma propriedade por linha** (nunca comprimir múltiplas declarações na mesma linha) para garantir *git diffs* granulares e legíveis em *code reviews*.
+- **Cascade Layers (`@layer`):** Manter todo estilo dentro da hierarquia declarada no topo do arquivo: `@layer tokens, base, layout, components, utilities, states;`.
+- **HTML (`index.html`):** Manter linhas com no máximo ~100 colunas; elementos de bloco (`<section>`, `<article>`, `<div>`, `<fieldset>`, `<label>`) devem ocupar linhas próprias com indentação de 2 espaços.
+
+### 2. Seletores Semânticos e Proibição de Seletores Estruturais Frágeis
+- **Proibido:** Usar seletores dependentes da posição ou exclusão de tags no DOM para tipografia/layout, tais como `:nth-child()`, `:last-of-type` ou cadeias `:not(.a):not(.b)`.
+- **Obrigatório:** Atribuir classes semânticas explícitas aos elementos estilizados (ex.: `.breather-quote`, `.timeline-description`, `.brazil-body`, `.founder-body`, `.invitation-body`, `.footer-top-link`) e usar `<template>` declarativo no HTML em vez de longas cadeias imperativas de `document.createElement`.
+
+### 3. Contratos de Módulos JS, Tipagem JSDoc e Escopo de DOM
+- **Verificação estática sem build (`// @ts-check`):** Todo arquivo `.js` deve iniciar com `// @ts-check` e documentar tipos de dados (`@typedef`) e assinaturas de funções (`@param`, `@returns`) via JSDoc.
+- **Isolamento de DOM:** Nenhum módulo de componente (`form.js`, `menu.js`, `header.js`) deve buscar subelementos internos soltos via `document.querySelector()` global. Cada módulo recebe o seletor do seu container raiz e executa buscas escopadas (`container.querySelector(...)`).
+
+### 4. Guardrails de Design Tokens, Acessibilidade (WCAG 2.2 AA) e Privacidade
+- **Zero Hex Cru:** Nenhuma cor hexadecimal (`#...`) pode existir no `styles.css` fora do bloco `:root` em `@layer tokens`.
+- **Restrição Estrita de `--earth` e `--line`:** `--earth` (`3.94:1`) e `--line` (`1.37:1`) são tokens exclusivos de **forma** (bordas, linhas divisórias, gradientes, travessão decorativo `aria-hidden="true"`). Nunca aplicá-los à propriedade `color:` de textos legíveis.
+- **Tipografia Responsiva e iOS:** Usar unidades `rem` para `font-size`. Campos de formulário (`input`, `select`, `textarea`) devem ter no mínimo `1rem` (`16px`) em telas mobile (`<= 680px`) para impedir zoom automático forçado no iOS Safari.
+- **Segurança de Deploy:** Ao publicar em produção, servir apenas os ativos públicos ou bloquear o acesso público a arquivos internos de documentação e planejamento (`.hermes/`, `CONTEXT.md`).
+
+### 5. Checklist Obrigatório de Pull Request (Definition of Done)
+1. **Sintaxe & Tipos:** Todos os módulos em `js/` e `admin/` passam em `node --input-type=module --check`.
+2. **Tokens & Contraste:** Nenhum hex fora do `:root` e nenhum uso de `color: var(--earth)` em texto.
+3. **Voz da Marca:** Nenhum termo proibido (*therapy, retreat, healing, burnout, detox, transformation, cure, spa*) introduzido em `index.html` ou `data/journeys.json`.
+4. **Interatividade & Teclado:** Navegação completa via `Tab`, avanço por `Enter` nas etapas 1 e 2 do formulário sem submissão precoce, fechamento do menu mobile com `Escape` e funcionamento imediato sob `prefers-reduced-motion: reduce`.
