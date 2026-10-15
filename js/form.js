@@ -24,7 +24,10 @@ export function initForm(formSelector = "#invitation-form") {
     formProgress.setAttribute("aria-valuemax", String(steps.length));
     formProgress.querySelector("span").style.width = `${(stepNumber / steps.length) * 100}%`;
     if (focus) {
-      steps[activeStep].querySelector("input, select, textarea, button").focus();
+      const firstControl = steps[activeStep].querySelector(
+        "input, select, textarea, button"
+      );
+      if (firstControl) firstControl.focus();
     }
   }
 
@@ -51,12 +54,30 @@ export function initForm(formSelector = "#invitation-form") {
     }
   });
 
+  form.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Enter" &&
+      activeStep < steps.length - 1 &&
+      !event.target.matches("textarea, button")
+    ) {
+      event.preventDefault();
+      if (!validateStep(steps[activeStep])) return;
+      showStep(activeStep + 1, { focus: true });
+    }
+  });
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!validateStep(steps[activeStep])) return;
 
+    if (activeStep < steps.length - 1) {
+      showStep(activeStep + 1, { focus: true });
+      return;
+    }
+
     form.hidden = true;
-    document.querySelector(".form-progress").hidden = true;
+    const progressWrap = document.querySelector(".form-progress");
+    if (progressWrap) progressWrap.hidden = true;
     formSuccess.hidden = false;
     formSuccess.focus();
   });
