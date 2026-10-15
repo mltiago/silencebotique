@@ -36,7 +36,7 @@ Fonte anterior (`silence.md`, briefing de 15 páginas) removida do worktree; his
 
 ## Arquitetura e fluxo
 
-- **Site como ferramenta de vendas** – Seções do MVP (single-file landing): Home, Silence (filosofia), The Experience, The Journeys, Brazil (Vila Oyá), Who it's for, The Founder, FAQ, Request an invitation.
+- **Site como ferramenta de vendas** – Seções do MVP (single-file landing): Home, Silence (filosofia), The Experience, Brazil (Vila Oyá), The Journeys, Who it's for, The Founder, FAQ, Request an invitation.
 - **Área privada de hóspedes** (fase 2+) – Guia pré-viagem, informações práticas.
 
 ## Princípios de design

@@ -10,13 +10,13 @@ import { renderJourneys } from "./journeys.js";
 
 // Initialize all modules
 document.addEventListener("DOMContentLoaded", async () => {
-  // Critical: loader first (blocks page reveal)
-  await initLoader();
-
-  // Non-critical: can run in parallel
+  // Build dynamic DOM and attach interactive controls immediately
+  renderJourneys(document.getElementById("journeys-grid"));
   initHeader();
   initMenu();
   initForm();
+
+  // Wait for hero reveal before triggering scroll-reveal transitions
+  await initLoader();
   initReveal();
-  renderJourneys(document.getElementById("journeys-grid"));
 });

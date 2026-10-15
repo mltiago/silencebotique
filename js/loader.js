@@ -8,27 +8,29 @@ export async function initLoader(iframeSelector = ".hero-video-frame iframe") {
   body.classList.add("is-loading");
 
   return new Promise((resolve) => {
+    let done = false;
+    let fallbackTimer = null;
+
     function reveal() {
+      if (done) return;
+      done = true;
+      if (fallbackTimer) clearTimeout(fallbackTimer);
       body.classList.remove("is-loading");
       body.classList.add("is-loaded");
       resolve();
     }
 
+    const prefersReducedMotion =
+      "matchMedia" in window &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     const iframe = document.querySelector(iframeSelector);
-    if (!iframe) {
+    if (!iframe || prefersReducedMotion) {
       reveal();
       return;
     }
 
-    let done = false;
-    const once = () => {
-      if (!done) {
-        done = true;
-        reveal();
-      }
-    };
-
-    iframe.addEventListener("load", once, { once: true });
-    setTimeout(reveal, 3000); // Fail-safe: never keep the page hidden
+    iframe.addEventListener("load", reveal, { once: true });
+    fallbackTimer = setTimeout(reveal, 3000); // Fail-safe: never keep the page hidden
   });
 }
