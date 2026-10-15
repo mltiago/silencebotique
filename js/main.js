@@ -1,5 +1,6 @@
-// main.js — SILENCE entry point
-// Orchestrates all UI modules
+// @ts-check
+// main.js — SILENCE entry point.
+// Orchestrates all UI modules according to the page lifecycle.
 
 import { initLoader } from "./loader.js";
 import { initHeader } from "./header.js";
@@ -8,15 +9,14 @@ import { initForm } from "./form.js";
 import { initReveal } from "./reveal.js";
 import { renderJourneys } from "./journeys.js";
 
-// Initialize all modules
 document.addEventListener("DOMContentLoaded", async () => {
-  // Build dynamic DOM and attach interactive controls immediately
-  renderJourneys(document.getElementById("journeys-grid"));
+  // 1. Initialize interactive UI controls and dynamic catalog immediately
   initHeader();
   initMenu();
   initForm();
+  await renderJourneys(document.getElementById("journeys-grid"));
 
-  // Wait for hero reveal before triggering scroll-reveal transitions
+  // 2. Wait for hero film reveal before starting scroll-triggered transitions
   await initLoader();
   initReveal();
 });

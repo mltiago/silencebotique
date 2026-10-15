@@ -1,0 +1,52 @@
+{
+  "journeys": [
+    {
+      "id": "algodoes",
+      "order": 1,
+      "status": "published",
+      "flagship": true,
+      "name": "Praia de Algodões",
+      "region": "Maraú Peninsula, Bahia",
+      "accommodation": "Vila Oyá Casa Hotel",
+      "duration": "7 nights / 8 days",
+      "groupSize": "8–10 guests",
+      "editionDates": "Inaugural edition",
+      "image": null,
+      "imageAlt": "Natural materials and open architecture at Vila Oyá Casa Hotel",
+      "description": "On Bahia's coast, the Atlantic, the forest, and the architecture make their presence felt without asking for attention.",
+      "ctaLabel": "Enquire about this journey"
+    },
+    {
+      "id": "atins",
+      "order": 2,
+      "status": "published",
+      "flagship": false,
+      "name": "Atins",
+      "region": "Lençóis Maranhenses, Maranhão",
+      "accommodation": "Boutique pousada",
+      "duration": "7 nights / 8 days",
+      "groupSize": "8–10 guests",
+      "editionDates": "In development",
+      "image": null,
+      "imageAlt": "White sand dunes and fresh water lagoons in Atins, Maranhão",
+      "description": "A quiet village between the dunes and the sea, where white sand and fresh water meet at the edge of the Lençóis National Park.",
+      "ctaLabel": "Enquire about this journey"
+    },
+    {
+      "id": "amazon",
+      "order": 3,
+      "status": "published",
+      "flagship": false,
+      "name": "The Amazon",
+      "region": "Amazon region",
+      "accommodation": "Boutique lodge",
+      "duration": "7 nights / 8 days",
+      "groupSize": "8–10 guests",
+      "editionDates": "In development",
+      "image": null,
+      "imageAlt": "Forest canopy and calm river waters in the Amazon region",
+      "description": "Deep in the forest, the river sets the pace. A place where silence is the loudest presence and the day follows the current.",
+      "ctaLabel": "Enquire about this journey"
+    }
+  ]
+}

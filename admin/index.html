@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>SILENCE — Curatorial Admin (Git-Based CMS)</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      .admin-shell {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 48px 5% 96px;
+      }
+      .admin-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 24px;
+        padding-bottom: 28px;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 40px;
+      }
+      .admin-header h1 {
+        margin: 8px 0 0;
+        font-size: clamp(2rem, 3.5vw, 2.75rem);
+      }
+      .admin-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .admin-layout {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 40px;
+        align-items: start;
+      }
+      .admin-panel {
+        background: var(--paper-warm);
+        border: 1px solid var(--line);
+        padding: 28px;
+      }
+      .admin-panel h2 {
+        font-size: 1.5rem;
+        margin-bottom: 18px;
+      }
+      .package-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .package-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        cursor: pointer;
+        transition: border-color var(--transition-fast);
+      }
+      .package-item.is-active {
+        border-color: var(--green);
+      }
+      .package-item-meta {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+      .package-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        font-size: 0.6875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border: 1px solid var(--line);
+        color: var(--green);
+      }
+      .admin-form {
+        display: grid;
+        gap: 16px;
+      }
+      .admin-form label {
+        display: grid;
+        gap: 6px;
+      }
+      .admin-form label > span {
+        font-size: 0.75rem;
+        color: var(--form-label);
+        letter-spacing: 0.04em;
+      }
+      .admin-form input:not([type="checkbox"]),
+      .admin-form select,
+      .admin-form textarea {
+        width: 100%;
+        padding: 9px 12px;
+        background: var(--paper);
+        border: 1px solid var(--field-line);
+        color: var(--ink);
+        font-size: 0.875rem;
+      }
+      .admin-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .admin-checkbox {
+        display: flex !important;
+        align-items: center;
+        gap: 10px;
+        padding-top: 6px;
+      }
+      .admin-checkbox input {
+        accent-color: var(--green);
+      }
+      .voice-alert {
+        padding: 12px 14px;
+        border: 1px solid var(--earth);
+        background: var(--paper);
+        color: var(--ink);
+        font-size: 0.8125rem;
+      }
+      .admin-status {
+        margin-top: 14px;
+        font-size: 0.8125rem;
+        color: var(--green);
+      }
+      .preview-grid {
+        display: grid;
+        gap: 20px;
+      }
+      @media (max-width: 900px) {
+        .admin-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    <script type="module" src="./admin.js"></script>
+  </head>
+  <body>
+    <div class="admin-shell">
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow">SILENCE · Git-Based Catalog Studio (Option A)</p>
+          <h1>Manage <em>The Journeys</em></h1>
+          <p class="package-item-meta">
+            Source of truth: <code>data/journeys.json</code> · Configs included:
+            <code>admin/config.yml</code> (Decap CMS) &amp; <code>.pages.yml</code> (Pages CMS)
+          </p>
+        </div>
+        <div class="admin-actions">
+          <a class="button button-quiet" href="../index.html#journeys">← Back to site</a>
+          <button class="button button-quiet" type="button" id="add-journey-btn">+ New journey</button>
+          <button class="button button-dark" type="button" id="save-json-btn">
+            Save to data/journeys.json
+          </button>
+        </div>
+      </header>
+
+      <main class="admin-layout">
+        <section class="admin-panel" aria-labelledby="editor-heading">
+          <h2 id="editor-heading">Catalog packages</h2>
+          <div class="package-list" id="package-list" role="list"></div>
+
+          <form class="admin-form" id="package-editor" novalidate>
+            <div class="admin-row">
+              <label>
+                <span>Slug ID (lowercase)</span>
+                <input name="id" required pattern="^[a-z0-9-]+$" placeholder="e.g. algodoes" />
+              </label>
+              <label>
+                <span>Display order</span>
+                <input name="order" type="number" min="1" required />
+              </label>
+            </div>
+
+            <div class="admin-row">
+              <label>
+                <span>Publication status</span>
+                <select name="status">
+                  <option value="published">Published (visible)</option>
+                  <option value="coming_soon">Coming soon</option>
+                  <option value="archived">Archived (hidden)</option>
+                </select>
+              </label>
+              <label class="admin-checkbox">
+                <input type="checkbox" name="flagship" />
+                <span>Flagship journey (The inaugural journey)</span>
+              </label>
+            </div>
+
+            <div class="admin-row">
+              <label>
+                <span>Destination name</span>
+                <input name="name" required placeholder="e.g. Praia de Algodões" />
+              </label>
+              <label>
+                <span>Region / State</span>
+                <input name="region" required placeholder="e.g. Maraú Peninsula, Bahia" />
+              </label>
+            </div>
+
+            <div class="admin-row">
+              <label>
+                <span>Accommodation</span>
+                <input name="accommodation" required placeholder="e.g. Vila Oyá Casa Hotel" />
+              </label>
+              <label>
+                <span>Edition / timing note</span>
+                <input name="editionDates" placeholder="e.g. Inaugural edition" />
+              </label>
+            </div>
+
+            <div class="admin-row">
+              <label>
+                <span>Image path (leave empty for gradient placeholder)</span>
+                <input name="image" placeholder="assets/images/journeys/algodoes.jpg" />
+              </label>
+              <label>
+                <span>Image descriptive alt text (WCAG AA)</span>
+                <input name="imageAlt" placeholder="Natural materials at Vila Oyá" />
+              </label>
+            </div>
+
+            <label>
+              <span>Curatorial description (checked against CONTEXT.md brand voice)</span>
+              <textarea name="description" rows="3" required></textarea>
+            </label>
+
+            <div class="voice-alert" id="voice-alert" hidden role="alert"></div>
+
+            <div class="form-actions">
+              <button class="button button-quiet" type="button" id="delete-journey-btn">
+                Remove package
+              </button>
+              <button class="button button-dark" type="submit">
+                Apply changes to preview
+              </button>
+            </div>
+            <p class="admin-status" id="admin-status" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="admin-panel" aria-labelledby="preview-heading">
+          <p class="eyebrow">Live card preview &amp; JSON output</p>
+          <h2 id="preview-heading">Rendered cards</h2>
+          <div class="preview-grid" id="preview-grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <template id="journey-card-template">
+      <article class="journey-card">
+        <div class="journey-image" data-field="image-container"></div>
+        <div class="journey-body">
+          <p class="eyebrow" data-field="eyebrow"></p>
+          <h3 data-field="name"></h3>
+          <p class="journey-region" data-field="region"></p>
+          <p class="journey-description" data-field="description"></p>
+          <a class="text-link" href="#invitation" data-field="cta">
+            <span data-field="cta-label">Enquire about this journey</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </article>
+    </template>
+  </body>
+</html>
