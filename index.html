@@ -5,23 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="SILENCE creates intimate contemplative retreats in Brazil for mental health professionals seeking room to rest, reflect, and reconnect."
+      content="SILENCE is a boutique travel company creating curated, slow travel experiences in Brazil for mental health professionals."
     />
-    <meta name="theme-color" content="#f5f3ed" />
-    <title>SILENCE — A quieter kind of journey</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap"
-      rel="stylesheet"
-    />
+    <meta name="theme-color" content="#f9f8f6" />
+    <title>SILENCE — Let silence speak</title>
     <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
+    <script type="module" src="js/main.js"></script>
   </head>
-  <body>
+
+  <body class="is-loading">
+    <div class="loader"></div>
     <a class="skip-link" href="#main">Skip to content</a>
+
     <header class="site-header">
-      <a class="wordmark" href="#top" aria-label="SILENCE home">SILENCE<span>®</span></a>
+      <a class="wordmark" href="#home" aria-label="SILENCE home">SILENCE</a>
       <button
         class="menu-toggle"
         type="button"
@@ -32,235 +29,326 @@
         <span></span><span></span>
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-        <a href="#philosophy">Our philosophy</a>
-        <a href="#retreat">The retreat</a>
-        <a href="#journey">The rhythm</a>
-        <a class="nav-apply" href="#inquire">Request an invitation <span aria-hidden="true">↗</span></a>
+        <a href="#philosophy">The philosophy</a>
+        <a href="#experience">The experience</a>
+        <a href="#journeys">The journeys</a>
+        <a href="#brazil">Brazil</a>
+        <a href="#for-you">Who it’s for</a>
+        <a href="#faq">FAQ</a>
+        <a class="nav-invitation" href="#invitation">Request an invitation <span aria-hidden="true">↗</span></a>
       </nav>
     </header>
 
     <main id="main">
-      <section class="hero" id="top" aria-labelledby="hero-title">
-        <img
-          class="hero-image"
-          src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2400&q=85"
-          alt="A quiet stretch of tropical coastline, with deep green water meeting the shore"
-          fetchpriority="high"
-        />
-        <div class="hero-shade"></div>
-        <div class="hero-content">
-          <p class="eyebrow light">A retreat for those who hold space for others</p>
-          <h1 id="hero-title">Make room<br />for <em>yourself.</em></h1>
-          <p class="hero-copy">
-            A contemplative journey to the Brazilian coast. A little less noise.
-            A little closer to what matters.
+      <section class="hero" id="home" aria-labelledby="hero-title">
+        <!-- Full-bleed hero film via Vimeo background mode (autoplay + loop + muted + no controls).
+             dnt=1 = do-not-track. Swap for a self-hosted <video> before launch: an iframe
+             costs ~250KB of third-party JS and delays LCP. -->
+        <div class="hero-video-frame" aria-hidden="true">
+          <iframe
+            src="https://player.vimeo.com/video/1235961242?background=1&autoplay=1&muted=1&loop=1&dnt=1&badge=0&byline=0&title=0&portrait=0"
+            title="Praia de Algodões, Bahia — slow water over sand at golden hour"
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            referrerpolicy="strict-origin-when-cross-origin"
+          ></iframe>
+        </div>
+        <div class="hero-copy">
+          <p class="eyebrow">Curated slow travel in Brazil</p>
+          <h1 id="hero-title">Experience<br />the <em>(un)spoken.</em></h1>
+          <p class="hero-description">
+            A boutique travel company creating curated, slow travel experiences
+            in Brazil for mental health professionals.
           </p>
-          <a class="button button-light" href="#retreat">Discover the first journey <span aria-hidden="true">↗</span></a>
+          <a class="button button-light" href="#invitation">Request an invitation <span aria-hidden="true">↗</span></a>
+          <p class="hero-tagline">Let silence speak.</p>
         </div>
-        <div class="hero-caption">
-          <span>Praia de Algodões · Bahia, Brazil</span>
-          <span>14°05′ S &nbsp; 38°59′ W</span>
+        <div class="hero-pillars" aria-label="The SILENCE approach">
+          <span><b>01</b> Slow</span>
+          <span><b>02</b> Small</span>
+          <span><b>03</b> Brazil</span>
+          <span class="hero-place">Algodões, Bahia</span>
         </div>
-        <a class="scroll-cue" href="#philosophy" aria-label="Scroll to our philosophy"><span></span>Scroll to slow down</a>
       </section>
 
-      <section class="intro section-wrap" id="philosophy">
-        <div class="intro-label">
-          <span class="section-number">01 / The intention</span>
-          <span class="small-rule"></span>
+      <section class="breather" aria-label="A pause">
+        <p class="breather-overline">A little more space</p>
+        <p>There is no need to fill<br />every moment.</p>
+        <span class="breather-mark" aria-hidden="true">—</span>
+      </section>
+
+      <section class="philosophy section-shell" id="philosophy" aria-labelledby="philosophy-title">
+        <div class="section-aside">
+          <span class="section-number">01 / The philosophy</span>
+          <span class="aside-line"></span>
         </div>
-        <div class="intro-main">
-          <p class="eyebrow">A different kind of professional care</p>
-          <h2>For the ones who<br />are always <em>there.</em></h2>
-          <div class="intro-bottom">
-            <p class="intro-lede">
-              You spend your days listening deeply, holding complexity, and
-              making space for others. This is space for you.
+        <div class="philosophy-content">
+          <p class="eyebrow">Space · Listening · Presence · Time</p>
+          <h2 id="philosophy-title">Travel can ask<br />less of you <em>and</em><br />give more back.</h2>
+          <div class="philosophy-body">
+            <p class="body-lede">
+              SILENCE is an invitation to meet a place without rushing through it.
             </p>
             <p>
-              SILENCE brings a small circle of mental health professionals to
-              Brazil for a considered pause: time in nature, unhurried
-              conversation with peers, and the freedom to simply be. Nothing to
-              fix. Nowhere else to be.
+              We bring a small circle of mental health professionals together in
+              Brazil. A thoughtful host, a considered place, and open time make
+              room for conversation to find its own pace.
             </p>
           </div>
-          <div class="intro-note"><span class="leaf-mark">✳</span><span>Intentionally intimate.<br /><strong>Never more than ten.</strong></span></div>
-        </div>
-      </section>
-
-      <section class="retreat-section" id="retreat">
-        <div class="retreat-image-wrap">
-          <img
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85"
-            alt="A serene boutique retreat framed by tropical foliage"
-            loading="lazy"
-          />
-          <span class="image-index">01 — 01</span>
-        </div>
-        <div class="retreat-copy">
-          <p class="section-number">The first journey &nbsp; / &nbsp; Bahia, Brazil</p>
-          <p class="eyebrow">A place to exhale</p>
-          <h2>Vila Oyá<br /><em>Casa Hotel</em></h2>
-          <p class="retreat-location">Praia de Algodões · Maraú Peninsula</p>
-          <span class="small-rule"></span>
-          <p class="retreat-description">
-            Where the Atlantic meets a quieter pace of life. At Vila Oyá, the
-            natural world sets the rhythm: barefoot paths, thoughtful
-            architecture in conversation with the landscape, and the generous
-            flavours of Bahia at the table.
-          </p>
-          <p class="retreat-description">
-            Between sea and forest, there is room to wander, to rest, and to
-            find your way back to yourself—without an agenda.
-          </p>
-          <div class="retreat-facts">
-            <div><span>Setting</span><strong>Atlantic coast, Bahia</strong></div>
-            <div><span>Group</span><strong>8–10 practitioners</strong></div>
-            <div><span>Dates</span><strong>Shared by invitation</strong></div>
+          <div class="not-list">
+            <p class="eyebrow">What SILENCE is not</p>
+            <p>
+              Not a clinical programme. Not a checklist of sights. Not a
+              schedule designed to keep you busy. This is travel, held with care.
+            </p>
           </div>
-          <a class="text-link" href="#inquire">Explore the first journey <span aria-hidden="true">↗</span></a>
         </div>
       </section>
 
-      <section class="for-you section-wrap">
-        <div class="for-you-heading">
-          <p class="section-number">02 / A space for your practice</p>
-          <h2>When caring is<br />your <em>calling.</em></h2>
-          <p>
-            This is not another conference or continuing education course.
-            It’s an invitation to step outside the role, among people who
-            understand it.
-          </p>
-        </div>
-        <div class="practice-list">
-          <article class="practice-card">
-            <span class="practice-index">01</span>
-            <div><h3>Psychologists</h3><p>Put down the listening chair for a while. Find perspective in the company of peers who know the work from the inside.</p></div>
-            <span class="practice-symbol" aria-hidden="true">↗</span>
-          </article>
-          <article class="practice-card">
-            <span class="practice-index">02</span>
-            <div><h3>Psychiatrists</h3><p>Move beyond the demands of the clinic. Reconnect with the person behind the professional practice.</p></div>
-            <span class="practice-symbol" aria-hidden="true">↗</span>
-          </article>
-          <article class="practice-card">
-            <span class="practice-index">03</span>
-            <div><h3>Psychoanalysts</h3><p>Let reflection take a new shape: open-ended, embodied, and held within a thoughtful community.</p></div>
-            <span class="practice-symbol" aria-hidden="true">↗</span>
-          </article>
-        </div>
-      </section>
-
-      <section class="interlude" aria-label="A moment in nature">
-        <img
-          src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2200&q=85"
-          alt="Sunlight resting on a still forest path"
-          loading="lazy"
-        />
-        <div class="interlude-overlay"></div>
-        <blockquote>
-          “In the space between<br />one thing and the next,<br /><em>we begin again.</em>”
-        </blockquote>
-        <span class="interlude-caption">The Maraú Peninsula · Bahia</span>
-      </section>
-
-      <section class="journey section-wrap" id="journey">
-        <div class="journey-top">
+      <section class="experience" id="experience" aria-labelledby="experience-title">
+        <div class="experience-heading section-shell">
           <div>
-            <p class="section-number">03 / The rhythm</p>
-            <h2>Days with<br /><em>nothing to prove.</em></h2>
+            <p class="section-number">02 / The experience</p>
+            <h2 id="experience-title">A week, with room<br />around the edges.</h2>
           </div>
-          <p class="journey-intro">
-            There is a gentle shape to our days, but no pressure to keep pace.
-            Follow your curiosity. Take the long way. Rest when you need to.
+          <p class="experience-intro">
+            Seven nights, eight days, and a small group of eight to ten
+            professionals. The group size holds for every SILENCE journey. The
+            shape of the week is set; the hours are not all spoken for.
           </p>
         </div>
-        <div class="journey-grid">
-          <article class="journey-card">
-            <span class="journey-time">MORNING</span>
-            <span class="journey-icon" aria-hidden="true">☼</span>
-            <h3>Begin softly</h3>
-            <p>Wake with the light. A quiet walk, a swim, or a slow breakfast made with the flavours of the region.</p>
-          </article>
-          <article class="journey-card">
-            <span class="journey-time">MIDDAY</span>
-            <span class="journey-icon" aria-hidden="true">◌</span>
-            <h3>Follow your own pace</h3>
-            <p>Time to read, rest, explore the coastline, or let the hours unfold without needing to fill them.</p>
-          </article>
-          <article class="journey-card">
-            <span class="journey-time">LATE AFTERNOON</span>
-            <span class="journey-icon" aria-hidden="true">◡</span>
-            <h3>Gather, if you wish</h3>
-            <p>Optional moments of shared reflection. No lectures, no expectations—just good company and room to talk.</p>
-          </article>
-          <article class="journey-card">
-            <span class="journey-time">EVENING</span>
-            <span class="journey-icon" aria-hidden="true">☾</span>
-            <h3>Come back to the table</h3>
-            <p>Seasonal Bahian cooking, a generous meal, and the warmth of a small circle at the end of the day.</p>
-          </article>
+
+        <div class="experience-layout section-shell">
+          <div class="timeline" aria-label="An outline of the eight-day journey">
+            <article class="timeline-entry">
+              <span class="timeline-marker">01</span>
+              <div><p class="timeline-label">Day one · Arrive</p><h3>Settle in</h3><p>Arrive, find your room, and take the evening as it comes.</p></div>
+            </article>
+            <article class="timeline-entry timeline-open">
+              <span class="timeline-marker">02—07</span>
+              <div><p class="timeline-label">Days two to seven · Open days</p><h3>Follow the day</h3><p>Optional invitations to gather, walk, share a meal, or simply let the landscape set the pace.</p><span class="open-time">Unscheduled time is part of the itinerary.</span></div>
+            </article>
+            <article class="timeline-entry">
+              <span class="timeline-marker">08</span>
+              <div><p class="timeline-label">Day eight · Depart</p><h3>Take your time</h3><p>A final breakfast and an unhurried goodbye.</p></div>
+            </article>
+          </div>
+
+          <aside class="journey-details" aria-label="Journey details">
+            <p class="experience-intro">The same group size and pace hold for every SILENCE journey — the Vila Oyá flagship and future destinations alike.</p>
+            <div class="detail-pair"><span>Duration</span><strong>7 nights / 8 days</strong></div>
+            <div class="detail-pair"><span>Group</span><strong>8–10 guests</strong></div>
+            <div class="detail-pair"><span>Language</span><strong>English</strong></div>
+            <div class="included-block">
+              <p class="eyebrow">Included in the journey</p>
+              <ul>
+                <li>Seven nights at the selected boutique pousada</li>
+                <li>Meals and shared experiences as outlined before booking</li>
+                <li>Thoughtful hosting throughout the stay</li>
+              </ul>
+            </div>
+            <div class="included-block">
+              <p class="eyebrow">Arranged separately</p>
+              <ul>
+                <li>International and domestic flights</li>
+                <li>Travel insurance and personal expenses</li>
+                <li>Any additional nights beyond the journey</li>
+              </ul>
+            </div>
+            <p class="details-note">Ground transport and the final meal plan are shared clearly before any booking is confirmed.</p>
+          </aside>
         </div>
-        <p class="journey-footnote">A loose rhythm, not a schedule. Every invitation is just that: an invitation.</p>
       </section>
 
-      <section class="inquiry" id="inquire">
-        <div class="inquiry-image">
+      <section class="brazil section-shell" id="brazil" aria-labelledby="brazil-title">
+        <div class="brazil-image">
           <img
-            src="https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1500&q=85"
-            alt="A secluded tropical beach at the edge of the forest"
+            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=85"
+            alt="Natural materials and open architecture at a boutique coastal stay"
             loading="lazy"
           />
-          <div class="inquiry-image-note"><span>THE FIRST JOURNEY</span><strong>Algodões, Bahia</strong></div>
+          <span class="image-caption">A place shaped by its surroundings</span>
         </div>
-        <div class="inquiry-content">
-          <p class="section-number">04 / Begin a conversation</p>
-          <h2>Some journeys<br />start with a <em>hello.</em></h2>
-          <p class="inquiry-copy">
-            Our first retreat is limited to 8–10 mental health professionals.
-            Tell us a little about yourself and we’ll share the details privately.
+        <div class="brazil-copy">
+          <p class="section-number">03 / Brazil, one place at a time</p>
+          <p class="eyebrow">The inaugural journey · Bahia</p>
+          <h2 id="brazil-title">Algodões,<br /><em>at its own pace.</em></h2>
+          <p class="brazil-location">Vila Oyá Casa Hotel · Maraú Peninsula</p>
+          <span class="aside-line"></span>
+          <p>
+            On Bahia’s coast, the Atlantic, the forest, and the architecture
+            make their presence felt without asking for attention. Vila Oyá
+            offers a quiet base from which to notice the grain of the wood, the
+            changing light, and the generous flavours of the region.
           </p>
-          <form class="inquiry-form" id="inquiry-form">
-            <div class="form-row">
+          <p>
+            Each SILENCE journey stays with one region. No list of sights to
+            complete—just time to become familiar with a place.
+          </p>
+          <a class="text-link" href="#invitation">Ask about the Bahia journey <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+
+      <section class="journeys section-shell" id="journeys" aria-labelledby="journeys-title">
+        <div class="journeys-heading">
+          <p class="section-number">04 / The journeys</p>
+          <h2 id="journeys-title">Three places,<br />one pace.</h2>
+          <p>
+            Each SILENCE journey stays with one region — a considered base, a
+            small group, and unhurried days. A few destinations to begin with,
+            each with its own character.
+          </p>
+        </div>
+        <div class="journeys-grid" id="journeys-grid"></div>
+      </section>
+
+      <section class="audience section-shell" id="for-you" aria-labelledby="audience-title">
+        <div class="audience-heading">
+          <p class="section-number">05 / Who it’s for</p>
+          <h2 id="audience-title">For those whose work<br />begins with <em>listening.</em></h2>
+          <p>
+            For psychologists, psychotherapists, psychoanalysts, and
+            psychiatrists who are curious about place, open to cultural
+            exchange, and comfortable sharing a small-group journey.
+          </p>
+        </div>
+        <div class="selection">
+          <p class="eyebrow">A considered way to begin</p>
+          <ol>
+            <li><span>01</span><div><h3>A personal invitation</h3><p>We reach out to practitioners whose work and interests align with the journey.</p></div></li>
+            <li><span>02</span><div><h3>An interest form</h3><p>Tell us about your practice and what draws you to slow travel.</p></div></li>
+            <li><span>03</span><div><h3>A conversation</h3><p>A one-to-one exchange to share details and see whether the journey feels right.</p></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="founder" aria-labelledby="founder-title">
+        <div class="founder-inner">
+          <p class="eyebrow">A note on the intention</p>
+          <h2 id="founder-title">Good journeys leave<br />something <em>open.</em></h2>
+          <p>
+            SILENCE is shaped by a belief in considered hospitality: a place
+            with its own character, a pace that leaves room for listening, and
+            the company of people who understand the value of attention.
+          </p>
+          <span class="founder-signature">The thinking behind SILENCE</span>
+        </div>
+      </section>
+
+      <section class="faq section-shell" id="faq" aria-labelledby="faq-title">
+        <div class="faq-heading">
+          <p class="section-number">06 / A few clear answers</p>
+          <h2 id="faq-title">Before you <em>ask.</em></h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>Is SILENCE a professional training programme?</summary>
+            <p>No. SILENCE is a curated travel experience. There are no lectures, clinical sessions, or continuing education credits.</p>
+          </details>
+          <details>
+            <summary>Who is invited to join?</summary>
+            <p>Psychologists, psychotherapists, psychoanalysts, and psychiatrists interested in a thoughtful, small-group journey in Brazil.</p>
+          </details>
+          <details>
+            <summary>How many people travel together?</summary>
+            <p>Each journey is designed for a group of eight to ten guests.</p>
+          </details>
+          <details>
+            <summary>How much of the day is planned?</summary>
+            <p>Very little. There are optional moments to gather, alongside generous unscheduled time. Joining an activity is always a choice.</p>
+          </details>
+          <details>
+            <summary>What is included in the price?</summary>
+            <p>The full meal plan, ground transport, and inclusions are shared transparently with each invitation before a booking is confirmed.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="invitation" id="invitation" aria-labelledby="invitation-title">
+        <div class="invitation-intro">
+          <p class="section-number">07 / Request an invitation</p>
+          <h2 id="invitation-title">Begin with a<br /><em>conversation.</em></h2>
+          <p>
+            Share a little about your practice and the kinds of places and
+            experiences that interest you. We’ll be in touch personally.
+          </p>
+          <p class="privacy-note">We ask about your professional interests, never personal health information.</p>
+        </div>
+        <div class="invitation-form-wrap">
+          <div class="form-progress">
+            <span class="step-count" id="step-count" aria-live="polite">Step 1 of 3</span>
+            <div class="progress-track" id="progress-track" role="progressbar" aria-label="Form progress" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1"><span></span></div>
+          </div>
+          <form class="invitation-form" id="invitation-form">
+            <fieldset class="form-step" data-step="0">
+              <legend>First, a few details.</legend>
+              <label><span>Your name</span><input name="name" autocomplete="name" placeholder="Name" required /></label>
+              <label><span>Email address</span><input name="email" type="email" autocomplete="email" placeholder="you@example.com" required /></label>
+              <label><span>Country of residence</span><input name="country" autocomplete="country-name" placeholder="Country" required /></label>
+              <div class="form-actions form-actions-end"><button class="button button-dark" type="button" data-next>Continue <span aria-hidden="true">→</span></button></div>
+            </fieldset>
+
+            <fieldset class="form-step" data-step="1" hidden>
+              <legend>Tell us about your practice.</legend>
               <label>
-                <span>Your name</span>
-                <input name="name" type="text" autocomplete="name" placeholder="How should we address you?" required />
+                <span>Your field</span>
+                <select name="profession" required>
+                  <option value="" disabled selected>Select your profession</option>
+                  <option>Psychology</option>
+                  <option>Psychotherapy</option>
+                  <option>Psychoanalysis</option>
+                  <option>Psychiatry</option>
+                  <option>Another mental health profession</option>
+                </select>
               </label>
               <label>
-                <span>Email address</span>
-                <input name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+                <span>Years in practice</span>
+                <select name="experience" required>
+                  <option value="" disabled selected>Select a range</option>
+                  <option>Under 5 years</option>
+                  <option>5–10 years</option>
+                  <option>11–20 years</option>
+                  <option>More than 20 years</option>
+                </select>
               </label>
-            </div>
-            <label>
-              <span>Your practice</span>
-              <select name="practice" required>
-                <option value="" disabled selected>Select your field</option>
-                <option>Psychology</option>
-                <option>Psychiatry</option>
-                <option>Psychoanalysis</option>
-                <option>Other mental health profession</option>
-              </select>
-            </label>
-            <label>
-              <span>What are you hoping to find?</span>
-              <textarea name="message" rows="3" placeholder="Share only what feels right to share."></textarea>
-            </label>
-            <button class="button button-dark" type="submit">Request an invitation <span aria-hidden="true">↗</span></button>
-            <p class="form-note">A private, personal conversation. No obligation, no mailing list.</p>
-            <p class="form-success" id="form-success" role="status" tabindex="-1" hidden>
-              Thank you for reaching out. Your interest has been noted; we look forward to speaking with you.
-            </p>
+              <label>
+                <span>Preferred language</span>
+                <select name="language" required>
+                  <option value="" disabled selected>Select a language</option>
+                  <option>English</option>
+                  <option>Portuguese</option>
+                  <option>Spanish</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <div class="form-actions"><button class="button button-quiet" type="button" data-previous>Back</button><button class="button button-dark" type="button" data-next>Continue <span aria-hidden="true">→</span></button></div>
+            </fieldset>
+
+            <fieldset class="form-step" data-step="2" hidden>
+              <legend>What draws you to this kind of journey?</legend>
+              <fieldset class="interest-options">
+                <legend class="visually-hidden">Choose any interests that appeal to you</legend>
+                <label><input type="checkbox" name="interests" value="Landscape and nature" /><span>Landscape and nature</span></label>
+                <label><input type="checkbox" name="interests" value="Architecture and place" /><span>Architecture and place</span></label>
+                <label><input type="checkbox" name="interests" value="Local food and culture" /><span>Local food and culture</span></label>
+                <label><input type="checkbox" name="interests" value="Time for reflection" /><span>Time for reflection</span></label>
+                <label><input type="checkbox" name="interests" value="Conversation with peers" /><span>Conversation with peers</span></label>
+              </fieldset>
+              <label><span>A little more, if you wish</span><textarea name="motivation" rows="3" placeholder="What would you like us to know about your interests?"></textarea></label>
+              <div class="form-actions"><button class="button button-quiet" type="button" data-previous>Back</button><button class="button button-dark" type="submit">Send an interest form <span aria-hidden="true">↗</span></button></div>
+            </fieldset>
           </form>
+          <p class="form-note">This prototype does not transmit or store form submissions.</p>
+          <p class="form-success" id="form-success" role="status" tabindex="-1" hidden>Thank you. We will be in touch personally.</p>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <a class="wordmark footer-wordmark" href="#top">SILENCE<span>®</span></a>
-      <p>Room to return to yourself.</p>
-      <a href="#top">Back to the beginning ↑</a>
-      <span class="footer-country">Brazil, held gently.</span>
-      <small>© 2025 SILENCE. Thoughtfully, always.</small>
+      <a class="wordmark" href="#home">SILENCE</a>
+      <p>Let silence speak.</p>
+      <a href="#home">Back to the beginning ↑</a>
+      <small>Curated slow travel in Brazil · © 2026 SILENCE</small>
     </footer>
   </body>
 </html>
