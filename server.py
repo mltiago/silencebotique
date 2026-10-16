@@ -35,6 +35,7 @@ MIME_OVERRIDES = {
     ".jpg": "image/jpeg",
     ".jpeg": "image/jpeg",
     ".png": "image/png",
+    ".ico": "image/x-icon",
     ".yml": "text/yaml; charset=utf-8",
     ".yaml": "text/yaml; charset=utf-8",
 }
