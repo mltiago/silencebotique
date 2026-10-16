@@ -290,18 +290,18 @@
     background: var(--green);
   }
 
+  .testimonials {
+    padding-top: 135px;
+    padding-bottom: 145px;
+    background: var(--paper-warm);
+  }
+
   .faq {
     display: grid;
     grid-template-columns: 0.75fr 1.25fr;
     gap: 12%;
     padding-top: 135px;
     padding-bottom: 145px;
-  }
-
-  .testimonials {
-    padding-top: 135px;
-    padding-bottom: 145px;
-    background: var(--paper-warm);
   }
 
   .invitation {
@@ -1411,53 +1411,7 @@
     font: italic 0.9375rem var(--serif);
   }
 
-  /* FAQ */
-  .faq h2 {
-    font-size: clamp(3rem, 5vw, 4.1875rem);
-  }
-
-  .faq-list {
-    border-top: 1px solid var(--line);
-  }
-
-  .faq-list details {
-    border-bottom: 1px solid var(--line);
-  }
-
-  .faq-list summary {
-    position: relative;
-    padding: 19px 35px 19px 0;
-    list-style: none;
-    font: 400 1.125rem/1.4 var(--serif);
-    cursor: pointer;
-  }
-
-  .faq-list summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .faq-list summary::after {
-    position: absolute;
-    top: 18px;
-    right: 4px;
-    color: var(--green);
-    font: 400 1.0625rem var(--sans);
-    content: "+";
-  }
-
-  .faq-list details[open] summary::after {
-    content: "−";
-  }
-
-  .faq-list details p {
-    max-width: 610px;
-    margin: -2px 40px 19px 0;
-    color: var(--muted);
-    font-size: 0.875rem;
-    line-height: 1.85;
-  }
-
-  /* 07 / I'VE BEEN THERE (Guest Feedback) */
+  /* 06 / I'VE BEEN THERE (Guest Feedback) */
   .testimonials-heading {
     max-width: 720px;
   }
@@ -1559,6 +1513,52 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     background: var(--paper-warm);
+  }
+
+  /* FAQ */
+  .faq h2 {
+    font-size: clamp(3rem, 5vw, 4.1875rem);
+  }
+
+  .faq-list {
+    border-top: 1px solid var(--line);
+  }
+
+  .faq-list details {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .faq-list summary {
+    position: relative;
+    padding: 19px 35px 19px 0;
+    list-style: none;
+    font: 400 1.125rem/1.4 var(--serif);
+    cursor: pointer;
+  }
+
+  .faq-list summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-list summary::after {
+    position: absolute;
+    top: 18px;
+    right: 4px;
+    color: var(--green);
+    font: 400 1.0625rem var(--sans);
+    content: "+";
+  }
+
+  .faq-list details[open] summary::after {
+    content: "−";
+  }
+
+  .faq-list details p {
+    max-width: 610px;
+    margin: -2px 40px 19px 0;
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.85;
   }
 
   /* Invitation Form */

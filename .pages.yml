@@ -85,7 +85,7 @@ content:
             default: "Enquire about this journey"
 
   - name: testimonials
-    label: Guest Feedback (07 / I’ve Been There)
+    label: Guest Feedback (06 / I’ve Been There)
     type: file
     path: data/testimonials.json
     format: json

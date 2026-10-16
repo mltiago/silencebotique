@@ -213,7 +213,7 @@ Um site lento no ritmo e rápido no carregamento: poucas páginas, muito espaço
 **Numeração das seções** (espelha o HTML real e a ordem da `<nav>`)
 
 - 01 / The philosophy · 02 / The experience · 03 / Brazil
-- 04 / The Journeys · 05 / Who it's for · 06 / A few clear answers · 07 / Request an invitation
+- 04 / The Journeys · 05 / Who it's for · 06 / I've been there · 07 / A few clear answers · 08 / Request an invitation
 - The Founder não tem número (seção institucional curta, fora da numeração) e **não entra na nav** (nav enxuta; quem se interessa encontra no scroll).
 
 ## Arquitetura de Catálogo e Plataforma Administrativa (Opção A — Git-Based CMS + API Local)
