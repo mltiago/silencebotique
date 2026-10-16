@@ -1,5 +1,5 @@
 # Decap CMS (Git-Based CMS — Option A) configuration for SILENCE
-# Edits data/journeys.json directly via Git commits on the repository.
+# Edits data/journeys.json and data/testimonials.json directly via Git commits on the repository.
 backend:
   name: git-gateway
   branch: main
@@ -11,7 +11,7 @@ public_folder: "assets/images/journeys"
 
 collections:
   - name: "catalog"
-    label: "SILENCE Journeys Catalog"
+    label: "SILENCE Content Studio"
     files:
       - name: "journeys"
         label: "Travel Packages (The Journeys)"
@@ -26,13 +26,14 @@ collections:
               - { label: "Slug ID", name: "id", widget: "string", pattern: ["^[a-z0-9-]+$", "Use lowercase letters, numbers, and hyphens only."] }
               - { label: "Display Order", name: "order", widget: "number", value_type: "int", min: 1, default: 1 }
               - { label: "Status", name: "status", widget: "select", options: ["published", "coming_soon", "archived"], default: "published" }
-              - { label: "Flagship (Inaugural Journey)", name: "flagship", widget: "boolean", default: false }
+              - { label: "Featured Card (Moss-Green Border)", name: "flagship", widget: "boolean", default: false }
               - { label: "Destination Name", name: "name", widget: "string" }
               - { label: "Region / State", name: "region", widget: "string" }
-              - { label: "Accommodation", name: "accommodation", widget: "string" }
+              - { label: "Hospitality Category (e.g. Boutique pousada / Boutique lodge)", name: "accommodation", widget: "string" }
               - { label: "Duration", name: "duration", widget: "string", default: "7 nights / 8 days" }
               - { label: "Group Size", name: "groupSize", widget: "string", default: "8–10 guests" }
               - { label: "Edition / Timing Note", name: "editionDates", widget: "string", required: false }
+              - { label: "Card Axiom", name: "axiom", widget: "string", required: false }
               - { label: "Cover Image Path (or empty for gradient placeholder)", name: "image", widget: "image", required: false }
               - { label: "Image Alt Text (WCAG AA descriptive)", name: "imageAlt", widget: "string", required: false }
               - {
@@ -41,4 +42,28 @@ collections:
                   widget: "text",
                   pattern: ["^(?!.*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa)\\b).*$", "Brand voice violation: avoid therapy, retreat, healing, burnout, detox, transformation, cure, or spa."]
                 }
+              - { label: "Sensory Highlights", name: "highlights", widget: "list", field: { label: "Highlight", name: "highlight", widget: "string" } }
               - { label: "CTA Label", name: "ctaLabel", widget: "string", default: "Enquire about this journey" }
+      - name: "testimonials"
+        label: "Guest Feedback (07 / I’ve Been There)"
+        file: "data/testimonials.json"
+        description: "Manage reflections from mental health professionals who traveled with SILENCE."
+        fields:
+          - label: "Testimonials"
+            name: "testimonials"
+            widget: "list"
+            summary: "{{fields.order}} · {{fields.author}} ({{fields.role}}, {{fields.location}})"
+            fields:
+              - { label: "Slug ID", name: "id", widget: "string" }
+              - { label: "Display Order", name: "order", widget: "number", value_type: "int", min: 1, default: 1 }
+              - { label: "Status", name: "status", widget: "select", options: ["published", "archived"], default: "published" }
+              - { label: "Author Name", name: "author", widget: "string" }
+              - { label: "Role / Discipline", name: "role", widget: "string" }
+              - { label: "Location", name: "location", widget: "string" }
+              - { label: "Journey Visited", name: "journey", widget: "string" }
+              - {
+                  label: "Quote",
+                  name: "quote",
+                  widget: "text",
+                  pattern: ["^(?!.*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa)\\b).*$", "Brand voice violation: avoid therapy, retreat, healing, burnout, detox, transformation, cure, or spa."]
+                }

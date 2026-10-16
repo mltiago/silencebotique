@@ -1,0 +1,34 @@
+{
+  "testimonials": [
+    {
+      "id": "julian-ross",
+      "order": 1,
+      "status": "published",
+      "author": "Dr. Julian Ross",
+      "role": "Clinical Psychoanalyst",
+      "location": "Manhattan, New York",
+      "journey": "Praia de Algodões, Bahia",
+      "quote": "In Manhattan, clinical listening is an act of holding back an overwhelming tide of language. At Algodões, between the reef and the coastal forest, silence was no longer something to interpret—it became an unburdened presence. A rare space where attention simply rests."
+    },
+    {
+      "id": "eleanor-ward",
+      "order": 2,
+      "status": "published",
+      "author": "Prof. Eleanor Ward",
+      "role": "Professor of Social Psychology",
+      "location": "Cambridge, United Kingdom",
+      "journey": "Atins, Lençóis Maranhenses",
+      "quote": "Academic and social life demand continuous performance. In Atins, sharing the vast dunes and quiet freshwater lagoons with eight peers carried zero social expectation. The silence wasn’t awkward or enforced; it was a generous common ground."
+    },
+    {
+      "id": "marcus-reid",
+      "order": 3,
+      "status": "published",
+      "author": "Dr. Marcus Reid",
+      "role": "Clinical Psychiatrist",
+      "location": "Vancouver, Canada",
+      "journey": "The Amazon, Brazil",
+      "quote": "The sensory cadence of the Amazon river at dawn settles chronic clinical vigilance like nothing else. For eight unhurried days, the mind re-calibrates to the slow rhythm of water and canopy. An essential restoration of quiet."
+    }
+  ]
+}

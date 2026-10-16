@@ -21,17 +21,25 @@ export function initMenu(headerSelector = ".site-header") {
 
   if (!menuToggle || !siteNav) return;
 
+  const menuLabel = /** @type {HTMLElement | null} */ (
+    menuToggle.querySelector(".menu-toggle-label")
+  );
+
   /**
    * Updates menu open/closed state and ARIA attributes.
    * @param {boolean} isOpen
    * @param {{ restoreFocus?: boolean }} [options]
    */
   function setMenuState(isOpen, { restoreFocus = false } = {}) {
+    if (!menuToggle || !siteNav || !siteHeader) return;
     menuToggle.setAttribute("aria-expanded", String(isOpen));
     menuToggle.setAttribute(
       "aria-label",
       isOpen ? "Close navigation" : "Open navigation"
     );
+    if (menuLabel) {
+      menuLabel.textContent = isOpen ? "Close" : "Menu";
+    }
     siteNav.classList.toggle("is-open", isOpen);
     siteHeader.classList.toggle("is-menu-open", isOpen);
 

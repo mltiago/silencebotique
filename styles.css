@@ -189,16 +189,20 @@
 
   .site-header {
     position: absolute;
-    z-index: 5;
-    inset: 0 0 auto;
+    z-index: 15;
+    top: var(--hero-header-top, calc(100svh - 114px));
+    right: 0;
+    left: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    min-height: 86px;
+    justify-content: flex-end;
+    min-height: 74px;
     padding: 0 7.2%;
     color: white;
-    background: transparent;
-    border-bottom: 1px solid rgb(255 255 255 / 20%);
+    background: rgb(20 25 22 / 36%);
+    border-top: 1px solid rgb(255 255 255 / 18%);
+    border-bottom: 0;
+    backdrop-filter: blur(8px);
     transition:
       background-color var(--transition-fast),
       color var(--transition-fast),
@@ -207,14 +211,22 @@
 
   .site-header.is-scrolled {
     position: fixed;
+    top: 0;
+    justify-content: space-between;
+    min-height: 82px;
     color: var(--ink);
-    background: rgb(249 248 246 / 94%);
-    border-bottom-color: var(--line);
-    backdrop-filter: blur(6px);
+    background: rgb(249 248 246 / 95%);
+    border-top-color: transparent;
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(8px);
   }
 
   .site-header.is-menu-open {
+    justify-content: space-between;
     color: var(--ink);
+    background: var(--paper);
+    border-top-color: var(--line);
+    border-bottom: 1px solid var(--line);
   }
 
   .hero {
@@ -222,8 +234,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 100svh;
-    padding: 155px 7.2% 55px;
+    min-height: calc(100svh - 40px);
+    padding: 110px 7.2% 115px;
     overflow: hidden;
     color: white;
     background: var(--ink);
@@ -254,12 +266,7 @@
   }
 
   .brazil {
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 10%;
-    align-items: center;
-    padding-top: 145px;
-    padding-bottom: 150px;
+    width: 100%;
   }
 
   .journeys {
@@ -291,6 +298,12 @@
     padding-bottom: 145px;
   }
 
+  .testimonials {
+    padding-top: 135px;
+    padding-bottom: 145px;
+    background: var(--paper-warm);
+  }
+
   .invitation {
     display: grid;
     grid-template-columns: 0.82fr 1.18fr;
@@ -305,7 +318,7 @@
     align-items: center;
     gap: 18px;
     min-height: 120px;
-    padding: 30px 7.2%;
+    padding: 30px 7.2% 68px;
     color: white;
     background: var(--ink);
   }
@@ -343,13 +356,38 @@
     letter-spacing: 0.22em;
   }
 
+  .site-header .wordmark {
+    display: none;
+  }
+
+  .site-header.is-scrolled .wordmark,
+  .site-header.is-menu-open .wordmark {
+    display: inline-block;
+  }
+
+  .hero-wordmark {
+    position: absolute;
+    z-index: 6;
+    top: 34px;
+    left: 7.2%;
+    color: white;
+  }
+
   .site-nav {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
     gap: clamp(20px, 2.7vw, 42px);
-    color: rgb(255 255 255 / 85%);
+    color: rgb(255 255 255 / 88%);
     font-size: 0.75rem;
     letter-spacing: 0.035em;
+  }
+
+  .site-header.is-scrolled .site-nav {
+    width: auto;
+    justify-content: flex-end;
+    color: var(--nav-scrolled);
   }
 
   .site-nav a {
@@ -358,6 +396,27 @@
 
   .site-nav a:hover {
     color: white;
+  }
+
+  .nav-link {
+    position: relative;
+    padding: 10px 0;
+  }
+
+  .nav-link::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: var(--green);
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition:
+      transform var(--transition-fast),
+      opacity var(--transition-fast);
+    content: "";
   }
 
   .nav-invitation {
@@ -373,19 +432,22 @@
     display: none;
   }
 
-  .site-header.is-scrolled .site-nav {
-    color: var(--nav-scrolled);
+  .site-header.is-scrolled .site-nav a:hover,
+  .site-header.is-scrolled .nav-link.is-active,
+  .site-header.is-scrolled .nav-invitation.is-active {
+    color: var(--green);
   }
 
-  .site-header.is-scrolled .site-nav a:hover {
-    color: var(--green);
+  .site-header.is-scrolled .nav-link.is-active::after {
+    opacity: 1;
+    transform: scaleX(1);
   }
 
   .site-header.is-scrolled .nav-invitation {
     border-bottom-color: var(--green);
   }
 
-  .site-header.is-scrolled .menu-toggle span {
+  .site-header.is-scrolled .menu-line {
     background: var(--ink);
   }
 
@@ -447,19 +509,23 @@
   }
 
   .hero-pillars {
-    position: absolute;
-    z-index: 1;
-    right: 7.2%;
-    bottom: 26px;
-    left: 7.2%;
+    position: fixed;
+    z-index: 12;
+    right: 0;
+    bottom: 0;
+    left: 0;
     display: flex;
+    align-items: center;
     gap: 34px;
-    padding-top: 13px;
-    border-top: 1px solid rgb(255 255 255 / 25%);
-    color: rgb(255 255 255 / 78%);
+    min-height: 40px;
+    padding: 0 7.2%;
+    background: rgb(20 25 22 / 86%);
+    border-top: 1px solid rgb(255 255 255 / 16%);
+    color: rgb(255 255 255 / 82%);
     font-size: 0.6875rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    backdrop-filter: blur(8px);
   }
 
   .hero-pillars b {
@@ -534,7 +600,7 @@
     font-size: 0.75rem;
   }
 
-  .text-link span:last-child {
+  .text-link-arrow {
     margin-left: 12px;
   }
 
@@ -571,6 +637,7 @@
   .experience h2,
   .audience h2,
   .faq h2,
+  .testimonials h2,
   .invitation h2 {
     margin-bottom: 28px;
     font-size: clamp(2.9375rem, 5.4vw, 4.4375rem);
@@ -623,7 +690,8 @@
 
   .experience-heading .section-number,
   .audience-heading .section-number,
-  .faq-heading .section-number {
+  .faq-heading .section-number,
+  .testimonials-heading .section-number {
     margin-bottom: 24px;
   }
 
@@ -668,7 +736,7 @@
     padding: 0 0 42px;
   }
 
-  .timeline-entry:last-child {
+  .timeline-entry-last {
     padding-bottom: 0;
   }
 
@@ -775,61 +843,161 @@
     font: italic 0.8125rem/1.8 var(--serif);
   }
 
-  /* Brazil (Flagship) */
+  /* Brazil (Contemplative Nature & Slideshow) */
   .brazil-image {
     position: relative;
-    height: 600px;
+    width: 100%;
+    min-height: clamp(540px, 78svh, 760px);
+    overflow: hidden;
+    background: var(--ink);
+  }
+
+  .brazil-slides {
+    position: absolute;
+    inset: 0;
+  }
+
+  .brazil-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    margin: 0;
+    padding: 64px var(--section-gutter) 58px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1100ms ease-out;
+  }
+
+  .brazil-slide.is-active {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .brazil-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 
-  .image-caption {
+  .brazil-slider-btn {
     position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 18px;
+    z-index: 3;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 22%);
+    color: rgb(255 255 255 / 72%);
+    background: rgb(20 25 22 / 22%);
+    font-size: 0.875rem;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    transform: translateY(-50%);
+    backdrop-filter: blur(4px);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+
+  .brazil-slider-btn-prev {
+    left: clamp(14px, 2.2vw, 32px);
+  }
+
+  .brazil-slider-btn-next {
+    right: clamp(14px, 2.2vw, 32px);
+  }
+
+  .brazil-slider-btn:hover {
+    border-color: rgb(255 255 255 / 55%);
     color: white;
-    background: linear-gradient(transparent, rgb(20 25 22 / 54%));
-    font-size: 0.6875rem;
-    letter-spacing: 0.09em;
+    background: rgb(20 25 22 / 46%);
+  }
+
+  .brazil-slider-dots {
+    position: absolute;
+    z-index: 3;
+    bottom: 20px;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateX(-50%);
+  }
+
+  .brazil-slider-dot {
+    width: 18px;
+    height: 2px;
+    padding: 0;
+    border: 0;
+    background: rgb(255 255 255 / 34%);
+    cursor: pointer;
+    transition:
+      width var(--transition-fast),
+      background-color var(--transition-fast);
+  }
+
+  .brazil-slider-dot.is-active {
+    width: 28px;
+    background: rgb(255 255 255 / 88%);
   }
 
   .brazil-copy {
-    max-width: 490px;
-    padding: 25px 0;
+    position: relative;
+    z-index: 2;
+    max-width: 380px;
+    padding: 22px 26px;
+    color: rgb(249 248 246 / 92%);
+    background: rgb(20 25 22 / 34%);
+    border: 1px solid rgb(255 255 255 / 14%);
+    backdrop-filter: blur(6px);
   }
 
-  .brazil-copy .section-number {
-    margin-bottom: 53px;
+  .brazil-overline {
+    margin: 0 0 10px;
+    color: rgb(249 248 246 / 68%);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
-  .brazil-copy .eyebrow {
-    margin-bottom: 19px;
-  }
-
-  .brazil h2 {
-    margin-bottom: 10px;
-    font-size: clamp(3.3125rem, 5.3vw, 4.625rem);
-    line-height: 1.03;
-  }
-
-  .brazil-location {
-    color: var(--muted);
-    font-size: 0.8125rem;
-    letter-spacing: 0.05em;
-  }
-
-  .brazil-copy .aside-line {
-    margin: 28px 0;
+  .brazil-slide-title {
+    margin: 0 0 10px;
+    color: white;
+    font: 400 clamp(1.5rem, 2.3vw, 2rem) / 1.14 var(--serif);
+    letter-spacing: -0.02em;
   }
 
   .brazil-body {
-    color: var(--muted);
-    font-size: 0.875rem;
-    line-height: 1.85;
+    margin: 0 0 14px;
+    color: rgb(249 248 246 / 80%);
+    font-size: 0.8125rem;
+    line-height: 1.65;
+  }
+
+  .brazil-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgb(255 255 255 / 32%);
+    color: rgb(249 248 246 / 88%);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    transition:
+      color var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+
+  .brazil-link:hover {
+    border-bottom-color: white;
+    color: white;
   }
 
   /* The Journeys (Catalog) */
@@ -868,6 +1036,19 @@
     flex-direction: column;
     background: var(--paper);
     border: 1px solid var(--line);
+    cursor: pointer;
+    user-select: none;
+    transition:
+      transform var(--transition-fast),
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+
+  .journey-card:hover,
+  .journey-card:focus-visible {
+    border-color: var(--green);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgb(20 25 22 / 6%);
   }
 
   .journey-card-flagship {
@@ -911,16 +1092,237 @@
     letter-spacing: 0.05em;
   }
 
-  .journey-description {
+  .journey-axiom {
     flex: 1;
-    margin: 0 0 18px;
+    margin: 0 0 20px;
     color: var(--muted);
-    font-size: 0.875rem;
+    font: italic 0.875rem/1.7 var(--serif);
+  }
+
+  .journey-expand-hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    color: var(--green);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .journey-expand-icon {
+    font-size: 1rem;
+    line-height: 1;
+    transition: transform var(--transition-fast);
+  }
+
+  .journey-card:hover .journey-expand-icon {
+    transform: scale(1.2);
+  }
+
+  /* Journey Dossier Modal (Framed Overlay) */
+  .journey-dossier {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: grid;
+    place-items: center;
+    padding: clamp(20px, 4.5vw, 56px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 380ms ease-out;
+  }
+
+  .journey-dossier.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .journey-dossier[hidden] {
+    display: none;
+  }
+
+  .journey-dossier-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgb(20 25 22 / 52%);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+  }
+
+  .journey-dossier-panel {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 0.95fr 1.05fr;
+    width: 100%;
+    max-width: 1220px;
+    height: 100%;
+    max-height: 760px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    box-shadow: 0 32px 72px rgb(20 25 22 / 24%);
+    overflow: hidden;
+    transform-origin: center center;
+    transform: translate3d(var(--morph-x, 0px), var(--morph-y, 0px), 0)
+      scale(var(--morph-sx, 0.92), var(--morph-sy, 0.92));
+    transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  .journey-dossier.is-open .journey-dossier-panel {
+    transform: translate3d(0, 0, 0) scale(1, 1);
+  }
+
+  .dossier-media {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--paper-warm);
+    border-right: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .dossier-image {
+    position: relative;
+    flex: 1;
+    min-height: 280px;
+    overflow: hidden;
+  }
+
+  .dossier-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .dossier-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 0;
+    padding: 20px 24px;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+  }
+
+  .dossier-meta-item dt {
+    margin-bottom: 4px;
+    color: var(--muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .dossier-meta-item dd {
+    margin: 0;
+    color: var(--ink);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .dossier-content {
+    display: flex;
+    flex-direction: column;
+    padding: 38px 42px 42px;
+    overflow-y: auto;
+  }
+
+  .dossier-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .dossier-close-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    background: transparent;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      color var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+
+  .dossier-close-btn:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .dossier-close-icon {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .dossier-content h3 {
+    margin: 0 0 10px;
+    font: 400 clamp(2rem, 3.2vw, 2.75rem)/1.1 var(--serif);
+    letter-spacing: -0.025em;
+  }
+
+  .dossier-axiom {
+    margin: 0 0 16px;
+    color: var(--green);
+    font: italic 0.9375rem/1.6 var(--serif);
+  }
+
+  .dossier-content .aside-line {
+    margin: 0 0 22px;
+  }
+
+  .dossier-description {
+    margin: 0 0 24px;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.85;
+  }
+
+  .dossier-highlights-wrap {
+    margin-bottom: 32px;
+    padding: 22px 24px;
+    background: var(--paper-warm);
+    border: 1px solid var(--line);
+  }
+
+  .dossier-highlights-title {
+    margin: 0 0 12px;
+    color: var(--green);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .dossier-highlights {
+    margin: 0;
+    padding: 0 0 0 18px;
+    color: var(--muted);
+    font-size: 0.8125rem;
     line-height: 1.8;
   }
 
-  .journey-body .text-link {
+  .dossier-highlights li {
+    margin-bottom: 6px;
+  }
+
+  .dossier-actions {
     margin-top: auto;
+    padding-top: 14px;
+  }
+
+  body.has-modal-open {
+    overflow: hidden;
   }
 
   /* Audience */
@@ -1055,6 +1457,110 @@
     line-height: 1.85;
   }
 
+  /* 07 / I'VE BEEN THERE (Guest Feedback) */
+  .testimonials-heading {
+    max-width: 720px;
+  }
+
+  .testimonials-heading h2 {
+    margin-bottom: 21px;
+    font-size: clamp(2.9375rem, 5.4vw, 4.4375rem);
+    line-height: 1.08;
+  }
+
+  .testimonials-intro {
+    max-width: 580px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.85;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+    gap: 28px;
+    margin-top: 64px;
+  }
+
+  .testimonial-card {
+    display: flex;
+    flex-direction: column;
+    padding: 38px 32px 34px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    transition:
+      border-color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .testimonial-card:hover {
+    border-color: var(--muted);
+    transform: translateY(-2px);
+  }
+
+  .testimonial-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    margin: 0;
+  }
+
+  .testimonial-quote {
+    margin: 0 0 32px;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: clamp(1.0625rem, 1.2vw, 1.1875rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.78;
+    letter-spacing: -0.01em;
+  }
+
+  .testimonial-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+
+  .testimonial-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .testimonial-author {
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .testimonial-role {
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+  }
+
+  .testimonial-journey {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 3px 9px;
+    border: 1px solid var(--line);
+    color: var(--green);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--paper-warm);
+  }
+
   /* Invitation Form */
   .invitation-intro {
     max-width: 420px;
@@ -1137,7 +1643,7 @@
     letter-spacing: 0.05em;
   }
 
-  .form-step input:not([type="checkbox"]),
+  .form-input,
   .form-step select,
   .form-step textarea {
     width: 100%;
@@ -1308,6 +1814,10 @@
       padding: 0 5%;
     }
 
+    .hero-wordmark {
+      left: 5%;
+    }
+
     .site-nav {
       gap: 15px;
       font-size: 0.6875rem;
@@ -1319,8 +1829,8 @@
     }
 
     .hero-pillars {
-      left: 5%;
-      right: 5%;
+      padding-left: 5%;
+      padding-right: 5%;
     }
 
     .section-shell {
@@ -1353,6 +1863,12 @@
     }
 
     .site-header {
+      top: var(--hero-header-top, calc(100svh - 110px));
+      min-height: 70px;
+    }
+
+    .site-header.is-scrolled {
+      top: 0;
       min-height: 70px;
     }
 
@@ -1360,56 +1876,105 @@
       font-size: 0.9375rem;
     }
 
+    .hero-wordmark {
+      top: 26px;
+      left: 7%;
+    }
+
     .menu-toggle {
       position: relative;
       z-index: 7;
-      display: grid;
-      align-content: center;
-      gap: 6px;
-      width: 42px;
-      height: 42px;
-      padding: 11px 8px;
-      border: 0;
-      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 40px;
+      padding: 0 15px;
+      border: 1px solid rgb(255 255 255 / 32%);
+      color: white;
+      background: rgb(255 255 255 / 8%);
+      font-size: 0.6875rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       cursor: pointer;
+      transition:
+        color var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
     }
 
-    .menu-toggle span {
-      width: 25px;
+    .menu-toggle:hover {
+      background: rgb(255 255 255 / 16%);
+      border-color: white;
+    }
+
+    .menu-toggle-icon {
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      width: 18px;
+      height: 14px;
+    }
+
+    .menu-line {
+      display: block;
+      width: 18px;
       height: 1px;
-      background: white;
+      background: currentcolor;
       transition:
         transform var(--transition-fast),
+        opacity var(--transition-fast),
         background-color var(--transition-fast);
     }
 
-    .site-header.is-scrolled .menu-toggle span,
-    .site-header.is-menu-open .menu-toggle span,
-    .menu-toggle[aria-expanded="true"] span {
-      background: var(--ink);
+    .site-header.is-scrolled .menu-toggle,
+    .site-header.is-menu-open .menu-toggle,
+    .menu-toggle[aria-expanded="true"] {
+      color: var(--ink);
+      background: rgb(20 25 22 / 4%);
+      border-color: var(--line);
     }
 
-    .menu-toggle[aria-expanded="true"] span:first-child {
-      transform: translateY(3.5px) rotate(45deg);
+    .site-header.is-scrolled .menu-toggle:hover,
+    .site-header.is-menu-open .menu-toggle:hover {
+      border-color: var(--green);
+      color: var(--green);
     }
 
-    .menu-toggle[aria-expanded="true"] span:last-child {
-      transform: translateY(-3.5px) rotate(-45deg);
+    .menu-toggle[aria-expanded="true"] .menu-line-top {
+      transform: translateY(5px) rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] .menu-line-middle {
+      opacity: 0;
+    }
+
+    .menu-toggle[aria-expanded="true"] .menu-line-bottom {
+      transform: translateY(-5px) rotate(-45deg);
     }
 
     .site-nav {
       position: absolute;
-      top: 0;
       right: 0;
+      bottom: 100%;
       left: 0;
       display: none;
       flex-direction: column;
       align-items: stretch;
       gap: 0;
-      padding: 83px 7% 22px;
+      padding: 22px 7%;
       color: var(--nav-scrolled);
       background: var(--paper);
+      border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
+      box-shadow: 0 -12px 32px rgb(20 25 22 / 12%);
+    }
+
+    .site-header.is-scrolled .site-nav {
+      top: 0;
+      bottom: auto;
+      width: 100%;
+      padding: 83px 7% 22px;
+      border-top: 0;
       box-shadow: 0 12px 32px rgb(20 25 22 / 8%);
     }
 
@@ -1424,8 +1989,14 @@
       font-size: 0.875rem;
     }
 
-    .site-nav a:hover {
+    .nav-link::after {
+      display: none;
+    }
+
+    .site-nav a:hover,
+    .site-nav .nav-link.is-active {
       color: var(--green);
+      border-bottom-color: var(--green);
     }
 
     .site-nav .nav-invitation {
@@ -1436,8 +2007,8 @@
     }
 
     .hero {
-      min-height: 100svh;
-      padding: 127px 7% 100px;
+      min-height: calc(100svh - 40px);
+      padding: 68px 7% 86px;
     }
 
     .hero-copy {
@@ -1445,27 +2016,33 @@
     }
 
     .hero h1 {
-      margin: 20px 0 18px;
-      font-size: clamp(3rem, 15vw, 5.25rem);
+      margin: 14px 0;
+      font-size: clamp(2.375rem, 10.5vw, 3.5rem);
     }
 
     .hero-description {
       max-width: 370px;
+      margin-bottom: 18px;
       font-size: 0.875rem;
+      line-height: 1.65;
+    }
+
+    .hero-tagline {
+      margin-top: 14px;
     }
 
     .hero-pillars {
-      right: 7%;
-      bottom: 23px;
-      left: 7%;
-      flex-wrap: wrap;
-      gap: 20px;
-      font-size: 0.6875rem;
+      height: 40px;
+      min-height: 40px;
+      padding: 0 5%;
+      gap: 10px;
+      font-size: 0.5625rem;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
     }
 
     .hero-place {
-      width: 100%;
-      margin-left: 0;
+      margin-left: auto;
     }
 
     .breather {
@@ -1494,6 +2071,7 @@
     .experience h2,
     .audience h2,
     .faq h2,
+    .testimonials h2,
     .invitation h2 {
       font-size: clamp(2.6875rem, 12vw, 3.75rem);
     }
@@ -1539,28 +2117,33 @@
     }
 
     .brazil {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 38px;
-      padding-top: 85px;
-      padding-bottom: 91px;
-    }
-
-    .brazil-image {
-      height: 390px;
-    }
-
-    .brazil-copy {
       padding: 0;
     }
 
-    .brazil-copy .section-number {
-      margin-bottom: 40px;
+    .brazil-image {
+      min-height: 480px;
     }
 
-    .brazil h2 {
-      font-size: 3.625rem;
+    .brazil-slide {
+      padding: 40px 52px 54px;
+    }
+
+    .brazil-copy {
+      max-width: 100%;
+      padding: 18px 20px;
+    }
+
+    .brazil-slider-btn {
+      width: 30px;
+      height: 30px;
+    }
+
+    .brazil-slider-btn-prev {
+      left: 10px;
+    }
+
+    .brazil-slider-btn-next {
+      right: 10px;
     }
 
     .journeys {
@@ -1580,6 +2163,36 @@
 
     .journey-image {
       height: 190px;
+    }
+
+    .journey-dossier {
+      padding: 16px;
+    }
+
+    .journey-dossier-panel {
+      grid-template-columns: 1fr;
+      max-height: calc(100svh - 32px);
+      overflow-y: auto;
+    }
+
+    .dossier-media {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dossier-image {
+      min-height: 220px;
+      height: 220px;
+    }
+
+    .dossier-meta {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 14px 18px;
+    }
+
+    .dossier-content {
+      padding: 24px 20px 30px;
     }
 
     .audience {
@@ -1619,6 +2232,25 @@
       font-size: 1rem;
     }
 
+    .testimonials {
+      padding-top: 88px;
+      padding-bottom: 91px;
+    }
+
+    .testimonials-heading {
+      margin-bottom: 35px;
+    }
+
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .testimonial-card {
+      padding: 28px 22px 24px;
+    }
+
     .invitation {
       display: block;
       padding: 84px 7% 90px;
@@ -1632,7 +2264,7 @@
       padding-top: 0;
     }
 
-    .form-step input:not([type="checkbox"]),
+    .form-input,
     .form-step select,
     .form-step textarea {
       font-size: 1rem;
@@ -1645,7 +2277,7 @@
     .site-footer {
       grid-template-columns: 1fr 1fr;
       row-gap: 18px;
-      padding: 28px 7%;
+      padding: 28px 7% 68px;
     }
 
     .footer-tagline {

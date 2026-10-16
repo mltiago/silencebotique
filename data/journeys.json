@@ -7,13 +7,19 @@
       "flagship": true,
       "name": "Praia de Algodões",
       "region": "Maraú Peninsula, Bahia",
-      "accommodation": "Vila Oyá Casa Hotel",
+      "accommodation": "Boutique pousada",
       "duration": "7 nights / 8 days",
       "groupSize": "8–10 guests",
-      "editionDates": "Inaugural edition",
-      "image": null,
-      "imageAlt": "Natural materials and open architecture at Vila Oyá Casa Hotel",
-      "description": "On Bahia's coast, the Atlantic, the forest, and the architecture make their presence felt without asking for attention.",
+      "editionDates": "",
+      "axiom": "Warm tide, coastal forest, and unhurried light.",
+      "image": "assets/images/journeys/algodoes.webp",
+      "imageAlt": "Golden hour over calm waters and palm trees at Praia de Algodões, Maraú Peninsula, Bahia",
+      "description": "On Bahia's coast, the Atlantic, the forest, and the architecture make their presence felt without asking for attention. Seven days to settle into the rhythm of the reef, the shade of native palms, and long conversations around a regional table.",
+      "highlights": [
+        "Quiet mornings between calm Atlantic tide pools and the coastal forest",
+        "Open architecture in natural wood, fiber, and linen",
+        "Generous Bahian cuisine shared in an intimate group of 8–10 guests"
+      ],
       "ctaLabel": "Enquire about this journey"
     },
     {
@@ -26,10 +32,16 @@
       "accommodation": "Boutique pousada",
       "duration": "7 nights / 8 days",
       "groupSize": "8–10 guests",
-      "editionDates": "In development",
-      "image": null,
-      "imageAlt": "White sand dunes and fresh water lagoons in Atins, Maranhão",
-      "description": "A quiet village between the dunes and the sea, where white sand and fresh water meet at the edge of the Lençóis National Park.",
+      "editionDates": "",
+      "axiom": "Wind-carved white sand and still rainwater under an open sky.",
+      "image": "assets/images/journeys/atins.webp",
+      "imageAlt": "White sand dunes and fresh water lagoons in Atins, Lençóis Maranhenses, Maranhão",
+      "description": "A quiet village between the dunes and the sea, where white sand and fresh water meet at the edge of the Lençóis National Park. Days follow the wind, the shifting light over the lagoons, and the slow pace of sandy paths.",
+      "highlights": [
+        "Late-afternoon walks across sweeping dunes and crystal rainwater lagoons",
+        "Unhurried hours where the Preguiças river meets the Atlantic",
+        "Secluded boutique pousada sheltered by native cashews and palms"
+      ],
       "ctaLabel": "Enquire about this journey"
     },
     {
@@ -42,10 +54,16 @@
       "accommodation": "Boutique lodge",
       "duration": "7 nights / 8 days",
       "groupSize": "8–10 guests",
-      "editionDates": "In development",
-      "image": null,
+      "editionDates": "",
+      "axiom": "Morning mist over mirrored waters, where the river sets the pace.",
+      "image": "assets/images/journeys/amazon.webp",
       "imageAlt": "Forest canopy and calm river waters in the Amazon region",
-      "description": "Deep in the forest, the river sets the pace. A place where silence is the loudest presence and the day follows the current.",
+      "description": "Deep in the forest, the river sets the pace. A place where silence is the loudest presence, the day follows the current, and the scale of the canopy invites a rare quality of listening.",
+      "highlights": [
+        "Dawn navigation along calm, mirror-like blackwater tributaries",
+        "Contemplative immersion in the acoustics and light of the primary forest",
+        "Boutique forest lodge designed in harmony with the riverbanks"
+      ],
       "ctaLabel": "Enquire about this journey"
     }
   ]

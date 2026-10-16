@@ -1,0 +1,136 @@
+# Pages CMS (Git-Based CMS — Option A) configuration for SILENCE
+# Edits data/journeys.json and data/testimonials.json directly via GitHub commits.
+media:
+  input: assets/images/journeys
+  output: assets/images/journeys
+
+content:
+  - name: journeys
+    label: Travel Packages (The Journeys)
+    type: file
+    path: data/journeys.json
+    format: json
+    fields:
+      - name: journeys
+        label: Journeys Catalog
+        type: object
+        list: true
+        fields:
+          - name: id
+            label: Slug ID
+            type: string
+            required: true
+            pattern:
+              regex: "^[a-z0-9-]+$"
+              message: "Use lowercase letters, numbers, and hyphens only."
+          - name: order
+            label: Display Order
+            type: number
+            default: 1
+          - name: status
+            label: Publication Status
+            type: select
+            default: published
+            options:
+              values:
+                - published
+                - coming_soon
+                - archived
+          - name: flagship
+            label: Featured Card (Moss-Green Border)
+            type: boolean
+            default: false
+          - name: name
+            label: Destination Name
+            type: string
+            required: true
+          - name: region
+            label: Region / State
+            type: string
+            required: true
+          - name: accommodation
+            label: Hospitality Category
+            type: string
+            required: true
+          - name: duration
+            label: Duration
+            type: string
+            default: "7 nights / 8 days"
+          - name: groupSize
+            label: Group Size
+            type: string
+            default: "8–10 guests"
+          - name: editionDates
+            label: Edition / Timing Note
+            type: string
+          - name: axiom
+            label: Card Axiom
+            type: string
+          - name: image
+            label: Cover Image Path
+            type: image
+          - name: imageAlt
+            label: Image Alt Text (WCAG AA descriptive)
+            type: string
+          - name: description
+            label: Description
+            type: text
+            required: true
+            pattern:
+              regex: "^(?!.*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa|wellness|vip)\\b).*$"
+              message: "Brand voice violation (CONTEXT.md): avoid therapy, retreat, healing, burnout, detox, transformation, cure, spa, wellness, or vip."
+          - name: ctaLabel
+            label: CTA Label
+            type: string
+            default: "Enquire about this journey"
+
+  - name: testimonials
+    label: Guest Feedback (07 / I’ve Been There)
+    type: file
+    path: data/testimonials.json
+    format: json
+    fields:
+      - name: testimonials
+        label: Testimonials Catalog
+        type: object
+        list: true
+        fields:
+          - name: id
+            label: Slug ID
+            type: string
+            required: true
+          - name: order
+            label: Display Order
+            type: number
+            default: 1
+          - name: status
+            label: Publication Status
+            type: select
+            default: published
+            options:
+              values:
+                - published
+                - archived
+          - name: author
+            label: Author Name
+            type: string
+            required: true
+          - name: role
+            label: Role / Discipline
+            type: string
+            required: true
+          - name: location
+            label: Location
+            type: string
+            required: true
+          - name: journey
+            label: Journey Visited
+            type: string
+            required: true
+          - name: quote
+            label: Quote
+            type: text
+            required: true
+            pattern:
+              regex: "^(?!.*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa|wellness|vip)\\b).*$"
+              message: "Brand voice violation (CONTEXT.md): avoid therapy, retreat, healing, burnout, detox, transformation, cure, spa, wellness, or vip."

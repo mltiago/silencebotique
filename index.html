@@ -9,6 +9,7 @@
     />
     <meta name="theme-color" content="#f9f8f6" />
     <title>SILENCE — Let silence speak</title>
+    <link rel="preconnect" href="https://player.vimeo.com" crossorigin />
     <link
       rel="preload"
       href="fonts/DMSans-normal-latin.woff2"
@@ -30,6 +31,7 @@
     <link rel="modulepreload" href="js/form.js" />
     <link rel="modulepreload" href="js/reveal.js" />
     <link rel="modulepreload" href="js/journeys.js" />
+    <link rel="modulepreload" href="js/brazil-slider.js" />
     <link rel="stylesheet" href="styles.css" />
     <script type="module" src="js/main.js"></script>
   </head>
@@ -47,16 +49,21 @@
         aria-controls="site-nav"
         aria-label="Open navigation"
       >
-        <span></span>
-        <span></span>
+        <span class="menu-toggle-label">Menu</span>
+        <span class="menu-toggle-icon" aria-hidden="true">
+          <span class="menu-line menu-line-top"></span>
+          <span class="menu-line menu-line-middle"></span>
+          <span class="menu-line menu-line-bottom"></span>
+        </span>
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-        <a href="#philosophy">The philosophy</a>
-        <a href="#experience">The experience</a>
-        <a href="#brazil">Brazil</a>
-        <a href="#journeys">The journeys</a>
-        <a href="#for-you">Who it’s for</a>
-        <a href="#faq">FAQ</a>
+        <a class="nav-link" href="#philosophy">The philosophy</a>
+        <a class="nav-link" href="#experience">The experience</a>
+        <a class="nav-link" href="#brazil">Brazil</a>
+        <a class="nav-link" href="#journeys">The journeys</a>
+        <a class="nav-link" href="#for-you">Who it’s for</a>
+        <a class="nav-link" href="#faq">FAQ</a>
+        <a class="nav-link" href="#been-there">I’ve been there</a>
         <a class="nav-invitation" href="#invitation">
           Request an invitation <span aria-hidden="true">↗</span>
         </a>
@@ -76,6 +83,7 @@
             referrerpolicy="strict-origin-when-cross-origin"
           ></iframe>
         </div>
+        <a class="wordmark hero-wordmark" href="#home" aria-label="SILENCE home">SILENCE</a>
         <div class="hero-copy">
           <p class="eyebrow">Curated slow travel in Brazil</p>
           <h1 id="hero-title">Experience<br />the <em>(un)spoken.</em></h1>
@@ -92,7 +100,7 @@
           <span><b>01</b> Slow</span>
           <span><b>02</b> Small</span>
           <span><b>03</b> Brazil</span>
-          <span class="hero-place">Algodões, Bahia</span>
+          <span class="hero-place">One region at a time</span>
         </div>
       </section>
 
@@ -173,7 +181,7 @@
               </div>
             </article>
 
-            <article class="timeline-entry">
+            <article class="timeline-entry timeline-entry-last">
               <span class="timeline-marker">08</span>
               <div class="timeline-content">
                 <p class="timeline-label">Day eight · Depart</p>
@@ -187,8 +195,8 @@
 
           <aside class="journey-details" aria-label="Journey details">
             <p class="experience-intro">
-              The same group size and pace hold for every SILENCE journey — the
-              Vila Oyá flagship and future destinations alike.
+              The same group size and pace hold for every SILENCE journey —
+              across every region of Brazil we visit.
             </p>
             <div class="detail-pair">
               <span>Duration</span>
@@ -226,43 +234,157 @@
         </div>
       </section>
 
-      <section class="brazil section-shell" id="brazil" aria-labelledby="brazil-title">
-        <div class="brazil-image">
-          <img
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=85"
-            srcset="
-              https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80 800w,
-              https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85 1200w,
-              https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=85 1600w
-            "
-            sizes="(max-width: 680px) 86vw, 45vw"
-            width="1600"
-            height="1200"
-            alt="Natural materials and open architecture at a boutique coastal stay"
-            loading="lazy"
-            decoding="async"
-          />
-          <span class="image-caption">A place shaped by its surroundings</span>
-        </div>
-        <div class="brazil-copy">
-          <p class="section-number">03 / Brazil, one place at a time</p>
-          <p class="eyebrow">The inaugural journey · Bahia</p>
-          <h2 id="brazil-title">Algodões,<br /><em>at its own pace.</em></h2>
-          <p class="brazil-location">Vila Oyá Casa Hotel · Maraú Peninsula</p>
-          <span class="aside-line"></span>
-          <p class="brazil-body">
-            On Bahia’s coast, the Atlantic, the forest, and the architecture
-            make their presence felt without asking for attention. Vila Oyá
-            offers a quiet base from which to notice the grain of the wood, the
-            changing light, and the generous flavours of the region.
-          </p>
-          <p class="brazil-body">
-            Each SILENCE journey stays with one region. No list of sights to
-            complete—just time to become familiar with a place.
-          </p>
-          <a class="text-link" href="#invitation" data-journey="algodoes">
-            Ask about the Bahia journey <span aria-hidden="true">↗</span>
-          </a>
+      <section class="brazil" id="brazil" aria-labelledby="brazil-title">
+        <h2 class="visually-hidden" id="brazil-title">
+          03 / Brazil, one place at a time
+        </h2>
+        <div
+          class="brazil-image brazil-slider"
+          id="brazil-slider"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Contemplative landscapes of Brazil"
+        >
+          <div class="brazil-slides" aria-live="polite">
+            <figure class="brazil-slide is-active" data-slide-index="0" aria-hidden="false">
+              <img
+                src="assets/images/brazil-coast-1600.webp"
+                srcset="
+                  assets/images/brazil-coast-1200.webp 1200w,
+                  assets/images/brazil-coast-1600.webp 1600w
+                "
+                sizes="100vw"
+                width="1600"
+                height="900"
+                alt="Golden sunlight filtering through native Atlantic coastal forest onto calm waters in Brazil"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption class="brazil-copy">
+                <p class="brazil-overline">03 / Brazil · Atlantic Coast</p>
+                <p class="brazil-slide-title">
+                  Where the tide <em>slows the day.</em>
+                </p>
+                <p class="brazil-body">
+                  Warm light through coastal forest, salt air, and room to
+                  listen.
+                </p>
+                <a class="brazil-link" href="#journeys">
+                  Explore the journeys
+                  <span class="text-link-arrow" aria-hidden="true">↗</span>
+                </a>
+              </figcaption>
+            </figure>
+
+            <figure class="brazil-slide" data-slide-index="1" aria-hidden="true">
+              <img
+                src="assets/images/brazil-dunes-1600.webp"
+                srcset="
+                  assets/images/brazil-dunes-1200.webp 1200w,
+                  assets/images/brazil-dunes-1600.webp 1600w
+                "
+                sizes="100vw"
+                width="1600"
+                height="900"
+                alt="Sweeping white sand dunes and still emerald rainwater lagoons at golden hour"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption class="brazil-copy">
+                <p class="brazil-overline">03 / Brazil · Dunes &amp; Lagoons</p>
+                <p class="brazil-slide-title">
+                  Open horizons, <em>still water.</em>
+                </p>
+                <p class="brazil-body">
+                  Wind-carved white sand and clear rainwater under an unhurried
+                  sky.
+                </p>
+                <a class="brazil-link" href="#journeys">
+                  Explore the journeys
+                  <span class="text-link-arrow" aria-hidden="true">↗</span>
+                </a>
+              </figcaption>
+            </figure>
+
+            <figure class="brazil-slide" data-slide-index="2" aria-hidden="true">
+              <img
+                src="assets/images/brazil-amazon-1600.webp"
+                srcset="
+                  assets/images/brazil-amazon-1200.webp 1200w,
+                  assets/images/brazil-amazon-1600.webp 1600w
+                "
+                sizes="100vw"
+                width="1600"
+                height="900"
+                alt="Morning mist rising over calm mirrored river waters and dense rainforest canopy"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption class="brazil-copy">
+                <p class="brazil-overline">03 / Brazil · Forest &amp; River</p>
+                <p class="brazil-slide-title">
+                  The current <em>sets the pace.</em>
+                </p>
+                <p class="brazil-body">
+                  Morning mist over mirrored waters, where silence is the
+                  deepest presence.
+                </p>
+                <a class="brazil-link" href="#journeys">
+                  Explore the journeys
+                  <span class="text-link-arrow" aria-hidden="true">↗</span>
+                </a>
+              </figcaption>
+            </figure>
+          </div>
+
+          <button
+            class="brazil-slider-btn brazil-slider-btn-prev"
+            type="button"
+            data-slide-prev
+            aria-label="Previous landscape"
+          >
+            <span aria-hidden="true">&lt;</span>
+          </button>
+
+          <button
+            class="brazil-slider-btn brazil-slider-btn-next"
+            type="button"
+            data-slide-next
+            aria-label="Next landscape"
+          >
+            <span aria-hidden="true">&gt;</span>
+          </button>
+
+          <div
+            class="brazil-slider-dots"
+            role="tablist"
+            aria-label="Select landscape slide"
+          >
+            <button
+              class="brazil-slider-dot is-active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-label="Slide 1: Atlantic coast"
+              data-slide-to="0"
+            ></button>
+            <button
+              class="brazil-slider-dot"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-label="Slide 2: Dunes and lagoons"
+              data-slide-to="1"
+            ></button>
+            <button
+              class="brazil-slider-dot"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-label="Slide 3: Forest and river"
+              data-slide-to="2"
+            ></button>
+          </div>
         </div>
       </section>
 
@@ -272,91 +394,186 @@
           <h2 id="journeys-title">Three places,<br />one pace.</h2>
           <p class="journeys-intro">
             Each SILENCE journey stays with one region — a considered base, a
-            small group, and unhurried days. A few destinations to begin with,
-            each with its own character.
+            small group, and unhurried days. Distinct regions of Brazil, each
+            with its own character.
           </p>
         </div>
 
         <div class="journeys-grid" id="journeys-grid">
-          <article class="journey-card journey-card-flagship">
-            <div
-              class="journey-image journey-image-placeholder"
-              role="img"
-              aria-label="Placeholder image for Praia de Algodões"
-            ></div>
+          <article
+            class="journey-card journey-card-flagship"
+            tabindex="0"
+            role="button"
+            aria-haspopup="dialog"
+            aria-label="View details for Praia de Algodões"
+            data-journey-id="algodoes"
+          >
+            <div class="journey-image">
+              <img
+                src="assets/images/journeys/algodoes.webp"
+                alt="Golden hour over calm waters and palm trees at Praia de Algodões, Maraú Peninsula, Bahia"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             <div class="journey-body">
-              <p class="eyebrow">The inaugural journey</p>
+              <p class="eyebrow">Maraú Peninsula, Bahia</p>
               <h3>Praia de Algodões</h3>
-              <p class="journey-region">Maraú Peninsula, Bahia · Vila Oyá Casa Hotel</p>
-              <p class="journey-description">
-                On Bahia's coast, the Atlantic, the forest, and the architecture
-                make their presence felt without asking for attention.
+              <p class="journey-region">Boutique pousada</p>
+              <p class="journey-axiom" data-field="axiom">
+                Warm tide, coastal forest, and unhurried light.
               </p>
-              <a class="text-link" href="#invitation" data-journey="algodoes">
-                <span>Enquire about this journey</span>
-                <span aria-hidden="true">↗</span>
-              </a>
+              <span class="journey-expand-hint">
+                <span>Explore journey</span>
+                <span class="journey-expand-icon" aria-hidden="true">+</span>
+              </span>
             </div>
           </article>
 
-          <article class="journey-card">
-            <div
-              class="journey-image journey-image-placeholder"
-              role="img"
-              aria-label="Placeholder image for Atins"
-            ></div>
+          <article
+            class="journey-card"
+            tabindex="0"
+            role="button"
+            aria-haspopup="dialog"
+            aria-label="View details for Atins"
+            data-journey-id="atins"
+          >
+            <div class="journey-image">
+              <img
+                src="assets/images/journeys/atins.webp"
+                alt="White sand dunes and fresh water lagoons in Atins, Lençóis Maranhenses, Maranhão"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             <div class="journey-body">
               <p class="eyebrow">Lençóis Maranhenses, Maranhão</p>
               <h3>Atins</h3>
               <p class="journey-region">Boutique pousada</p>
-              <p class="journey-description">
-                A quiet village between the dunes and the sea, where white sand
-                and fresh water meet at the edge of the Lençóis National Park.
+              <p class="journey-axiom" data-field="axiom">
+                Wind-carved white sand and still rainwater under an open sky.
               </p>
-              <a class="text-link" href="#invitation" data-journey="atins">
-                <span>Enquire about this journey</span>
-                <span aria-hidden="true">↗</span>
-              </a>
+              <span class="journey-expand-hint">
+                <span>Explore journey</span>
+                <span class="journey-expand-icon" aria-hidden="true">+</span>
+              </span>
             </div>
           </article>
 
-          <article class="journey-card">
-            <div
-              class="journey-image journey-image-placeholder"
-              role="img"
-              aria-label="Placeholder image for The Amazon"
-            ></div>
+          <article
+            class="journey-card"
+            tabindex="0"
+            role="button"
+            aria-haspopup="dialog"
+            aria-label="View details for The Amazon"
+            data-journey-id="amazon"
+          >
+            <div class="journey-image">
+              <img
+                src="assets/images/journeys/amazon.webp"
+                alt="Forest canopy and calm river waters in the Amazon region"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             <div class="journey-body">
               <p class="eyebrow">Amazon region</p>
               <h3>The Amazon</h3>
               <p class="journey-region">Boutique lodge</p>
-              <p class="journey-description">
-                Deep in the forest, the river sets the pace. A place where
-                silence is the loudest presence and the day follows the current.
+              <p class="journey-axiom" data-field="axiom">
+                Morning mist over mirrored waters, where the river sets the pace.
               </p>
-              <a class="text-link" href="#invitation" data-journey="amazon">
-                <span>Enquire about this journey</span>
-                <span aria-hidden="true">↗</span>
-              </a>
+              <span class="journey-expand-hint">
+                <span>Explore journey</span>
+                <span class="journey-expand-icon" aria-hidden="true">+</span>
+              </span>
             </div>
           </article>
         </div>
 
         <template id="journey-card-template">
-          <article class="journey-card">
+          <article
+            class="journey-card"
+            tabindex="0"
+            role="button"
+            aria-haspopup="dialog"
+          >
             <div class="journey-image" data-field="image-container"></div>
             <div class="journey-body">
               <p class="eyebrow" data-field="eyebrow"></p>
               <h3 data-field="name"></h3>
               <p class="journey-region" data-field="region"></p>
-              <p class="journey-description" data-field="description"></p>
-              <a class="text-link" href="#invitation" data-field="cta">
-                <span data-field="cta-label">Enquire about this journey</span>
-                <span aria-hidden="true">↗</span>
-              </a>
+              <p class="journey-axiom" data-field="axiom"></p>
+              <span class="journey-expand-hint">
+                <span>Explore journey</span>
+                <span class="journey-expand-icon" aria-hidden="true">+</span>
+              </span>
             </div>
           </article>
         </template>
+
+        <div
+          class="journey-dossier"
+          id="journey-dossier"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="dossier-title"
+          hidden
+        >
+          <div class="journey-dossier-backdrop" data-dossier-close tabindex="-1"></div>
+          <article class="journey-dossier-panel" id="journey-dossier-panel">
+            <div class="dossier-media">
+              <div class="dossier-image" id="dossier-image"></div>
+              <dl class="dossier-meta">
+                <div class="dossier-meta-item">
+                  <dt>Duration</dt>
+                  <dd id="dossier-duration">7 nights / 8 days</dd>
+                </div>
+                <div class="dossier-meta-item">
+                  <dt>Group</dt>
+                  <dd id="dossier-group">8–10 guests</dd>
+                </div>
+                <div class="dossier-meta-item">
+                  <dt>Hospitality</dt>
+                  <dd id="dossier-accommodation">Boutique pousada</dd>
+                </div>
+              </dl>
+            </div>
+            <div class="dossier-content">
+              <div class="dossier-header">
+                <p class="eyebrow" id="dossier-eyebrow"></p>
+                <button
+                  class="dossier-close-btn"
+                  type="button"
+                  data-dossier-close
+                  aria-label="Close journey details"
+                >
+                  <span>Close</span>
+                  <span class="dossier-close-icon" aria-hidden="true">×</span>
+                </button>
+              </div>
+              <h3 id="dossier-title"></h3>
+              <p class="dossier-axiom" id="dossier-axiom"></p>
+              <span class="aside-line"></span>
+              <p class="dossier-description" id="dossier-description"></p>
+              <div class="dossier-highlights-wrap" id="dossier-highlights-wrap">
+                <p class="dossier-highlights-title">Sensory notes &amp; presence</p>
+                <ul class="dossier-highlights" id="dossier-highlights"></ul>
+              </div>
+              <div class="dossier-actions">
+                <a
+                  class="button button-dark"
+                  href="#invitation"
+                  id="dossier-cta"
+                  data-journey=""
+                >
+                  <span id="dossier-cta-label">Enquire about this journey</span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
       </section>
 
       <section class="audience section-shell" id="for-you" aria-labelledby="audience-title">
@@ -463,9 +680,63 @@
         </div>
       </section>
 
+      <section class="testimonials section-shell" id="been-there" aria-labelledby="testimonials-title">
+        <div class="testimonials-heading">
+          <p class="section-number">07 / I’ve been there</p>
+          <h2 id="testimonials-title">Reflections on<br /><em>the unspoken.</em></h2>
+          <p class="testimonials-intro">
+            Notes from psychoanalysts, psychologists, and psychiatrists who traveled with SILENCE.
+          </p>
+        </div>
+        <div class="testimonials-grid" id="testimonials-grid">
+          <article class="testimonial-card" data-id="julian-ross">
+            <blockquote class="testimonial-body">
+              <p class="testimonial-quote">
+                “In Manhattan, clinical listening is an act of holding back an overwhelming tide of language. At Algodões, between the reef and the coastal forest, silence was no longer something to interpret—it became an unburdened presence. A rare space where attention simply rests.”
+              </p>
+              <footer class="testimonial-footer">
+                <div class="testimonial-meta">
+                  <cite class="testimonial-author">Dr. Julian Ross</cite>
+                  <span class="testimonial-role">Clinical Psychoanalyst · Manhattan, New York</span>
+                </div>
+                <span class="testimonial-journey">Praia de Algodões, Bahia</span>
+              </footer>
+            </blockquote>
+          </article>
+          <article class="testimonial-card" data-id="eleanor-ward">
+            <blockquote class="testimonial-body">
+              <p class="testimonial-quote">
+                “Academic and social life demand continuous performance. In Atins, sharing the vast dunes and quiet freshwater lagoons with eight peers carried zero social expectation. The silence wasn’t awkward or enforced; it was a generous common ground.”
+              </p>
+              <footer class="testimonial-footer">
+                <div class="testimonial-meta">
+                  <cite class="testimonial-author">Prof. Eleanor Ward</cite>
+                  <span class="testimonial-role">Professor of Social Psychology · Cambridge, United Kingdom</span>
+                </div>
+                <span class="testimonial-journey">Atins, Lençóis Maranhenses</span>
+              </footer>
+            </blockquote>
+          </article>
+          <article class="testimonial-card" data-id="marcus-reid">
+            <blockquote class="testimonial-body">
+              <p class="testimonial-quote">
+                “The sensory cadence of the Amazon river at dawn settles chronic clinical vigilance like nothing else. For eight unhurried days, the mind re-calibrates to the slow rhythm of water and canopy. An essential restoration of quiet.”
+              </p>
+              <footer class="testimonial-footer">
+                <div class="testimonial-meta">
+                  <cite class="testimonial-author">Dr. Marcus Reid</cite>
+                  <span class="testimonial-role">Clinical Psychiatrist · Vancouver, Canada</span>
+                </div>
+                <span class="testimonial-journey">The Amazon, Brazil</span>
+              </footer>
+            </blockquote>
+          </article>
+        </div>
+      </section>
+
       <section class="invitation" id="invitation" aria-labelledby="invitation-title">
         <div class="invitation-intro">
-          <p class="section-number">07 / Request an invitation</p>
+          <p class="section-number">08 / Request an invitation</p>
           <h2 id="invitation-title">Begin with a<br /><em>conversation.</em></h2>
           <p class="invitation-body">
             Share a little about your practice and the kinds of places and
@@ -511,6 +782,7 @@
               <label>
                 <span>Your name</span>
                 <input
+                  class="form-input"
                   name="name"
                   autocomplete="name"
                   placeholder="Name"
@@ -520,6 +792,7 @@
               <label>
                 <span>Email address</span>
                 <input
+                  class="form-input"
                   name="email"
                   type="email"
                   autocomplete="email"
@@ -530,6 +803,7 @@
               <label>
                 <span>Country of residence</span>
                 <input
+                  class="form-input"
                   name="country"
                   autocomplete="country-name"
                   placeholder="Country"
@@ -592,8 +866,8 @@
                 <span>Destination of interest</span>
                 <select name="journey" id="journey-select">
                   <option value="">Open to any destination</option>
-                  <option value="algodoes">Praia de Algodões (Vila Oyá · Bahia)</option>
-                  <option value="atins">Atins (Lençóis Maranhenses · Maranhão)</option>
+                  <option value="algodoes">Praia de Algodões (Maraú Peninsula, Bahia)</option>
+                  <option value="atins">Atins (Lençóis Maranhenses, Maranhão)</option>
                   <option value="amazon">The Amazon (Amazon region)</option>
                 </select>
               </label>

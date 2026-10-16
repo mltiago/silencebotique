@@ -70,7 +70,7 @@ Fonte anterior (`silence.md`, briefing de 15 páginas) removida do worktree; his
   Contraste WCAG AA obrigatório para **texto**. `--earth` (3.94:1) e `--line` (1.37:1) são tokens de **forma** — nunca aplicar a texto legível.
 - **Tipografia** – Display/wordmark: serifada editorial (Playfair Display). Corpo/UI: sans geométrica (DM Sans). Wordmark em caixa alta, tracking `0.15em`–`0.25em`. Escala em `rem` (base `16px`), com inputs de formulário a `1rem` (`16px`) no mobile para evitar auto-zoom no iOS Safari.
 - **Movimento** – transições lentas (`--transition-slow: 700ms ease-out`), fades sutis na rolagem. `prefers-reduced-motion` desliga tudo e exibe o poster estático (`assets/video/hero-poster.jpg`).
-- **Hero** – imagem/vídeo lento em loop, sem som, tipografia surgindo após breve respiro.
+- **Hero & Navegação (Hero-Base Docked Navigation)** – Imagem/vídeo lento em loop, sem som, tipografia surgindo após breve respiro. A wordmark `SILENCE` (`.hero-wordmark`) fica isolada no canto superior esquerdo do Hero. A barra de links de navegação (`.site-header`) repousa na base do Hero (logo acima da barra de pilares) e, ao rolar a página, sobe junto com o Hero até travar fixa no topo da viewport (`.is-scrolled`), exibindo a wordmark integrada à esquerda. Ao retornar ao Hero, a barra volta a repousar na base do Hero. Os pilares (`01 Slow · 02 Small · 03 Brazil · Algodões, Bahia` em `.hero-pillars`) permanecem fixos na base da viewport durante toda a navegação pelo site. No mobile (`<= 680px`), o botão `.menu-toggle` exibe o rótulo dinâmico `MENU` / `CLOSE` com ícone animado, abrindo a gaveta para cima quando na base do Hero e para baixo quando fixo no topo.
 
 ### Direção de fotografia e vídeo
 
@@ -159,11 +159,11 @@ Um site lento no ritmo e rápido no carregamento: poucas páginas, muito espaço
    - Intro: "Each SILENCE journey stays with one region — a considered base, a small group, and unhurried days."
 
 2. **Grid de destinos (3-col)** – Renderizado a partir de `<template id="journey-card-template">` e `data/journeys.json` (com fallback estático no HTML para SEO). Cada card contém:
-   - Imagem destacada (ou placeholder com gradiente)
-   - Eyebrow: "The inaugural journey" (flagship) ou região
-   - Nome do destino em H3
-   - Subtítulo com acomodações
-   - Breve descrição (campo `description`)
+   - Imagem ilustrativa em WebP (`assets/images/journeys/*.webp`) ou placeholder com gradiente
+   - Eyebrow com a região (`Maraú Peninsula, Bahia`, `Lençóis Maranhenses, Maranhão`, `Amazon region`) — sem uso de "The inaugural journey"
+   - Nome do destino em H3 (`Praia de Algodões`, `Atins`, `The Amazon`)
+   - Subtítulo com a categoria de hospitalidade (`Boutique pousada`, `Boutique lodge`) — sem citar marcas específicas de hotéis
+   - Breve descrição contemplativa (campo `description`)
    - Link CTA: "Enquire about this journey" (`href="#invitation" data-journey="{id}"`, que pré-seleciona o destino no formulário de convite)
 
 3. **Encerramento** – Transição suave para a seção de convite.
@@ -176,19 +176,22 @@ Um site lento no ritmo e rápido no carregamento: poucas páginas, muito espaço
 
 **Destinos**
 
-- **Praia de Algodões (Maraú Peninsula, Bahia)** – flagship, Vila Oyá Casa Hotel
-  - Eyebrow: "The inaugural journey"
-  - Imagem placeholder até produção
+- **Praia de Algodões (`algodoes`)** – card destacado (`flagship: true`)
+  - Eyebrow: "Maraú Peninsula, Bahia"
+  - Hospitalidade: "Boutique pousada"
+  - Imagem: `assets/images/journeys/algodoes.webp`
   - Description: "On Bahia's coast, the Atlantic, the forest, and the architecture make their presence felt without asking for attention."
 
-- **Atins (Lençóis Maranhenses, Maranhão)** – non-flagship
+- **Atins (`atins`)**
   - Eyebrow: "Lençóis Maranhenses, Maranhão"
-  - Acomodação: "Boutique pousada"
+  - Hospitalidade: "Boutique pousada"
+  - Imagem: `assets/images/journeys/atins.webp`
   - Description: "A quiet village between the dunes and the sea, where white sand and fresh water meet at the edge of the Lençóis National Park."
 
-- **The Amazon (Amazon region)** – non-flagship
+- **The Amazon (`amazon`)**
   - Eyebrow: "Amazon region"
-  - Acomodação: "Boutique lodge"
+  - Hospitalidade: "Boutique lodge"
+  - Imagem: `assets/images/journeys/amazon.webp`
   - Description: "Deep in the forest, the river sets the pace. A place where silence is the loudest presence and the day follows the current."
 
 **Design tokens específicos**
@@ -204,7 +207,7 @@ Um site lento no ritmo e rápido no carregamento: poucas páginas, muito espaço
 
 - `aria-labelledby="journeys-title"` na section
 - `role="img"` + `aria-label="Placeholder image for {name}"` nos placeholders
-- `alt="{name}"` em imagens reais
+- `alt="{imageAlt}"` descritivo em imagens reais
 - Foco visível em links (<200ms INP)
 
 **Numeração das seções** (espelha o HTML real e a ordem da `<nav>`)
@@ -213,9 +216,9 @@ Um site lento no ritmo e rápido no carregamento: poucas páginas, muito espaço
 - 04 / The Journeys · 05 / Who it's for · 06 / A few clear answers · 07 / Request an invitation
 - The Founder não tem número (seção institucional curta, fora da numeração) e **não entra na nav** (nav enxuta; quem se interessa encontra no scroll).
 
-## Arquitetura de Catálogo e Plataforma Administrativa (Opção A — Git-Based CMS)
+## Arquitetura de Catálogo e Plataforma Administrativa (Opção A — Git-Based CMS + API Local)
 
-Para permitir que o fundador ou a agência modifique pacotes de viagem sem editar código JavaScript e sem custo mensal de banco de dados ou exposição a servidores de terceiros, o projeto adota a **Opção A (Git-Based CMS)**:
+Para permitir que o fundador ou a agência adicione, edite, reordene e remova pacotes de viagem sem editar código JavaScript e sem custo mensal de banco de dados externo:
 
 1. **Fonte Única da Verdade (`data/journeys.json`):**
    - Todos os pacotes residem em `data/journeys.json` sob a chave `"journeys"`.
@@ -223,7 +226,7 @@ Para permitir que o fundador ou a agência modifique pacotes de viagem sem edita
    - O módulo `js/journeys.js` busca `./data/journeys.json`, filtra pacotes com `status !== "archived"`, ordena por `order`, clona o `<template id="journey-card-template">` e sincroniza automaticamente o `<select name="journey">` da Etapa 3 do formulário.
 
 2. **Três Interfaces de Edição Compatíveis (Zero Lock-in):**
-   - **Estúdio Curatorial Local/Web (`admin/index.html` + `admin/admin.js`):** Painel visual na estética do SILENCE acessível em `/admin/index.html`. Permite adicionar, editar, reordenar e arquivar pacotes, validar automaticamente o *Checklist de "não pode"* (bloqueando termos clínicos/wellness como *retreat, therapy, healing, burnout, detox, transformation*), visualizar o preview dos cards em tempo real e salvar diretamente no `data/journeys.json` local (via *File System Access API*) ou baixar o arquivo pronto para commit.
+   - **Estúdio Curatorial Local/Web (`admin/index.html` + `admin/admin.js` + `POST /api/journeys` em `server.py`):** Painel visual na estética do SILENCE acessível em `/admin/`. Permite adicionar, editar, reordenar (`↑`/`↓`) e remover pacotes, validar automaticamente o *Checklist de "não pode"* (bloqueando termos clínicos/wellness como *retreat, therapy, healing, burnout, detox, transformation, cure, spa, wellness, vip*), visualizar o preview dos cards com imagens em tempo real e salvar diretamente em `data/journeys.json` no servidor em 1 clique via `POST /api/journeys` (com fallback para *File System Access API* ou download do JSON).
    - **Decap CMS (`admin/config.yml`):** Configuração pronta para Git Gateway (Netlify / Cloudflare) com validação por expressão regular contra palavras banidas da marca.
    - **Pages CMS (`.pages.yml`):** Configuração pronta para edição direta conectada ao repositório GitHub via Pages CMS.
 
