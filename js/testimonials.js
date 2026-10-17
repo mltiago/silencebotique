@@ -1,5 +1,5 @@
 // @ts-check
-// testimonials.js — Data-driven guest feedback module for SILENCE (07 / I'VE BEEN THERE).
+// testimonials.js — Data-driven guest feedback module for SILENCE (05 / TESTIMONIALS).
 // Fetches quotes from ./data/testimonials.json (editable via /admin)
 // and renders elegant editorial cards for mental health professionals.
 

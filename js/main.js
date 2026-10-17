@@ -10,6 +10,7 @@ import { initReveal } from "./reveal.js";
 import { renderJourneys } from "./journeys.js";
 import { initBrazilSlider } from "./brazil-slider.js";
 import { renderTestimonials } from "./testimonials.js";
+import { initScrollytelling } from "./scrolly.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // 1. Initialize interactive UI controls and dynamic catalog immediately
@@ -17,12 +18,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   initMenu();
   initForm();
   initBrazilSlider();
-  await Promise.all([
+
+  const loaderPromise = initLoader();
+
+  await Promise.allSettled([
     renderJourneys(document.getElementById("journeys-grid")),
     renderTestimonials(document.getElementById("testimonials-grid")),
+    loaderPromise,
   ]);
 
-  // 2. Wait for hero film reveal before starting scroll-triggered transitions
-  await initLoader();
+  // 2. Start scroll-triggered transitions once ready
   initReveal();
+  initScrollytelling();
 });

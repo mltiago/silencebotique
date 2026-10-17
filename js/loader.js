@@ -36,6 +36,6 @@ export async function initLoader(iframeSelector = ".hero-video-frame iframe") {
     }
 
     iframe.addEventListener("load", reveal, { once: true });
-    fallbackTimer = setTimeout(reveal, 3000);
+    fallbackTimer = setTimeout(reveal, 1200);
   });
 }

@@ -379,7 +379,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderJourneyListAndPreview();
 
   /* -------------------------------------------------------------
-   * 3. TESTIMONIALS (07 / I'VE BEEN THERE)
+   * 3. TESTIMONIALS (05 / TESTIMONIALS)
    * ----------------------------------------------------------- */
   const testimonialListEl = /** @type {HTMLElement} */ (
     document.getElementById("testimonial-list")

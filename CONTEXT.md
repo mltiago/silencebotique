@@ -70,7 +70,7 @@ Fonte anterior (`silence.md`, briefing de 15 páginas) removida do worktree; his
   Contraste WCAG AA obrigatório para **texto**. `--earth` (3.94:1) e `--line` (1.37:1) são tokens de **forma** — nunca aplicar a texto legível.
 - **Tipografia** – Display/wordmark: serifada editorial (Playfair Display). Corpo/UI: sans geométrica (DM Sans). Wordmark em caixa alta, tracking `0.15em`–`0.25em`. Escala em `rem` (base `16px`), com inputs de formulário a `1rem` (`16px`) no mobile para evitar auto-zoom no iOS Safari.
 - **Movimento** – transições lentas (`--transition-slow: 700ms ease-out`), fades sutis na rolagem. `prefers-reduced-motion` desliga tudo e exibe o poster estático (`assets/video/hero-poster.jpg`).
-- **Hero & Navegação (Hero-Base Docked Navigation)** – Imagem/vídeo lento em loop, sem som, tipografia surgindo após breve respiro. A wordmark `SILENCE` (`.hero-wordmark`) fica isolada no canto superior esquerdo do Hero. A barra de links de navegação (`.site-header`) repousa na base do Hero (logo acima da barra de pilares) e, ao rolar a página, sobe junto com o Hero até travar fixa no topo da viewport (`.is-scrolled`), exibindo a wordmark integrada à esquerda. Ao retornar ao Hero, a barra volta a repousar na base do Hero. Os pilares (`01 Slow · 02 Small · 03 Brazil · Algodões, Bahia` em `.hero-pillars`) permanecem fixos na base da viewport durante toda a navegação pelo site. No mobile (`<= 680px`), o botão `.menu-toggle` exibe o rótulo dinâmico `MENU` / `CLOSE` com ícone animado, abrindo a gaveta para cima quando na base do Hero e para baixo quando fixo no topo.
+- **Hero & Navegação (Hero-Base Docked Navigation)** – Imagem/vídeo lento em loop, sem som, tipografia purificada surgindo após breve respiro ("menos é mais": sem descrições antecipadas no hero, deixando a revelação para o clímax do storytelling). A wordmark `SILENCE` (`.hero-wordmark`) fica isolada no canto superior esquerdo e o convite discreto (`.hero-invitation`, *Request an invitation ↗*) repousa no canto superior direito em oposição arquitetônica. O centro do Hero é desobstruído de botões pesados, abrigando apenas o título e a tagline poética. A barra de links de navegação (`.site-header`) repousa na base do Hero com estilo translúcido sheer (fundo 12%, borda dissolvida 6%, blur 6px) e, ao rolar a página, sobe junto com o Hero até travar fixa no topo da viewport (`.is-scrolled`), exibindo a wordmark integrada à esquerda. Ao retornar ao Hero, a barra volta a repousar na base. A seção `02 / Brazil` abre direto no papel com cabeçalho editorial contínuo (`.brazil-heading .story-column`), com título sereno e o lede poético. No mobile (`<= 680px`), o botão `.menu-toggle` exibe o rótulo dinâmico `MENU` / `CLOSE` com ícone animado.
 
 ### Direção de fotografia e vídeo
 
@@ -212,9 +212,11 @@ Um site lento no ritmo e rápido no carregamento: poucas páginas, muito espaço
 
 **Numeração das seções** (espelha o HTML real e a ordem da `<nav>`)
 
-- 01 / The philosophy · 02 / The experience · 03 / Brazil
-- 04 / The Journeys · 05 / Who it's for · 06 / I've been there · 07 / A few clear answers · 08 / Request an invitation
-- The Founder não tem número (seção institucional curta, fora da numeração) e **não entra na nav** (nav enxuta; quem se interessa encontra no scroll).
+- 01 / Experience (Eyebrow: Slow · Small · Brazil)
+- 02 / Brazil · 03 / Journeys · 04 / Who it's for · 05 / Testimonials
+- The Founder não tem número (pausa institucional da intenção).
+- A few clear answers (FAQ) não tem número (seção de apoio em acordeão calmo, fora do storytelling e fora da nav).
+- Request an invitation fecha a página com o formulário em três passos.
 
 ## Arquitetura de Catálogo e Plataforma Administrativa (Opção A — Git-Based CMS + API Local)
 
