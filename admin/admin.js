@@ -1,10 +1,18 @@
 // @ts-check
 // admin.js — Git-Based CMS Local & Cloud Studio for SILENCE
 // Manages both The Journeys (../data/journeys.json) and Testimonials (../data/testimonials.json).
-// Validates CONTEXT.md brand voice rules in real time.
+// Validates CONTEXT.md brand voice rules, HTML5 constraints, and unique slugs in real time.
 
-import { DEFAULT_JOURNEYS, createJourneyCardElement } from "../js/journeys.js";
-import { DEFAULT_TESTIMONIALS, createTestimonialCardElement } from "../js/testimonials.js";
+import {
+  DEFAULT_JOURNEYS,
+  createJourneyCardElement,
+  loadJourneysCatalog,
+} from "../js/journeys.js";
+import {
+  DEFAULT_TESTIMONIALS,
+  createTestimonialCardElement,
+  loadTestimonialsCatalog,
+} from "../js/testimonials.js";
 
 /** @typedef {import("../js/journeys.js").JourneyPackage} JourneyPackage */
 /** @typedef {import("../js/testimonials.js").Testimonial} Testimonial */
@@ -25,6 +33,8 @@ const FORBIDDEN_TERMS = [
   "vip",
 ];
 
+const IMAGE_PREFIX = "../";
+
 /**
  * Checks text against CONTEXT.md forbidden terms.
  * @param {string} text
@@ -38,9 +48,47 @@ function findForbiddenTerms(text) {
   });
 }
 
+/**
+ * Renders a brand voice alert message using safe DOM nodes (no innerHTML).
+ * @param {HTMLElement} alertEl
+ * @param {string[]} violations
+ * @param {string} [customError]
+ */
+function renderVoiceAlert(alertEl, violations, customError = "") {
+  if (violations.length === 0 && !customError) {
+    alertEl.hidden = true;
+    alertEl.replaceChildren();
+    return;
+  }
+
+  alertEl.hidden = false;
+  alertEl.replaceChildren();
+
+  const strong = document.createElement("strong");
+  strong.textContent = customError
+    ? "Validation Alert: "
+    : "Brand Voice Alert: ";
+  alertEl.appendChild(strong);
+
+  if (customError) {
+    alertEl.appendChild(document.createTextNode(customError));
+    return;
+  }
+
+  alertEl.appendChild(document.createTextNode("The terms "));
+  const em = document.createElement("em");
+  em.textContent = `"${violations.join('", "')}"`;
+  alertEl.appendChild(em);
+  alertEl.appendChild(
+    document.createTextNode(
+      " conflict with CONTEXT.md. Please rephrase in quiet luxury tone."
+    )
+  );
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   /* -------------------------------------------------------------
-   * 1. TAB SWITCHING
+   * 1. TAB SWITCHING (with WAI-ARIA keyboard arrow support)
    * ----------------------------------------------------------- */
   const tabBtnJourneys = /** @type {HTMLButtonElement} */ (
     document.getElementById("tab-btn-journeys")
@@ -55,58 +103,84 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("section-testimonials")
   );
 
-  function switchTab(target) {
-    if (target === "testimonials") {
-      tabBtnJourneys.classList.remove("is-active");
-      tabBtnJourneys.setAttribute("aria-selected", "false");
-      sectionJourneys.classList.remove("is-active");
+  /**
+   * @param {"journeys" | "testimonials"} target
+   * @param {{ focusTab?: boolean }} [options]
+   */
+  function switchTab(target, { focusTab = false } = {}) {
+    const isTestimonials = target === "testimonials";
 
-      tabBtnTestimonials.classList.add("is-active");
-      tabBtnTestimonials.setAttribute("aria-selected", "true");
-      sectionTestimonials.classList.add("is-active");
-    } else {
-      tabBtnTestimonials.classList.remove("is-active");
-      tabBtnTestimonials.setAttribute("aria-selected", "false");
-      sectionTestimonials.classList.remove("is-active");
+    tabBtnJourneys.classList.toggle("is-active", !isTestimonials);
+    tabBtnJourneys.setAttribute("aria-selected", String(!isTestimonials));
+    tabBtnJourneys.tabIndex = isTestimonials ? -1 : 0;
+    sectionJourneys.classList.toggle("is-active", !isTestimonials);
+    sectionJourneys.hidden = isTestimonials;
 
-      tabBtnJourneys.classList.add("is-active");
-      tabBtnJourneys.setAttribute("aria-selected", "true");
-      sectionJourneys.classList.add("is-active");
+    tabBtnTestimonials.classList.toggle("is-active", isTestimonials);
+    tabBtnTestimonials.setAttribute("aria-selected", String(isTestimonials));
+    tabBtnTestimonials.tabIndex = isTestimonials ? 0 : -1;
+    sectionTestimonials.classList.toggle("is-active", isTestimonials);
+    sectionTestimonials.hidden = !isTestimonials;
+
+    if (focusTab) {
+      (isTestimonials ? tabBtnTestimonials : tabBtnJourneys).focus();
     }
   }
 
   tabBtnJourneys.addEventListener("click", () => switchTab("journeys"));
   tabBtnTestimonials.addEventListener("click", () => switchTab("testimonials"));
 
+  const tabList = tabBtnJourneys.parentElement;
+  if (tabList) {
+    tabList.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+        event.preventDefault();
+        const nextTarget =
+          document.activeElement === tabBtnJourneys
+            ? "testimonials"
+            : "journeys";
+        switchTab(nextTarget, { focusTab: true });
+      }
+    });
+  }
+
   /* -------------------------------------------------------------
    * 2. THE JOURNEYS CATALOG
    * ----------------------------------------------------------- */
-  const listEl = /** @type {HTMLElement} */ (document.getElementById("package-list"));
-  const formEl = /** @type {HTMLFormElement} */ (document.getElementById("package-editor"));
-  const previewEl = /** @type {HTMLElement} */ (document.getElementById("preview-grid"));
-  const alertEl = /** @type {HTMLElement} */ (document.getElementById("voice-alert"));
-  const statusEl = /** @type {HTMLElement} */ (document.getElementById("admin-status"));
-  const addBtn = /** @type {HTMLButtonElement} */ (document.getElementById("add-journey-btn"));
+  const listEl = /** @type {HTMLElement} */ (
+    document.getElementById("package-list")
+  );
+  const formEl = /** @type {HTMLFormElement} */ (
+    document.getElementById("package-editor")
+  );
+  const previewEl = /** @type {HTMLElement} */ (
+    document.getElementById("preview-grid")
+  );
+  const alertEl = /** @type {HTMLElement} */ (
+    document.getElementById("voice-alert")
+  );
+  const statusEl = /** @type {HTMLElement} */ (
+    document.getElementById("admin-status")
+  );
+  const addBtn = /** @type {HTMLButtonElement} */ (
+    document.getElementById("add-journey-btn")
+  );
   const deleteBtn = /** @type {HTMLButtonElement} */ (
     document.getElementById("delete-journey-btn")
   );
-  const saveBtn = /** @type {HTMLButtonElement} */ (document.getElementById("save-json-btn"));
-  const template = /** @type {HTMLTemplateElement} */ (
+  const saveBtn = /** @type {HTMLButtonElement} */ (
+    document.getElementById("save-json-btn")
+  );
+  const journeyTemplate = /** @type {HTMLTemplateElement | null} */ (
     document.getElementById("journey-card-template")
   );
 
   /** @type {JourneyPackage[]} */
-  let journeys = [];
-  let activeIndex = 0;
-
-  try {
-    const response = await fetch("../data/journeys.json", { cache: "no-store" });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const payload = await response.json();
-    journeys = Array.isArray(payload.journeys) ? payload.journeys : [...DEFAULT_JOURNEYS];
-  } catch {
+  let journeys = await loadJourneysCatalog("../data/journeys.json");
+  if (!Array.isArray(journeys) || journeys.length === 0) {
     journeys = structuredClone(DEFAULT_JOURNEYS);
   }
+  let activeIndex = 0;
 
   function normalizeJourneyOrders() {
     journeys.forEach((item, idx) => {
@@ -115,11 +189,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /**
-   * Moves a package up or down in the display order.
+   * Moves a package up or down in the display order after syncing current form edits.
    * @param {number} index
    * @param {number} delta
    */
   function movePackage(index, delta) {
+    syncCurrentJourneyFromForm();
     const targetIndex = index + delta;
     if (targetIndex < 0 || targetIndex >= journeys.length) return;
     const temp = journeys[index];
@@ -131,13 +206,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderJourneyListAndPreview();
   }
 
+  function renderJourneyPreviewOnly() {
+    const previewFragment = document.createDocumentFragment();
+    journeys.forEach((item) => {
+      const card = createJourneyCardElement(
+        item,
+        journeyTemplate,
+        IMAGE_PREFIX
+      );
+      previewFragment.appendChild(card);
+    });
+    previewEl.replaceChildren(previewFragment);
+  }
+
   function renderJourneyListAndPreview() {
+    const currentItem = journeys[activeIndex];
     journeys.sort((a, b) => (a.order || 0) - (b.order || 0));
+    if (currentItem) {
+      const newIdx = journeys.indexOf(currentItem);
+      if (newIdx !== -1) activeIndex = newIdx;
+    }
 
     const listFragment = document.createDocumentFragment();
     journeys.forEach((item, index) => {
       const row = document.createElement("div");
-      row.className = index === activeIndex ? "package-item is-active" : "package-item";
+      row.className =
+        index === activeIndex ? "package-item is-active" : "package-item";
       row.setAttribute("role", "listitem");
       row.tabIndex = 0;
 
@@ -185,25 +279,29 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       row.append(info, controls);
 
-      row.addEventListener("click", () => {
+      const selectRow = () => {
+        syncCurrentJourneyFromForm();
         activeIndex = index;
         populateJourneyForm(journeys[activeIndex]);
         renderJourneyListAndPreview();
+      };
+
+      row.addEventListener("click", selectRow);
+      row.addEventListener("keydown", (event) => {
+        if (
+          (event.key === "Enter" || event.key === " ") &&
+          event.target === row
+        ) {
+          event.preventDefault();
+          selectRow();
+        }
       });
 
       listFragment.appendChild(row);
     });
 
     listEl.replaceChildren(listFragment);
-
-    // Render Preview
-    const previewFragment = document.createDocumentFragment();
-    journeys.forEach((item) => {
-      const card = createJourneyCardElement(item, template);
-      previewFragment.appendChild(card);
-    });
-    previewEl.replaceChildren(previewFragment);
-
+    renderJourneyPreviewOnly();
     deleteBtn.disabled = journeys.length <= 1;
   }
 
@@ -230,70 +328,96 @@ document.addEventListener("DOMContentLoaded", async () => {
     elements.highlights.value = Array.isArray(item.highlights)
       ? item.highlights.join("\n")
       : "";
-    validateJourneyVoice(item.description, item.axiom ?? "");
+    validateJourneyFormFields();
   }
 
   /**
-   * @param {string} text
-   * @param {string} [axiomText]
+   * Checks all text fields in the journey form against CONTEXT.md forbidden terms.
+   * @returns {boolean}
    */
-  function validateJourneyVoice(text, axiomText = "") {
-    const combined = `${text} ${axiomText}`;
+  function validateJourneyFormFields() {
+    const elements = /** @type {any} */ (formEl.elements);
+    const combined = [
+      elements.name.value,
+      elements.region.value,
+      elements.accommodation.value,
+      elements.editionDates.value,
+      elements.axiom.value,
+      elements.description.value,
+      elements.highlights.value,
+    ].join(" ");
     const violations = findForbiddenTerms(combined);
-    if (violations.length > 0) {
-      alertEl.hidden = false;
-      alertEl.innerHTML = `<strong>Brand Voice Alert:</strong> The terms <em>"${violations.join('", "')}"</em> conflict with CONTEXT.md. Please rephrase in quiet luxury tone.`;
-      return false;
-    }
-    alertEl.hidden = true;
-    alertEl.textContent = "";
-    return true;
+    renderVoiceAlert(alertEl, violations);
+    return violations.length === 0;
   }
 
-  formEl.description.addEventListener("input", () => {
-    validateJourneyVoice(formEl.description.value, formEl.axiom.value);
-  });
+  function syncCurrentJourneyFromForm() {
+    const current = journeys[activeIndex];
+    if (!current) return;
+    const elements = /** @type {any} */ (formEl.elements);
+    current.id = elements.id.value.trim() || current.id;
+    current.order = Number(elements.order.value) || current.order || 1;
+    current.status = elements.status.value;
+    current.flagship = elements.flagship.checked;
+    current.name = elements.name.value.trim() || current.name;
+    current.region = elements.region.value.trim() || current.region;
+    current.accommodation =
+      elements.accommodation.value.trim() || current.accommodation;
+    current.axiom = elements.axiom.value.trim();
+    current.duration = elements.duration.value.trim() || "7 nights / 8 days";
+    current.groupSize = elements.groupSize.value.trim() || "8–10 guests";
+    current.editionDates = elements.editionDates.value.trim();
+    current.image = elements.image.value.trim() || null;
+    current.imageAlt = elements.imageAlt.value.trim();
+    current.description =
+      elements.description.value.trim() || current.description;
+    current.highlights = elements.highlights.value
+      .split("\n")
+      .map((/** @type {string} */ line) => line.trim())
+      .filter((/** @type {string} */ line) => line.length > 0);
+  }
 
-  formEl.axiom.addEventListener("input", () => {
-    validateJourneyVoice(formEl.description.value, formEl.axiom.value);
+  formEl.addEventListener("input", () => {
+    validateJourneyFormFields();
+    syncCurrentJourneyFromForm();
+    renderJourneyPreviewOnly();
   });
 
   function applyJourneyFormChanges() {
     const current = journeys[activeIndex];
     if (!current) return false;
 
+    if (!formEl.checkValidity()) {
+      formEl.reportValidity();
+      return false;
+    }
+
+    if (!validateJourneyFormFields()) return false;
+
     const elements = /** @type {any} */ (formEl.elements);
-    const desc = elements.description.value.trim();
-    const axiom = elements.axiom.value.trim();
+    const candidateId = elements.id.value.trim();
+    const duplicate = journeys.some(
+      (item, idx) => idx !== activeIndex && item.id === candidateId
+    );
+    if (duplicate) {
+      renderVoiceAlert(
+        alertEl,
+        [],
+        `Slug ID "${candidateId}" is already used by another journey.`
+      );
+      return false;
+    }
 
-    if (!validateJourneyVoice(desc, axiom)) return false;
-
-    current.id = elements.id.value.trim();
-    current.order = Number(elements.order.value) || 1;
-    current.status = elements.status.value;
-    current.flagship = elements.flagship.checked;
-    current.name = elements.name.value.trim();
-    current.region = elements.region.value.trim();
-    current.accommodation = elements.accommodation.value.trim();
-    current.axiom = axiom;
-    current.duration = elements.duration.value.trim();
-    current.groupSize = elements.groupSize.value.trim();
-    current.editionDates = elements.editionDates.value.trim();
-    current.image = elements.image.value.trim() || null;
-    current.imageAlt = elements.imageAlt.value.trim();
-    current.description = desc;
-
-    const rawHighlights = elements.highlights.value.split("\n");
-    current.highlights = rawHighlights
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0);
-
+    syncCurrentJourneyFromForm();
     renderJourneyListAndPreview();
+    populateJourneyForm(journeys[activeIndex]);
     return true;
   }
 
   async function persistJourneys() {
     normalizeJourneyOrders();
+    populateJourneyForm(journeys[activeIndex]);
+    renderJourneyListAndPreview();
     const jsonString = JSON.stringify({ journeys }, null, 2) + "\n";
 
     try {
@@ -307,6 +431,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         setTimeout(() => {
           statusEl.textContent = "";
         }, 5000);
+        return;
+      }
+      const errPayload = await response.json().catch(() => null);
+      if (errPayload && errPayload.error) {
+        renderVoiceAlert(alertEl, [], errPayload.error);
         return;
       }
     } catch {
@@ -330,10 +459,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   addBtn.addEventListener("click", () => {
+    syncCurrentJourneyFromForm();
     const nextOrder = journeys.length + 1;
+    let slugCounter = nextOrder;
+    while (journeys.some((j) => j.id === `destination-${slugCounter}`)) {
+      slugCounter += 1;
+    }
     /** @type {JourneyPackage} */
     const newPkg = {
-      id: `destination-${nextOrder}`,
+      id: `destination-${slugCounter}`,
       order: nextOrder,
       status: "published",
       flagship: false,
@@ -405,21 +539,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   const saveTestimonialsBtn = /** @type {HTMLButtonElement} */ (
     document.getElementById("save-testimonials-btn")
   );
+  const testimonialTemplate = /** @type {HTMLTemplateElement | null} */ (
+    document.getElementById("testimonial-card-template")
+  );
 
   /** @type {Testimonial[]} */
-  let testimonials = [];
-  let activeTestimonialIndex = 0;
-
-  try {
-    const response = await fetch("../data/testimonials.json", { cache: "no-store" });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const payload = await response.json();
-    testimonials = Array.isArray(payload.testimonials)
-      ? payload.testimonials
-      : [...DEFAULT_TESTIMONIALS];
-  } catch {
+  let testimonials = await loadTestimonialsCatalog("../data/testimonials.json");
+  if (!Array.isArray(testimonials) || testimonials.length === 0) {
     testimonials = structuredClone(DEFAULT_TESTIMONIALS);
   }
+  let activeTestimonialIndex = 0;
 
   function normalizeTestimonialOrders() {
     testimonials.forEach((item, idx) => {
@@ -432,6 +561,7 @@ document.addEventListener("DOMContentLoaded", async () => {
    * @param {number} delta
    */
   function moveTestimonial(index, delta) {
+    syncCurrentTestimonialFromForm();
     const targetIndex = index + delta;
     if (targetIndex < 0 || targetIndex >= testimonials.length) return;
     const temp = testimonials[index];
@@ -443,14 +573,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderTestimonialListAndPreview();
   }
 
+  function renderTestimonialPreviewOnly() {
+    const previewFragment = document.createDocumentFragment();
+    testimonials.forEach((item) => {
+      const card = createTestimonialCardElement(item, testimonialTemplate);
+      previewFragment.appendChild(card);
+    });
+    testimonialPreviewEl.replaceChildren(previewFragment);
+  }
+
   function renderTestimonialListAndPreview() {
+    const currentItem = testimonials[activeTestimonialIndex];
     testimonials.sort((a, b) => (a.order || 0) - (b.order || 0));
+    if (currentItem) {
+      const newIdx = testimonials.indexOf(currentItem);
+      if (newIdx !== -1) activeTestimonialIndex = newIdx;
+    }
 
     const listFragment = document.createDocumentFragment();
     testimonials.forEach((item, index) => {
       const row = document.createElement("div");
       row.className =
-        index === activeTestimonialIndex ? "package-item is-active" : "package-item";
+        index === activeTestimonialIndex
+          ? "package-item is-active"
+          : "package-item";
       row.setAttribute("role", "listitem");
       row.tabIndex = 0;
 
@@ -498,25 +644,29 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       row.append(info, controls);
 
-      row.addEventListener("click", () => {
+      const selectRow = () => {
+        syncCurrentTestimonialFromForm();
         activeTestimonialIndex = index;
         populateTestimonialForm(testimonials[activeTestimonialIndex]);
         renderTestimonialListAndPreview();
+      };
+
+      row.addEventListener("click", selectRow);
+      row.addEventListener("keydown", (event) => {
+        if (
+          (event.key === "Enter" || event.key === " ") &&
+          event.target === row
+        ) {
+          event.preventDefault();
+          selectRow();
+        }
       });
 
       listFragment.appendChild(row);
     });
 
     testimonialListEl.replaceChildren(listFragment);
-
-    // Live preview
-    const previewFragment = document.createDocumentFragment();
-    testimonials.forEach((item) => {
-      const card = createTestimonialCardElement(item);
-      previewFragment.appendChild(card);
-    });
-    testimonialPreviewEl.replaceChildren(previewFragment);
-
+    renderTestimonialPreviewOnly();
     deleteTestimonialBtn.disabled = testimonials.length <= 1;
   }
 
@@ -534,52 +684,81 @@ document.addEventListener("DOMContentLoaded", async () => {
     elements.role.value = item.role;
     elements.location.value = item.location;
     elements.quote.value = item.quote;
-    validateTestimonialVoice(item.quote);
+    validateTestimonialFormFields();
   }
 
   /**
-   * @param {string} text
+   * @returns {boolean}
    */
-  function validateTestimonialVoice(text) {
-    const violations = findForbiddenTerms(text);
-    if (violations.length > 0) {
-      testimonialAlertEl.hidden = false;
-      testimonialAlertEl.innerHTML = `<strong>Brand Voice Alert:</strong> The terms <em>"${violations.join('", "')}"</em> conflict with CONTEXT.md. Please rephrase in quiet luxury tone.`;
-      return false;
-    }
-    testimonialAlertEl.hidden = true;
-    testimonialAlertEl.textContent = "";
-    return true;
+  function validateTestimonialFormFields() {
+    const elements = /** @type {any} */ (testimonialFormEl.elements);
+    const combined = [
+      elements.author.value,
+      elements.role.value,
+      elements.location.value,
+      elements.journey.value,
+      elements.quote.value,
+    ].join(" ");
+    const violations = findForbiddenTerms(combined);
+    renderVoiceAlert(testimonialAlertEl, violations);
+    return violations.length === 0;
   }
 
-  testimonialFormEl.quote.addEventListener("input", () => {
-    validateTestimonialVoice(testimonialFormEl.quote.value);
+  function syncCurrentTestimonialFromForm() {
+    const current = testimonials[activeTestimonialIndex];
+    if (!current) return;
+    const elements = /** @type {any} */ (testimonialFormEl.elements);
+    current.id = elements.id.value.trim() || current.id;
+    current.order = Number(elements.order.value) || current.order || 1;
+    current.status = elements.status.value;
+    current.journey = elements.journey.value.trim() || current.journey;
+    current.author = elements.author.value.trim() || current.author;
+    current.role = elements.role.value.trim() || current.role;
+    current.location = elements.location.value.trim() || current.location;
+    current.quote = elements.quote.value.trim() || current.quote;
+  }
+
+  testimonialFormEl.addEventListener("input", () => {
+    validateTestimonialFormFields();
+    syncCurrentTestimonialFromForm();
+    renderTestimonialPreviewOnly();
   });
 
   function applyTestimonialFormChanges() {
     const current = testimonials[activeTestimonialIndex];
     if (!current) return false;
 
+    if (!testimonialFormEl.checkValidity()) {
+      testimonialFormEl.reportValidity();
+      return false;
+    }
+
+    if (!validateTestimonialFormFields()) return false;
+
     const elements = /** @type {any} */ (testimonialFormEl.elements);
-    const quote = elements.quote.value.trim();
+    const candidateId = elements.id.value.trim();
+    const duplicate = testimonials.some(
+      (item, idx) => idx !== activeTestimonialIndex && item.id === candidateId
+    );
+    if (duplicate) {
+      renderVoiceAlert(
+        testimonialAlertEl,
+        [],
+        `Slug ID "${candidateId}" is already used by another testimonial.`
+      );
+      return false;
+    }
 
-    if (!validateTestimonialVoice(quote)) return false;
-
-    current.id = elements.id.value.trim();
-    current.order = Number(elements.order.value) || 1;
-    current.status = elements.status.value;
-    current.journey = elements.journey.value.trim();
-    current.author = elements.author.value.trim();
-    current.role = elements.role.value.trim();
-    current.location = elements.location.value.trim();
-    current.quote = quote;
-
+    syncCurrentTestimonialFromForm();
     renderTestimonialListAndPreview();
+    populateTestimonialForm(testimonials[activeTestimonialIndex]);
     return true;
   }
 
   async function persistTestimonials() {
     normalizeTestimonialOrders();
+    populateTestimonialForm(testimonials[activeTestimonialIndex]);
+    renderTestimonialListAndPreview();
     const jsonString = JSON.stringify({ testimonials }, null, 2) + "\n";
 
     try {
@@ -596,6 +775,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         }, 5000);
         return;
       }
+      const errPayload = await response.json().catch(() => null);
+      if (errPayload && errPayload.error) {
+        renderVoiceAlert(testimonialAlertEl, [], errPayload.error);
+        return;
+      }
     } catch {
       // Client download fallback
     }
@@ -607,7 +791,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     link.download = "testimonials.json";
     link.click();
     URL.revokeObjectURL(url);
-    testimonialStatusEl.textContent = "Downloaded testimonials.json. Commit to repo.";
+    testimonialStatusEl.textContent =
+      "Downloaded testimonials.json. Commit to repo.";
   }
 
   testimonialFormEl.addEventListener("submit", async (event) => {
@@ -617,10 +802,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   addTestimonialBtn.addEventListener("click", () => {
+    syncCurrentTestimonialFromForm();
     const nextOrder = testimonials.length + 1;
+    let slugCounter = nextOrder;
+    while (testimonials.some((t) => t.id === `reflection-${slugCounter}`)) {
+      slugCounter += 1;
+    }
     /** @type {Testimonial} */
     const newTestimonial = {
-      id: `reflection-${nextOrder}`,
+      id: `reflection-${slugCounter}`,
       order: nextOrder,
       status: "published",
       author: "New Contributor",

@@ -40,29 +40,55 @@ export function initHeader(
     .filter((entry) => entry.section !== null);
 
   let ticking = false;
+  let dockedHeaderHeight = 74;
+  let lastDockedTop = -1;
+
+  function measureDockedMetrics() {
+    if (!header || !hero) return;
+    const isMobile =
+      "matchMedia" in window && window.matchMedia("(max-width: 680px)").matches;
+    dockedHeaderHeight = isMobile ? 70 : 74;
+    const heroHeight = hero.offsetHeight;
+    const dockedTop = Math.max(0, heroHeight - dockedHeaderHeight);
+
+    if (dockedTop !== lastDockedTop) {
+      lastDockedTop = dockedTop;
+      header.style.setProperty("--hero-header-top", `${dockedTop}px`);
+    }
+  }
 
   function syncHeaderState() {
     if (!header || !hero) return;
     const heroRect = hero.getBoundingClientRect();
-    const headerHeight = header.offsetHeight || 70;
-    const heroHeight = hero.offsetHeight;
-    const dockedTop = Math.max(0, heroHeight - headerHeight);
+    const shouldLockTop = heroRect.bottom <= dockedHeaderHeight;
 
-    header.style.setProperty("--hero-header-top", `${dockedTop}px`);
-
-    const shouldLockTop = heroRect.bottom <= headerHeight;
     header.classList.toggle("is-scrolled", shouldLockTop);
 
-    const focalY = headerHeight + window.innerHeight * 0.28;
+    // If the docked header is in the upper half of the viewport on mobile,
+    // signal the mobile drawer to open downward instead of clipping off the top edge.
+    const isNearViewportTop = heroRect.bottom <= 380;
+    header.classList.toggle("is-near-top", isNearViewportTop);
+
+    const activeHeaderHeight = shouldLockTop ? 82 : dockedHeaderHeight;
+    const focalY = activeHeaderHeight + window.innerHeight * 0.28;
+    const atPageBottom =
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 24;
+
     /** @type {HTMLElement | null} */
     let activeSection = null;
 
     if (shouldLockTop) {
-      for (const { section } of trackedSections) {
-        if (!section) continue;
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= focalY && rect.bottom > headerHeight + 40) {
-          activeSection = section;
+      if (atPageBottom && trackedSections.length > 0) {
+        activeSection =
+          trackedSections[trackedSections.length - 1].section || null;
+      } else {
+        for (const { section } of trackedSections) {
+          if (!section) continue;
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= focalY && rect.bottom > activeHeaderHeight + 40) {
+            activeSection = section;
+          }
         }
       }
     }
@@ -91,10 +117,17 @@ export function initHeader(
     { passive: true }
   );
 
-  window.addEventListener("resize", syncHeaderState, { passive: true });
+  function handleResize() {
+    measureDockedMetrics();
+    syncHeaderState();
+  }
+
+  window.addEventListener("resize", handleResize, { passive: true });
   if ("ResizeObserver" in window) {
-    const resizeObserver = new ResizeObserver(syncHeaderState);
+    const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(hero);
   }
+
+  measureDockedMetrics();
   syncHeaderState();
 }

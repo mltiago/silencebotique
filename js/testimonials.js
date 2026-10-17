@@ -1,7 +1,7 @@
 // @ts-check
 // testimonials.js — Data-driven guest feedback module for SILENCE (05 / TESTIMONIALS).
 // Fetches quotes from ./data/testimonials.json (editable via /admin)
-// and renders elegant editorial cards for mental health professionals.
+// and renders editorial cards declaratively using <template id="testimonial-card-template">.
 
 /**
  * @typedef {Object} Testimonial
@@ -53,25 +53,78 @@ export const DEFAULT_TESTIMONIALS = [
 ];
 
 /**
- * Creates an accessible, semantic DOM element for a testimonial card.
+ * Loads the testimonials catalog from data/testimonials.json with graceful fallback.
+ * @param {string} [dataUrl="./data/testimonials.json"]
+ * @returns {Promise<Testimonial[]>}
+ */
+export async function loadTestimonialsCatalog(
+  dataUrl = "./data/testimonials.json"
+) {
+  try {
+    const response = await fetch(dataUrl, { cache: "no-cache" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    const list = Array.isArray(data) ? data : data.testimonials;
+    if (Array.isArray(list) && list.length > 0) {
+      return list;
+    }
+    return structuredClone(DEFAULT_TESTIMONIALS);
+  } catch {
+    return structuredClone(DEFAULT_TESTIMONIALS);
+  }
+}
+
+/**
+ * Creates an accessible, semantic DOM element for a testimonial card using a declarative <template>.
  * @param {Testimonial} item
+ * @param {HTMLTemplateElement | null} [template=null]
  * @returns {HTMLElement}
  */
-export function createTestimonialCardElement(item) {
+export function createTestimonialCardElement(item, template = null) {
+  const cleanQuote = `“${(item.quote || "").replace(/^["“]|["”]$/g, "")}”`;
+  const roleAndLocation = [item.role, item.location]
+    .filter(Boolean)
+    .join(" · ");
+
+  if (template && template.content.firstElementChild) {
+    const card = /** @type {HTMLElement} */ (
+      template.content.firstElementChild.cloneNode(true)
+    );
+    card.setAttribute("data-id", item.id);
+
+    const quoteEl = card.querySelector('[data-field="quote"]');
+    if (quoteEl) quoteEl.textContent = cleanQuote;
+
+    const authorEl = card.querySelector('[data-field="author"]');
+    if (authorEl) authorEl.textContent = item.author;
+
+    const roleEl = card.querySelector('[data-field="role"]');
+    if (roleEl) roleEl.textContent = roleAndLocation;
+
+    const journeyEl = /** @type {HTMLElement | null} */ (
+      card.querySelector('[data-field="journey"]')
+    );
+    if (journeyEl) {
+      journeyEl.textContent = item.journey || "";
+      journeyEl.hidden = !item.journey;
+    }
+
+    return card;
+  }
+
+  // Fallback when no <template> is present in the DOM
   const card = document.createElement("article");
   card.className = "testimonial-card";
   card.setAttribute("data-id", item.id);
 
-  // Quote container
   const blockquote = document.createElement("blockquote");
   blockquote.className = "testimonial-body";
 
   const quotePara = document.createElement("p");
   quotePara.className = "testimonial-quote";
-  quotePara.textContent = `“${item.quote.replace(/^["“]|["”]$/g, "")}”`;
+  quotePara.textContent = cleanQuote;
   blockquote.appendChild(quotePara);
 
-  // Author & Context attribution
   const footer = document.createElement("footer");
   footer.className = "testimonial-footer";
 
@@ -85,7 +138,7 @@ export function createTestimonialCardElement(item) {
 
   const rolePara = document.createElement("span");
   rolePara.className = "testimonial-role";
-  rolePara.textContent = `${item.role} · ${item.location}`;
+  rolePara.textContent = roleAndLocation;
   metaWrap.appendChild(rolePara);
 
   footer.appendChild(metaWrap);
@@ -106,35 +159,34 @@ export function createTestimonialCardElement(item) {
 /**
  * Fetches data/testimonials.json and populates the container.
  * @param {HTMLElement | null} containerEl
+ * @param {string} [dataUrl="./data/testimonials.json"]
+ * @param {{ templateSelector?: string }} [options]
  * @returns {Promise<void>}
  */
-export async function renderTestimonials(containerEl) {
+export async function renderTestimonials(
+  containerEl,
+  dataUrl = "./data/testimonials.json",
+  { templateSelector = "#testimonial-card-template" } = {}
+) {
   if (!containerEl) return;
 
-  /** @type {Testimonial[]} */
-  let testimonials = [];
-
-  try {
-    const response = await fetch("data/testimonials.json", { cache: "no-store" });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    if (Array.isArray(data.testimonials) && data.testimonials.length > 0) {
-      testimonials = data.testimonials;
-    } else {
-      testimonials = DEFAULT_TESTIMONIALS;
-    }
-  } catch {
-    testimonials = DEFAULT_TESTIMONIALS;
-  }
-
+  const testimonials = await loadTestimonialsCatalog(dataUrl);
   const published = testimonials
     .filter((t) => t.status !== "archived")
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   if (published.length === 0) return;
 
-  containerEl.replaceChildren();
+  const sectionScope = /** @type {HTMLElement} */ (
+    containerEl.closest("section") || document.body
+  );
+  const template = /** @type {HTMLTemplateElement | null} */ (
+    sectionScope.querySelector(templateSelector)
+  );
+
+  const fragment = document.createDocumentFragment();
   for (const item of published) {
-    containerEl.appendChild(createTestimonialCardElement(item));
+    fragment.appendChild(createTestimonialCardElement(item, template));
   }
+  containerEl.replaceChildren(fragment);
 }

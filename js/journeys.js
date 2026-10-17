@@ -99,6 +99,9 @@ export const DEFAULT_JOURNEYS = [
   },
 ];
 
+/** @type {WeakMap<HTMLElement, AbortController>} */
+const dossierControllers = new WeakMap();
+
 /**
  * Loads the journey catalog from data/journeys.json with graceful fallback.
  * @param {string} [dataUrl="./data/journeys.json"]
@@ -106,16 +109,16 @@ export const DEFAULT_JOURNEYS = [
  */
 export async function loadJourneysCatalog(dataUrl = "./data/journeys.json") {
   try {
-    const response = await fetch(dataUrl);
+    const response = await fetch(dataUrl, { cache: "no-cache" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
     const list = Array.isArray(payload) ? payload : payload.journeys;
     if (!Array.isArray(list) || list.length === 0) {
-      return DEFAULT_JOURNEYS;
+      return structuredClone(DEFAULT_JOURNEYS);
     }
     return list;
   } catch {
-    return DEFAULT_JOURNEYS;
+    return structuredClone(DEFAULT_JOURNEYS);
   }
 }
 
@@ -138,9 +141,11 @@ export function createJourneyCardElement(
         )
       : document.createElement("article");
 
-  article.className = location.flagship
-    ? "journey-card journey-card-flagship"
-    : "journey-card";
+  const classes = ["journey-card"];
+  if (location.flagship) classes.push("journey-card-flagship");
+  if (location.status === "coming_soon") classes.push("journey-card-coming-soon");
+  article.className = classes.join(" ");
+
   article.dataset.journeyId = location.id;
   article.tabIndex = 0;
   article.setAttribute("role", "button");
@@ -154,6 +159,8 @@ export function createJourneyCardElement(
   imageContainer.replaceChildren();
 
   if (location.image) {
+    imageContainer.removeAttribute("role");
+    imageContainer.removeAttribute("aria-label");
     const img = document.createElement("img");
     const isExternalOrRoot =
       location.image.startsWith("http://") ||
@@ -188,8 +195,11 @@ export function createJourneyCardElement(
 
   const regionEl = article.querySelector('[data-field="region"]');
   if (regionEl) {
-    regionEl.textContent = location.editionDates
-      ? `${location.accommodation} · ${location.editionDates}`
+    const timingNote =
+      location.editionDates ||
+      (location.status === "coming_soon" ? "Coming soon" : "");
+    regionEl.textContent = timingNote
+      ? `${location.accommodation} · ${timingNote}`
       : location.accommodation;
   }
 
@@ -233,7 +243,7 @@ function syncJourneySelectOptions(journeys, select = null) {
 /**
  * Sets up the Morphing Journey Dossier overlay (opens card into framed sheet, retracts back).
  * @param {JourneyPackage[]} catalog
- * @param {HTMLElement} [sectionElement=document]
+ * @param {HTMLElement | Document} [sectionElement=document]
  */
 function setupJourneyDossier(catalog, sectionElement = document) {
   const dossierModal = /** @type {HTMLElement | null} */ (
@@ -244,18 +254,33 @@ function setupJourneyDossier(catalog, sectionElement = document) {
   );
   if (!dossierModal || !panel) return;
 
+  const previousController = dossierControllers.get(dossierModal);
+  if (previousController) {
+    previousController.abort();
+  }
+  const controller = new AbortController();
+  const { signal } = controller;
+  dossierControllers.set(dossierModal, controller);
+
   /** @type {HTMLElement | null} */
   let activeCard = null;
   let isAnimating = false;
 
   const titleEl = dossierModal.querySelector("#dossier-title");
   const eyebrowEl = dossierModal.querySelector("#dossier-eyebrow");
-  const axiomEl = dossierModal.querySelector("#dossier-axiom");
+  const axiomEl = /** @type {HTMLElement | null} */ (
+    dossierModal.querySelector("#dossier-axiom")
+  );
   const descEl = dossierModal.querySelector("#dossier-description");
   const durationEl = dossierModal.querySelector("#dossier-duration");
   const groupEl = dossierModal.querySelector("#dossier-group");
   const accommodationEl = dossierModal.querySelector("#dossier-accommodation");
-  const imageWrap = dossierModal.querySelector("#dossier-image");
+  const imageWrap = /** @type {HTMLElement | null} */ (
+    dossierModal.querySelector("#dossier-image")
+  );
+  const highlightsWrap = /** @type {HTMLElement | null} */ (
+    dossierModal.querySelector("#dossier-highlights-wrap")
+  );
   const highlightsList = dossierModal.querySelector("#dossier-highlights");
   const ctaBtn = /** @type {HTMLAnchorElement | null} */ (
     dossierModal.querySelector("#dossier-cta")
@@ -298,34 +323,58 @@ function setupJourneyDossier(catalog, sectionElement = document) {
    * @param {HTMLElement} card
    */
   function openDossier(location, card) {
-    if (isAnimating) return;
+    if (isAnimating || !dossierModal) return;
     activeCard = card;
 
     if (titleEl) titleEl.textContent = location.name;
-    if (eyebrowEl) eyebrowEl.textContent = location.region;
+    if (eyebrowEl) {
+      const statusSuffix =
+        location.status === "coming_soon" ? " · Coming soon" : "";
+      eyebrowEl.textContent = `${location.region}${statusSuffix}`;
+    }
     if (axiomEl) {
       axiomEl.textContent = location.axiom || "";
-      // @ts-ignore
       axiomEl.hidden = !location.axiom;
     }
     if (descEl) descEl.textContent = location.description;
-    if (durationEl) durationEl.textContent = location.duration || "7 nights / 8 days";
-    if (groupEl) groupEl.textContent = location.groupSize || "8–10 guests";
-    if (accommodationEl) accommodationEl.textContent = location.accommodation;
+    if (durationEl) {
+      durationEl.textContent = location.duration || "7 nights / 8 days";
+    }
+    if (groupEl) {
+      groupEl.textContent = location.groupSize || "8–10 guests";
+    }
+    if (accommodationEl) {
+      accommodationEl.textContent = location.accommodation;
+    }
 
     if (imageWrap) {
       imageWrap.replaceChildren();
       if (location.image) {
+        imageWrap.classList.remove("journey-image-placeholder");
+        imageWrap.removeAttribute("role");
+        imageWrap.removeAttribute("aria-label");
         const img = document.createElement("img");
         img.src = location.image;
         img.alt = location.imageAlt || location.name;
         imageWrap.appendChild(img);
+      } else {
+        imageWrap.classList.add("journey-image-placeholder");
+        imageWrap.setAttribute("role", "img");
+        imageWrap.setAttribute(
+          "aria-label",
+          location.imageAlt || `Placeholder image for ${location.name}`
+        );
       }
     }
 
     if (highlightsList) {
       highlightsList.replaceChildren();
-      const items = location.highlights || [];
+      const items = (location.highlights || []).filter(
+        (text) => typeof text === "string" && text.trim().length > 0
+      );
+      if (highlightsWrap) {
+        highlightsWrap.hidden = items.length === 0;
+      }
       items.forEach((itemText) => {
         const li = document.createElement("li");
         li.textContent = itemText;
@@ -337,7 +386,8 @@ function setupJourneyDossier(catalog, sectionElement = document) {
       ctaBtn.href = "#invitation";
       ctaBtn.dataset.journey = location.id;
       if (ctaLabel) {
-        ctaLabel.textContent = location.ctaLabel || "Enquire about this journey";
+        ctaLabel.textContent =
+          location.ctaLabel || "Enquire about this journey";
       }
     }
 
@@ -347,6 +397,7 @@ function setupJourneyDossier(catalog, sectionElement = document) {
     isAnimating = true;
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
+        if (!dossierModal) return;
         dossierModal.classList.add("is-open");
         document.body.classList.add("has-modal-open");
         isAnimating = false;
@@ -357,9 +408,10 @@ function setupJourneyDossier(catalog, sectionElement = document) {
 
   /**
    * Retracts the dossier back into the source card.
+   * @param {{ restoreFocus?: boolean }} [options]
    */
-  function closeDossier() {
-    if (isAnimating || dossierModal.hidden) return;
+  function closeDossier({ restoreFocus = true } = {}) {
+    if (isAnimating || !dossierModal || !panel || dossierModal.hidden) return;
     isAnimating = true;
 
     if (activeCard) {
@@ -369,22 +421,25 @@ function setupJourneyDossier(catalog, sectionElement = document) {
     dossierModal.classList.remove("is-open");
     document.body.classList.remove("has-modal-open");
 
+    const cardToFocus = restoreFocus ? activeCard : null;
+    activeCard = null;
+
     const onTransitionEnd = () => {
+      if (!dossierModal || !panel) return;
       dossierModal.hidden = true;
       isAnimating = false;
       panel.style.removeProperty("--morph-x");
       panel.style.removeProperty("--morph-y");
       panel.style.removeProperty("--morph-sx");
       panel.style.removeProperty("--morph-sy");
-      if (activeCard) {
-        activeCard.focus();
-        activeCard = null;
+      if (cardToFocus) {
+        cardToFocus.focus();
       }
     };
 
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    const prefersReducedMotion =
+      "matchMedia" in window &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
       onTransitionEnd();
     } else {
@@ -392,67 +447,107 @@ function setupJourneyDossier(catalog, sectionElement = document) {
     }
   }
 
-  // Handle click on cards inside the section
-  sectionElement.addEventListener("click", (event) => {
-    const target = /** @type {HTMLElement | null} */ (event.target);
-    if (!target) return;
+  // Handle click on cards and controls inside the section
+  sectionElement.addEventListener(
+    "click",
+    (event) => {
+      const target = /** @type {HTMLElement | null} */ (event.target);
+      if (!target) return;
 
-    // Check if close trigger
-    if (target.closest("[data-dossier-close]")) {
-      event.preventDefault();
-      closeDossier();
-      return;
-    }
-
-    // Check if CTA within dossier
-    if (target.closest("#dossier-cta")) {
-      closeDossier();
-      return;
-    }
-
-    // Check if card was clicked
-    const card = /** @type {HTMLElement | null} */ (
-      target.closest(".journey-card")
-    );
-    if (card && !dossierModal.contains(card)) {
-      const journeyId = card.dataset.journeyId;
-      const found = catalog.find((item) => item.id === journeyId);
-      if (found) {
-        openDossier(found, card);
+      if (target.closest("[data-dossier-close]")) {
+        event.preventDefault();
+        closeDossier({ restoreFocus: true });
+        return;
       }
-    }
-  });
 
-  // Handle keyboard activation of card (Enter/Space) and Escape to close
-  sectionElement.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !dossierModal.hidden) {
-      event.preventDefault();
-      closeDossier();
-      return;
-    }
-
-    const target = /** @type {HTMLElement | null} */ (event.target);
-    if (!target) return;
-
-    if (
-      (event.key === "Enter" || event.key === " ") &&
-      target.classList.contains("journey-card") &&
-      !dossierModal.contains(target)
-    ) {
-      event.preventDefault();
-      const journeyId = target.dataset.journeyId;
-      const found = catalog.find((item) => item.id === journeyId);
-      if (found) {
-        openDossier(found, target);
+      // When user clicks the CTA to navigate to #invitation, do NOT yank focus back to the card
+      if (target.closest("#dossier-cta")) {
+        closeDossier({ restoreFocus: false });
+        return;
       }
-    }
-  });
 
-  window.addEventListener("resize", () => {
-    if (!dossierModal.hidden && activeCard) {
-      applyMorphVariables(activeCard);
-    }
-  });
+      const card = /** @type {HTMLElement | null} */ (
+        target.closest(".journey-card")
+      );
+      if (card && !dossierModal.contains(card)) {
+        const journeyId = card.dataset.journeyId;
+        const found = catalog.find((item) => item.id === journeyId);
+        if (found) {
+          openDossier(found, card);
+        }
+      }
+    },
+    { signal }
+  );
+
+  // Handle keyboard activation of card (Enter/Space)
+  sectionElement.addEventListener(
+    "keydown",
+    (event) => {
+      const keyEvent = /** @type {KeyboardEvent} */ (event);
+      const target = /** @type {HTMLElement | null} */ (keyEvent.target);
+      if (!target) return;
+
+      if (
+        (keyEvent.key === "Enter" || keyEvent.key === " ") &&
+        target.classList.contains("journey-card") &&
+        !dossierModal.contains(target)
+      ) {
+        keyEvent.preventDefault();
+        const journeyId = target.dataset.journeyId;
+        const found = catalog.find((item) => item.id === journeyId);
+        if (found) {
+          openDossier(found, target);
+        }
+      }
+    },
+    { signal }
+  );
+
+  // Document-level Escape and modal focus trap (WCAG 2.2 AA aria-modal compliance)
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (dossierModal.hidden) return;
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeDossier({ restoreFocus: true });
+        return;
+      }
+
+      if (event.key === "Tab") {
+        const focusable = /** @type {HTMLElement[]} */ ([
+          ...panel.querySelectorAll(
+            'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          ),
+        ]).filter((el) => !el.hidden);
+
+        if (focusable.length === 0) return;
+        const firstEl = focusable[0];
+        const lastEl = focusable[focusable.length - 1];
+
+        if (event.shiftKey && document.activeElement === firstEl) {
+          event.preventDefault();
+          lastEl.focus();
+        } else if (!event.shiftKey && document.activeElement === lastEl) {
+          event.preventDefault();
+          firstEl.focus();
+        }
+      }
+    },
+    { signal }
+  );
+
+  window.addEventListener(
+    "resize",
+    () => {
+      if (!dossierModal.hidden && activeCard) {
+        applyMorphVariables(activeCard);
+      }
+    },
+    { signal, passive: true }
+  );
 }
 
 /**
@@ -492,7 +587,7 @@ export async function renderJourneys(
   container.replaceChildren(fragment);
 
   const selectEl = /** @type {HTMLSelectElement | null} */ (
-    document.querySelector(selectSelector)
+    container.ownerDocument.querySelector(selectSelector)
   );
   syncJourneySelectOptions(visibleJourneys, selectEl);
 

@@ -36,7 +36,8 @@ export function initForm(sectionSelector = "#invitation") {
     ...form.querySelectorAll(".form-step"),
   ]);
   const progressFill = /** @type {HTMLElement | null} */ (
-    formProgress.querySelector("span")
+    formProgress.querySelector(".progress-fill") ||
+      formProgress.querySelector("span")
   );
   let activeStep = 0;
 
@@ -46,6 +47,7 @@ export function initForm(sectionSelector = "#invitation") {
    * @param {{ focus?: boolean }} [options]
    */
   function showStep(index, { focus = false } = {}) {
+    if (!formProgress || !stepCount) return;
     activeStep = index;
     steps.forEach((step, stepIndex) => {
       step.hidden = stepIndex !== activeStep;
@@ -123,8 +125,15 @@ export function initForm(sectionSelector = "#invitation") {
     if (!journeyTrigger || !journeySelect) return;
 
     const journeyId = journeyTrigger.dataset.journey;
-    if (journeyId) {
+    if (journeyId !== undefined) {
       journeySelect.value = journeyId;
+    }
+
+    if (form.hidden) {
+      form.hidden = false;
+      if (progressWrap) progressWrap.hidden = false;
+      formSuccess.hidden = true;
+      showStep(0);
     }
   });
 

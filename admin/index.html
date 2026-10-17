@@ -9,6 +9,20 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+    <link
+      rel="preload"
+      href="../fonts/DMSans-normal-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../fonts/PlayfairDisplay-normal-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link rel="stylesheet" href="../styles.css" />
     <style>
       .admin-shell {
@@ -174,8 +188,8 @@
         grid-template-columns: 1fr 1fr;
         gap: 16px;
       }
-      .admin-checkbox {
-        display: flex !important;
+      .admin-form label.admin-checkbox {
+        display: flex;
         align-items: center;
         gap: 10px;
         padding-top: 6px;
@@ -197,7 +211,32 @@
       }
       .preview-grid {
         display: grid;
-        gap: 20px;
+        gap: 28px;
+      }
+      .preview-grid .journey-card {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        background: var(--paper);
+        border: 1px solid var(--line);
+      }
+      .preview-grid .journey-card-flagship {
+        border-color: var(--green);
+      }
+      .preview-grid .journey-image {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        min-height: 180px;
+        margin-bottom: 18px;
+        overflow: hidden;
+      }
+      .preview-grid .journey-image img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
       @media (max-width: 900px) {
         .admin-layout {
@@ -232,237 +271,387 @@
         </div>
       </header>
 
-      <nav class="admin-tabs" role="tablist" aria-label="CMS Sections">
+      <div class="admin-tabs" role="tablist" aria-label="CMS Sections">
         <button
           class="admin-tab is-active"
           id="tab-btn-journeys"
+          type="button"
           role="tab"
           aria-selected="true"
           aria-controls="section-journeys"
+          tabindex="0"
         >
           The Journeys (Catalog)
         </button>
         <button
           class="admin-tab"
           id="tab-btn-testimonials"
+          type="button"
           role="tab"
           aria-selected="false"
           aria-controls="section-testimonials"
+          tabindex="-1"
         >
           05 / Testimonials (Guest Feedback)
         </button>
-      </nav>
+      </div>
 
-      <!-- TAB 1: THE JOURNEYS -->
-      <section class="tab-content is-active" id="section-journeys" role="tabpanel" aria-labelledby="tab-btn-journeys">
-        <div class="tab-header">
-          <h2>Travel Packages</h2>
-          <div class="admin-actions">
-            <button class="button button-quiet" type="button" id="add-journey-btn">+ New journey</button>
-            <button class="button button-dark" type="button" id="save-json-btn">
-              Save to site (data/journeys.json)
-            </button>
+      <main id="admin-main">
+        <!-- TAB 1: THE JOURNEYS -->
+        <section
+          class="tab-content is-active"
+          id="section-journeys"
+          role="tabpanel"
+          aria-labelledby="tab-btn-journeys"
+        >
+          <div class="tab-header">
+            <h2>Travel Packages</h2>
+            <div class="admin-actions">
+              <button class="button button-quiet" type="button" id="add-journey-btn">
+                + New journey
+              </button>
+              <button class="button button-dark" type="button" id="save-json-btn">
+                Save to site (data/journeys.json)
+              </button>
+            </div>
           </div>
-        </div>
 
-        <main class="admin-layout">
-          <section class="admin-panel" aria-labelledby="editor-heading">
-            <h2 id="editor-heading">Catalog packages</h2>
-            <div class="package-list" id="package-list" role="list"></div>
+          <div class="admin-layout">
+            <section class="admin-panel" aria-labelledby="editor-heading">
+              <h2 id="editor-heading">Catalog packages</h2>
+              <div class="package-list" id="package-list" role="list"></div>
 
-            <form class="admin-form" id="package-editor" novalidate>
-              <div class="admin-row">
+              <form class="admin-form" id="package-editor" novalidate>
+                <div class="admin-row">
+                  <label>
+                    <span>Slug ID (lowercase)</span>
+                    <input
+                      class="admin-input"
+                      name="id"
+                      required
+                      pattern="^[a-z0-9-]+$"
+                      placeholder="e.g. algodoes"
+                    />
+                  </label>
+                  <label>
+                    <span>Display order</span>
+                    <input
+                      class="admin-input"
+                      name="order"
+                      type="number"
+                      min="1"
+                      required
+                    />
+                  </label>
+                </div>
+
+                <div class="admin-row">
+                  <label>
+                    <span>Publication status</span>
+                    <select name="status">
+                      <option value="published">Published (visible)</option>
+                      <option value="coming_soon">Coming soon</option>
+                      <option value="archived">Archived (hidden)</option>
+                    </select>
+                  </label>
+                  <label class="admin-checkbox">
+                    <input type="checkbox" name="flagship" />
+                    <span>Featured card (moss-green border highlight)</span>
+                  </label>
+                </div>
+
+                <div class="admin-row">
+                  <label>
+                    <span>Destination name</span>
+                    <input
+                      class="admin-input"
+                      name="name"
+                      required
+                      placeholder="e.g. Praia de Algodões"
+                    />
+                  </label>
+                  <label>
+                    <span>Region / State</span>
+                    <input
+                      class="admin-input"
+                      name="region"
+                      required
+                      placeholder="e.g. Maraú Peninsula, Bahia"
+                    />
+                  </label>
+                </div>
+
+                <div class="admin-row">
+                  <label>
+                    <span>Hospitality category</span>
+                    <input
+                      class="admin-input"
+                      name="accommodation"
+                      required
+                      placeholder="e.g. Boutique pousada or Boutique lodge"
+                    />
+                  </label>
+                  <label>
+                    <span>Optional timing / edition note</span>
+                    <input
+                      class="admin-input"
+                      name="editionDates"
+                      placeholder="Optional seasonal note"
+                    />
+                  </label>
+                </div>
+
                 <label>
-                  <span>Slug ID (lowercase)</span>
-                  <input class="admin-input" name="id" required pattern="^[a-z0-9-]+$" placeholder="e.g. algodoes" />
+                  <span>Card axiom (short 1-line phrase on compact card)</span>
+                  <input
+                    class="admin-input"
+                    name="axiom"
+                    placeholder="e.g. Warm tide, coastal forest, and unhurried light."
+                  />
                 </label>
+
+                <div class="admin-row">
+                  <label>
+                    <span>Duration</span>
+                    <input
+                      class="admin-input"
+                      name="duration"
+                      placeholder="7 nights / 8 days"
+                    />
+                  </label>
+                  <label>
+                    <span>Group size</span>
+                    <input
+                      class="admin-input"
+                      name="groupSize"
+                      placeholder="8–10 guests"
+                    />
+                  </label>
+                </div>
+
+                <div class="admin-row">
+                  <label>
+                    <span>Image path (leave empty for gradient placeholder)</span>
+                    <input
+                      class="admin-input"
+                      name="image"
+                      placeholder="assets/images/journeys/algodoes.webp"
+                    />
+                  </label>
+                  <label>
+                    <span>Image descriptive alt text (WCAG AA)</span>
+                    <input
+                      class="admin-input"
+                      name="imageAlt"
+                      placeholder="Golden hour at Praia de Algodões, Bahia"
+                    />
+                  </label>
+                </div>
+
                 <label>
-                  <span>Display order</span>
-                  <input class="admin-input" name="order" type="number" min="1" required />
+                  <span>Expanded dossier narrative (checked against CONTEXT.md brand voice)</span>
+                  <textarea name="description" rows="3" required></textarea>
                 </label>
-              </div>
 
-              <div class="admin-row">
                 <label>
-                  <span>Publication status</span>
-                  <select name="status">
-                    <option value="published">Published (visible)</option>
-                    <option value="coming_soon">Coming soon</option>
-                    <option value="archived">Archived (hidden)</option>
-                  </select>
+                  <span>Sensory &amp; curatorial highlights (one per line)</span>
+                  <textarea
+                    name="highlights"
+                    rows="3"
+                    placeholder="Quiet mornings between calm Atlantic tide pools&#10;Open architecture in natural wood and linen"
+                  ></textarea>
                 </label>
-                <label class="admin-checkbox">
-                  <input type="checkbox" name="flagship" />
-                  <span>Featured card (moss-green border highlight)</span>
-                </label>
-              </div>
 
-              <div class="admin-row">
-                <label>
-                  <span>Destination name</span>
-                  <input class="admin-input" name="name" required placeholder="e.g. Praia de Algodões" />
-                </label>
-                <label>
-                  <span>Region / State</span>
-                  <input class="admin-input" name="region" required placeholder="e.g. Maraú Peninsula, Bahia" />
-                </label>
-              </div>
+                <div class="voice-alert" id="voice-alert" hidden role="alert"></div>
 
-              <div class="admin-row">
-                <label>
-                  <span>Hospitality category</span>
-                  <input class="admin-input" name="accommodation" required placeholder="e.g. Boutique pousada or Boutique lodge" />
-                </label>
-                <label>
-                  <span>Optional timing / edition note</span>
-                  <input class="admin-input" name="editionDates" placeholder="Optional seasonal note" />
-                </label>
-              </div>
+                <div class="form-actions">
+                  <button
+                    class="button button-quiet"
+                    type="button"
+                    id="delete-journey-btn"
+                  >
+                    Remove package
+                  </button>
+                  <button class="button button-dark" type="submit">
+                    Apply &amp; save to site
+                  </button>
+                </div>
+                <p
+                  class="admin-status"
+                  id="admin-status"
+                  role="status"
+                  aria-live="polite"
+                ></p>
+              </form>
+            </section>
 
-              <label>
-                <span>Card axiom (short 1-line phrase on compact card)</span>
-                <input class="admin-input" name="axiom" placeholder="e.g. Warm tide, coastal forest, and unhurried light." />
-              </label>
-
-              <div class="admin-row">
-                <label>
-                  <span>Duration</span>
-                  <input class="admin-input" name="duration" placeholder="7 nights / 8 days" />
-                </label>
-                <label>
-                  <span>Group size</span>
-                  <input class="admin-input" name="groupSize" placeholder="8–10 guests" />
-                </label>
-              </div>
-
-              <div class="admin-row">
-                <label>
-                  <span>Image path (leave empty for gradient placeholder)</span>
-                  <input class="admin-input" name="image" placeholder="assets/images/journeys/algodoes.webp" />
-                </label>
-                <label>
-                  <span>Image descriptive alt text (WCAG AA)</span>
-                  <input class="admin-input" name="imageAlt" placeholder="Golden hour at Praia de Algodões, Bahia" />
-                </label>
-              </div>
-
-              <label>
-                <span>Expanded dossier narrative (checked against CONTEXT.md brand voice)</span>
-                <textarea name="description" rows="3" required></textarea>
-              </label>
-
-              <label>
-                <span>Sensory &amp; curatorial highlights (one per line)</span>
-                <textarea name="highlights" rows="3" placeholder="Quiet mornings between calm Atlantic tide pools&#10;Open architecture in natural wood and linen"></textarea>
-              </label>
-
-              <div class="voice-alert" id="voice-alert" hidden role="alert"></div>
-
-              <div class="form-actions">
-                <button class="button button-quiet" type="button" id="delete-journey-btn">
-                  Remove package
-                </button>
-                <button class="button button-dark" type="submit">
-                  Apply &amp; save to site
-                </button>
-              </div>
-              <p class="admin-status" id="admin-status" role="status" aria-live="polite"></p>
-            </form>
-          </section>
-
-          <section class="admin-panel" aria-labelledby="preview-heading">
-            <p class="eyebrow">Live card preview &amp; JSON output</p>
-            <h2 id="preview-heading">Rendered cards</h2>
-            <div class="preview-grid" id="preview-grid"></div>
-          </section>
-        </main>
-      </section>
-
-      <!-- TAB 2: TESTIMONIALS (05 / TESTIMONIALS) -->
-      <section class="tab-content" id="section-testimonials" role="tabpanel" aria-labelledby="tab-btn-testimonials">
-        <div class="tab-header">
-          <h2>05 / Testimonials — Reflections</h2>
-          <div class="admin-actions">
-            <button class="button button-quiet" type="button" id="add-testimonial-btn">+ New testimonial</button>
-            <button class="button button-dark" type="button" id="save-testimonials-btn">
-              Save to site (data/testimonials.json)
-            </button>
+            <section class="admin-panel" aria-labelledby="preview-heading">
+              <p class="eyebrow">Live card preview &amp; JSON output</p>
+              <h2 id="preview-heading">Rendered cards</h2>
+              <div class="preview-grid" id="preview-grid"></div>
+            </section>
           </div>
-        </div>
+        </section>
 
-        <main class="admin-layout">
-          <section class="admin-panel" aria-labelledby="testimonial-editor-heading">
-            <h2 id="testimonial-editor-heading">Guest testimonials</h2>
-            <div class="package-list" id="testimonial-list" role="list"></div>
+        <!-- TAB 2: TESTIMONIALS (05 / TESTIMONIALS) -->
+        <section
+          class="tab-content"
+          id="section-testimonials"
+          role="tabpanel"
+          aria-labelledby="tab-btn-testimonials"
+          hidden
+        >
+          <div class="tab-header">
+            <h2>05 / Testimonials — Reflections</h2>
+            <div class="admin-actions">
+              <button
+                class="button button-quiet"
+                type="button"
+                id="add-testimonial-btn"
+              >
+                + New testimonial
+              </button>
+              <button
+                class="button button-dark"
+                type="button"
+                id="save-testimonials-btn"
+              >
+                Save to site (data/testimonials.json)
+              </button>
+            </div>
+          </div>
 
-            <form class="admin-form" id="testimonial-editor" novalidate>
-              <div class="admin-row">
+          <div class="admin-layout">
+            <section
+              class="admin-panel"
+              aria-labelledby="testimonial-editor-heading"
+            >
+              <h2 id="testimonial-editor-heading">Guest testimonials</h2>
+              <div class="package-list" id="testimonial-list" role="list"></div>
+
+              <form class="admin-form" id="testimonial-editor" novalidate>
+                <div class="admin-row">
+                  <label>
+                    <span>Slug ID (lowercase)</span>
+                    <input
+                      class="admin-input"
+                      name="id"
+                      required
+                      pattern="^[a-z0-9-]+$"
+                      placeholder="e.g. julian-ross"
+                    />
+                  </label>
+                  <label>
+                    <span>Display order</span>
+                    <input
+                      class="admin-input"
+                      name="order"
+                      type="number"
+                      min="1"
+                      required
+                    />
+                  </label>
+                </div>
+
+                <div class="admin-row">
+                  <label>
+                    <span>Publication status</span>
+                    <select name="status">
+                      <option value="published">Published (visible)</option>
+                      <option value="archived">Archived (hidden)</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span>Journey visited in Brazil</span>
+                    <input
+                      class="admin-input"
+                      name="journey"
+                      required
+                      placeholder="e.g. Praia de Algodões, Bahia"
+                    />
+                  </label>
+                </div>
+
+                <div class="admin-row">
+                  <label>
+                    <span>Author name</span>
+                    <input
+                      class="admin-input"
+                      name="author"
+                      required
+                      placeholder="e.g. Dr. Julian Ross"
+                    />
+                  </label>
+                  <label>
+                    <span>Role / Discipline</span>
+                    <input
+                      class="admin-input"
+                      name="role"
+                      required
+                      placeholder="e.g. Clinical Psychoanalyst"
+                    />
+                  </label>
+                </div>
+
                 <label>
-                  <span>Slug ID (lowercase)</span>
-                  <input class="admin-input" name="id" required pattern="^[a-z0-9-]+$" placeholder="e.g. julian-ross" />
+                  <span>Location (City, Country)</span>
+                  <input
+                    class="admin-input"
+                    name="location"
+                    required
+                    placeholder="e.g. Manhattan, New York"
+                  />
                 </label>
+
                 <label>
-                  <span>Display order</span>
-                  <input class="admin-input" name="order" type="number" min="1" required />
+                  <span>Testimonial quote (checked against CONTEXT.md brand voice)</span>
+                  <textarea
+                    name="quote"
+                    rows="4"
+                    required
+                    placeholder="Reflective feedback on silence, landscape and attention..."
+                  ></textarea>
                 </label>
-              </div>
 
-              <div class="admin-row">
-                <label>
-                  <span>Publication status</span>
-                  <select name="status">
-                    <option value="published">Published (visible)</option>
-                    <option value="archived">Archived (hidden)</option>
-                  </select>
-                </label>
-                <label>
-                  <span>Journey visited in Brazil</span>
-                  <input class="admin-input" name="journey" required placeholder="e.g. Praia de Algodões, Bahia" />
-                </label>
-              </div>
+                <div
+                  class="voice-alert"
+                  id="testimonial-voice-alert"
+                  hidden
+                  role="alert"
+                ></div>
 
-              <div class="admin-row">
-                <label>
-                  <span>Author name</span>
-                  <input class="admin-input" name="author" required placeholder="e.g. Dr. Julian Ross" />
-                </label>
-                <label>
-                  <span>Role / Discipline</span>
-                  <input class="admin-input" name="role" required placeholder="e.g. Clinical Psychoanalyst" />
-                </label>
-              </div>
+                <div class="form-actions">
+                  <button
+                    class="button button-quiet"
+                    type="button"
+                    id="delete-testimonial-btn"
+                  >
+                    Remove testimonial
+                  </button>
+                  <button class="button button-dark" type="submit">
+                    Apply &amp; save to site
+                  </button>
+                </div>
+                <p
+                  class="admin-status"
+                  id="testimonial-admin-status"
+                  role="status"
+                  aria-live="polite"
+                ></p>
+              </form>
+            </section>
 
-              <label>
-                <span>Location (City, Country)</span>
-                <input class="admin-input" name="location" required placeholder="e.g. Manhattan, New York" />
-              </label>
-
-              <label>
-                <span>Testimonial quote (checked against CONTEXT.md brand voice)</span>
-                <textarea name="quote" rows="4" required placeholder="Reflective feedback on silence, landscape and attention..."></textarea>
-              </label>
-
-              <div class="voice-alert" id="testimonial-voice-alert" hidden role="alert"></div>
-
-              <div class="form-actions">
-                <button class="button button-quiet" type="button" id="delete-testimonial-btn">
-                  Remove testimonial
-                </button>
-                <button class="button button-dark" type="submit">
-                  Apply &amp; save to site
-                </button>
-              </div>
-              <p class="admin-status" id="testimonial-admin-status" role="status" aria-live="polite"></p>
-            </form>
-          </section>
-
-          <section class="admin-panel" aria-labelledby="testimonial-preview-heading">
-            <p class="eyebrow">Live testimonial preview</p>
-            <h2 id="testimonial-preview-heading">Rendered cards</h2>
-            <div class="preview-grid" id="testimonial-preview-grid"></div>
-          </section>
-        </main>
-      </section>
+            <section
+              class="admin-panel"
+              aria-labelledby="testimonial-preview-heading"
+            >
+              <p class="eyebrow">Live testimonial preview</p>
+              <h2 id="testimonial-preview-heading">Rendered cards</h2>
+              <div class="preview-grid" id="testimonial-preview-grid"></div>
+            </section>
+          </div>
+        </section>
+      </main>
     </div>
 
     <template id="journey-card-template">
@@ -475,9 +664,24 @@
           <p class="journey-axiom" data-field="axiom"></p>
           <span class="journey-expand-hint">
             <span>Explore journey</span>
-            <span class="journey-expand-icon" aria-hidden="true">+</span>
+            <span class="journey-expand-icon" aria-hidden="true">↗</span>
           </span>
         </div>
+      </article>
+    </template>
+
+    <template id="testimonial-card-template">
+      <article class="testimonial-card">
+        <blockquote class="testimonial-body">
+          <p class="testimonial-quote" data-field="quote"></p>
+          <footer class="testimonial-footer">
+            <div class="testimonial-meta">
+              <cite class="testimonial-author" data-field="author"></cite>
+              <span class="testimonial-role" data-field="role"></span>
+            </div>
+            <span class="testimonial-journey" data-field="journey"></span>
+          </footer>
+        </blockquote>
       </article>
     </template>
   </body>

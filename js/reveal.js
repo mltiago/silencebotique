@@ -1,29 +1,36 @@
 // @ts-check
-// reveal.js — Scroll-triggered fade-in animations.
+// reveal.js — Scroll-triggered fade-in animations for structural blocks.
+// Operates exclusively on non-scrollytelling containers to avoid conflicting
+// with scrolly.js ([data-scrolly]) transitions.
 
 const DEFAULT_REVEAL_TARGETS = [
-  ".philosophy-content",
-  ".experience-heading",
-  ".timeline",
-  ".journey-details",
-  ".brazil-copy",
-  ".journeys-heading",
-  ".journeys-grid",
-  ".audience-heading",
-  ".selection",
-  ".faq-heading",
-  ".faq-list",
-  ".invitation-intro",
+  ".breather",
+  ".brazil-image",
   ".invitation-form-wrap",
 ].join(", ");
 
 /**
- * Observes content blocks and reveals them smoothly as they enter the viewport.
+ * Observes structural blocks and reveals them smoothly as they enter the viewport.
+ * Automatically skips elements managed by scrolly.js ([data-scrolly]).
  * @param {string} [targetSelector=DEFAULT_REVEAL_TARGETS]
- * @returns {void}
+ * @returns {() => void} Cleanup function to disconnect the observer
  */
 export function initReveal(targetSelector = DEFAULT_REVEAL_TARGETS) {
-  const revealTargets = document.querySelectorAll(targetSelector);
+  const candidates = /** @type {HTMLElement[]} */ ([
+    ...document.querySelectorAll(targetSelector),
+  ]);
+
+  const revealTargets = candidates.filter(
+    (el) =>
+      !el.hasAttribute("data-scrolly") &&
+      !el.hasAttribute("data-scrolly-children") &&
+      !el.querySelector("[data-scrolly]")
+  );
+
+  if (revealTargets.length === 0) {
+    return () => {};
+  }
+
   const prefersReducedMotion =
     "matchMedia" in window &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -43,9 +50,19 @@ export function initReveal(targetSelector = DEFAULT_REVEAL_TARGETS) {
 
     revealTargets.forEach((target) => {
       target.classList.add("reveal");
-      revealObserver.observe(target);
+      const rect = target.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.88 && rect.bottom > 0) {
+        target.classList.add("is-visible");
+      } else {
+        revealObserver.observe(target);
+      }
     });
-  } else {
-    revealTargets.forEach((target) => target.classList.add("is-visible"));
+
+    return () => {
+      revealObserver.disconnect();
+    };
   }
+
+  revealTargets.forEach((target) => target.classList.add("is-visible"));
+  return () => {};
 }

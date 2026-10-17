@@ -1,10 +1,10 @@
 // @ts-check
-// brazil-slider.js — Contemplative Brazilian nature slideshow for Section 03 (#brazil).
+// brazil-slider.js — Contemplative Brazilian nature slideshow for Section 02 (#brazil).
 // Scoped to the slider container; supports slow auto-advance, keyboard arrows,
 // pause-on-hover/focus, and respects prefers-reduced-motion.
 
 /**
- * Initializes the Brazilian nature carousel inside Section 03.
+ * Initializes the Brazilian nature carousel inside Section 02.
  * @param {string} [selector="#brazil-slider"] - Root selector for the slider container.
  * @param {number} [intervalMs=6000] - Auto-advance interval in milliseconds.
  * @returns {void}
@@ -31,6 +31,8 @@ export function initBrazilSlider(selector = "#brazil-slider", intervalMs = 6000)
   if (slides.length <= 1) return;
 
   let currentIndex = 0;
+  let isHovered = false;
+  let isFocused = false;
   /** @type {number | null} */
   let timerId = null;
   const reducedMotionQuery = window.matchMedia(
@@ -54,7 +56,7 @@ export function initBrazilSlider(selector = "#brazil-slider", intervalMs = 6000)
     dots.forEach((dot, idx) => {
       const isActive = idx === currentIndex;
       dot.classList.toggle("is-active", isActive);
-      dot.setAttribute("aria-selected", isActive ? "true" : "false");
+      dot.setAttribute("aria-current", isActive ? "true" : "false");
     });
   }
 
@@ -67,7 +69,7 @@ export function initBrazilSlider(selector = "#brazil-slider", intervalMs = 6000)
 
   function startAutoPlay() {
     stopAutoPlay();
-    if (reducedMotionQuery.matches) return;
+    if (reducedMotionQuery.matches || isHovered || isFocused) return;
     timerId = window.setInterval(() => {
       goToSlide(currentIndex + 1);
     }, intervalMs);
@@ -106,10 +108,28 @@ export function initBrazilSlider(selector = "#brazil-slider", intervalMs = 6000)
     }
   });
 
-  container.addEventListener("mouseenter", stopAutoPlay);
-  container.addEventListener("mouseleave", startAutoPlay);
-  container.addEventListener("focusin", stopAutoPlay);
-  container.addEventListener("focusout", startAutoPlay);
+  container.addEventListener("mouseenter", () => {
+    isHovered = true;
+    stopAutoPlay();
+  });
+
+  container.addEventListener("mouseleave", () => {
+    isHovered = false;
+    startAutoPlay();
+  });
+
+  container.addEventListener("focusin", () => {
+    isFocused = true;
+    stopAutoPlay();
+  });
+
+  container.addEventListener("focusout", (event) => {
+    const nextFocus = /** @type {Node | null} */ (event.relatedTarget);
+    if (!nextFocus || !container.contains(nextFocus)) {
+      isFocused = false;
+      startAutoPlay();
+    }
+  });
 
   reducedMotionQuery.addEventListener("change", () => {
     if (reducedMotionQuery.matches) {

@@ -13,21 +13,24 @@ import { renderTestimonials } from "./testimonials.js";
 import { initScrollytelling } from "./scrolly.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // 1. Initialize interactive UI controls and dynamic catalog immediately
+  // 1. Start hero loader gate and initialize interactive controls immediately
+  const loaderPromise = initLoader();
+
   initHeader();
   initMenu();
   initForm();
   initBrazilSlider();
 
-  const loaderPromise = initLoader();
-
+  // 2. Hydrate dynamic catalogs before attaching scroll observers
   await Promise.allSettled([
     renderJourneys(document.getElementById("journeys-grid")),
     renderTestimonials(document.getElementById("testimonials-grid")),
-    loaderPromise,
   ]);
 
-  // 2. Start scroll-triggered transitions once ready
+  // 3. Attach initial reveal/scrolly states while loader veil still covers viewport
   initReveal();
   initScrollytelling();
+
+  // 4. Wait for loader veil to lift
+  await loaderPromise;
 });

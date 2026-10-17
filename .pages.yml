@@ -77,15 +77,19 @@ content:
             type: text
             required: true
             pattern:
-              regex: "^(?!.*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa|wellness|vip)\\b).*$"
+              regex: "^(?![\\s\\S]*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa|wellness|vip)\\b)[\\s\\S]*$"
               message: "Brand voice violation (CONTEXT.md): avoid therapy, retreat, healing, burnout, detox, transformation, cure, spa, wellness, or vip."
+          - name: highlights
+            label: Sensory Highlights
+            type: string
+            list: true
           - name: ctaLabel
             label: CTA Label
             type: string
             default: "Enquire about this journey"
 
   - name: testimonials
-    label: Guest Feedback (06 / I’ve Been There)
+    label: Guest Feedback (05 / Testimonials)
     type: file
     path: data/testimonials.json
     format: json
@@ -99,6 +103,9 @@ content:
             label: Slug ID
             type: string
             required: true
+            pattern:
+              regex: "^[a-z0-9-]+$"
+              message: "Use lowercase letters, numbers, and hyphens only."
           - name: order
             label: Display Order
             type: number
@@ -132,5 +139,5 @@ content:
             type: text
             required: true
             pattern:
-              regex: "^(?!.*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa|wellness|vip)\\b).*$"
+              regex: "^(?![\\s\\S]*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa|wellness|vip)\\b)[\\s\\S]*$"
               message: "Brand voice violation (CONTEXT.md): avoid therapy, retreat, healing, burnout, detox, transformation, cure, spa, wellness, or vip."

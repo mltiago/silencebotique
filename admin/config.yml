@@ -16,7 +16,7 @@ collections:
       - name: "journeys"
         label: "Travel Packages (The Journeys)"
         file: "data/journeys.json"
-        description: "Manage SILENCE destinations. Guardrail: never use clinical/wellness words (retreat, therapy, healing, burnout, detox, transformation)."
+        description: "Manage SILENCE destinations. Guardrail: never use clinical/wellness words (retreat, therapy, healing, burnout, detox, transformation, cure, spa, wellness, vip)."
         fields:
           - label: "Journeys"
             name: "journeys"
@@ -40,7 +40,7 @@ collections:
                   label: "Description",
                   name: "description",
                   widget: "text",
-                  pattern: ["^(?!.*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa)\\b).*$", "Brand voice violation: avoid therapy, retreat, healing, burnout, detox, transformation, cure, or spa."]
+                  pattern: ["^(?![\\s\\S]*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa|wellness|vip)\\b)[\\s\\S]*$", "Brand voice violation: avoid therapy, retreat, healing, burnout, detox, transformation, cure, spa, wellness, or vip."]
                 }
               - { label: "Sensory Highlights", name: "highlights", widget: "list", field: { label: "Highlight", name: "highlight", widget: "string" } }
               - { label: "CTA Label", name: "ctaLabel", widget: "string", default: "Enquire about this journey" }
@@ -54,7 +54,7 @@ collections:
             widget: "list"
             summary: "{{fields.order}} · {{fields.author}} ({{fields.role}}, {{fields.location}})"
             fields:
-              - { label: "Slug ID", name: "id", widget: "string" }
+              - { label: "Slug ID", name: "id", widget: "string", pattern: ["^[a-z0-9-]+$", "Use lowercase letters, numbers, and hyphens only."] }
               - { label: "Display Order", name: "order", widget: "number", value_type: "int", min: 1, default: 1 }
               - { label: "Status", name: "status", widget: "select", options: ["published", "archived"], default: "published" }
               - { label: "Author Name", name: "author", widget: "string" }
@@ -65,5 +65,5 @@ collections:
                   label: "Quote",
                   name: "quote",
                   widget: "text",
-                  pattern: ["^(?!.*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa)\\b).*$", "Brand voice violation: avoid therapy, retreat, healing, burnout, detox, transformation, cure, or spa."]
+                  pattern: ["^(?![\\s\\S]*\\b(therapy|therapeutic|retreat|healing|heal|burnout|detox|transform|transformation|cure|spa|wellness|vip)\\b)[\\s\\S]*$", "Brand voice violation: avoid therapy, retreat, healing, burnout, detox, transformation, cure, spa, wellness, or vip."]
                 }

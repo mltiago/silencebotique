@@ -34,9 +34,21 @@
     <link rel="modulepreload" href="js/menu.js" />
     <link rel="modulepreload" href="js/form.js" />
     <link rel="modulepreload" href="js/reveal.js" />
+    <link rel="modulepreload" href="js/scrolly.js" />
     <link rel="modulepreload" href="js/journeys.js" />
+    <link rel="modulepreload" href="js/testimonials.js" />
     <link rel="modulepreload" href="js/brazil-slider.js" />
     <link rel="stylesheet" href="styles.css" />
+    <noscript>
+      <style>
+        .loader {
+          display: none !important;
+        }
+        .is-loading {
+          overflow: auto !important;
+        }
+      </style>
+    </noscript>
     <script type="module" src="js/main.js"></script>
   </head>
 
@@ -74,8 +86,8 @@
 
     <main id="main">
       <section class="hero" id="home" aria-labelledby="hero-title">
-        <!-- Full-bleed hero film via Vimeo background mode (autoplay + loop + muted + no controls, 720p).
-             dnt=1 enables do-not-track; zero player.js required (see assets/video/README.md). -->
+        <!-- Full-bleed hero film via Vimeo background mode (720p, muted, loop).
+             dnt=1 enables do-not-track; zero player.js required. -->
         <div class="hero-video-frame" aria-hidden="true">
           <iframe
             src="https://player.vimeo.com/video/1235961242?background=1&autoplay=1&muted=1&loop=1&dnt=1&badge=0&byline=0&title=0&portrait=0"
@@ -86,25 +98,40 @@
           ></iframe>
         </div>
         <div class="hero-brand">
-          <a class="wordmark hero-wordmark" href="#home" aria-label="SILENCE home">SILENCE</a>
-          <h1 class="hero-descriptor" id="hero-title">Curated slow travel in Brazil</h1>
+          <a
+            class="wordmark hero-wordmark"
+            href="#home"
+            aria-label="SILENCE home"
+          >
+            SILENCE
+          </a>
+          <h1 class="hero-descriptor" id="hero-title">
+            Curated slow travel in Brazil
+          </h1>
         </div>
       </section>
 
       <section class="breather" aria-label="A pause">
         <p class="breather-overline">A little more space</p>
-        <p class="breather-quote">There is no need to fill<br />every moment.</p>
+        <p class="breather-quote">
+          There is no need to fill<br />every moment.
+        </p>
         <span class="breather-mark" aria-hidden="true">—</span>
       </section>
 
-      <section class="philosophy section-shell" id="philosophy" aria-labelledby="philosophy-title">
+      <section
+        class="philosophy section-shell"
+        id="philosophy"
+        aria-labelledby="philosophy-title"
+      >
         <div class="story-column">
           <p class="section-number" data-scrolly>01 / Experience</p>
           <p class="eyebrow story-eyebrow" data-scrolly>
             Slow · Small · Brazil
           </p>
           <h2 id="philosophy-title" data-scrolly>
-            The landscape asks<br />for no words. And<br />silence <em>emerges.</em>
+            The landscape asks<br />for no words. And<br />silence
+            <em>emerges.</em>
           </h2>
           <p class="story-lede" data-scrolly>
             In a life devoted to the weight of human words, silence is not an
@@ -113,10 +140,10 @@
           <p class="story-text" data-scrolly>
             We gather intimate circles of eight to ten practitioners in secluded
             sanctuaries of Brazil. Here, where the landscape asks nothing to be
-            analyzed or diagnosed, the mind uncoils. The tide, the canopy, and the
-            warm earth speak without language—leaving room for true silence to
-            emerge. Conversation arises only when it wants to; stillness requires
-            no defense.
+            analyzed or diagnosed, the mind uncoils. The tide, the canopy, and
+            the warm earth speak without language—leaving room for true silence
+            to emerge. Conversation arises only when it wants to; stillness
+            requires no defense.
           </p>
         </div>
       </section>
@@ -132,8 +159,8 @@
           </p>
           <p class="story-text" data-scrolly>
             From the warm coastal forest of Bahia to the wind-swept lagoons of
-            Maranhão and the mirrored currents of the Amazon, each SILENCE journey
-            stays with one region—leaving room to listen.
+            Maranhão and the mirrored currents of the Amazon, each SILENCE
+            journey stays with one region—leaving room to listen.
           </p>
         </div>
 
@@ -145,7 +172,11 @@
           aria-label="Contemplative landscapes of Brazil"
         >
           <div class="brazil-slides" aria-live="polite">
-            <figure class="brazil-slide is-active" data-slide-index="0" aria-hidden="false">
+            <figure
+              class="brazil-slide is-active"
+              data-slide-index="0"
+              aria-hidden="false"
+            >
               <img
                 src="assets/images/brazil-coast-1600.webp"
                 srcset="
@@ -155,19 +186,24 @@
                 sizes="100vw"
                 width="1600"
                 height="900"
-                alt="Golden sunlight filtering through native Atlantic coastal forest onto calm waters in Brazil"
+                alt="Golden sunlight filtering through native Atlantic coastal forest onto calm waters"
                 loading="lazy"
                 decoding="async"
               />
               <figcaption class="brazil-copy">
                 <p class="brazil-caption-place">Atlantic Coast · Bahia</p>
                 <p class="brazil-caption-text">
-                  Warm light through coastal forest, salt air, and room to listen.
+                  Warm light through coastal forest, salt air, and room to
+                  listen.
                 </p>
               </figcaption>
             </figure>
 
-            <figure class="brazil-slide" data-slide-index="1" aria-hidden="true">
+            <figure
+              class="brazil-slide"
+              data-slide-index="1"
+              aria-hidden="true"
+            >
               <img
                 src="assets/images/brazil-dunes-1600.webp"
                 srcset="
@@ -182,14 +218,21 @@
                 decoding="async"
               />
               <figcaption class="brazil-copy">
-                <p class="brazil-caption-place">Dunes &amp; Lagoons · Lençóis Maranhenses</p>
+                <p class="brazil-caption-place">
+                  Dunes &amp; Lagoons · Lençóis Maranhenses
+                </p>
                 <p class="brazil-caption-text">
-                  Wind-carved white sand and clear rainwater under an unhurried sky.
+                  Wind-carved white sand and clear rainwater under an unhurried
+                  sky.
                 </p>
               </figcaption>
             </figure>
 
-            <figure class="brazil-slide" data-slide-index="2" aria-hidden="true">
+            <figure
+              class="brazil-slide"
+              data-slide-index="2"
+              aria-hidden="true"
+            >
               <img
                 src="assets/images/brazil-amazon-1600.webp"
                 srcset="
@@ -204,9 +247,12 @@
                 decoding="async"
               />
               <figcaption class="brazil-copy">
-                <p class="brazil-caption-place">Forest &amp; River · The Amazon</p>
+                <p class="brazil-caption-place">
+                  Forest &amp; River · The Amazon
+                </p>
                 <p class="brazil-caption-text">
-                  Morning mist over mirrored waters, where silence is the deepest presence.
+                  Morning mist over mirrored waters, where silence is the
+                  deepest presence.
                 </p>
               </figcaption>
             </figure>
@@ -232,30 +278,27 @@
 
           <div
             class="brazil-slider-dots"
-            role="tablist"
+            role="group"
             aria-label="Select landscape slide"
           >
             <button
               class="brazil-slider-dot is-active"
               type="button"
-              role="tab"
-              aria-selected="true"
+              aria-current="true"
               aria-label="Slide 1: Atlantic coast"
               data-slide-to="0"
             ></button>
             <button
               class="brazil-slider-dot"
               type="button"
-              role="tab"
-              aria-selected="false"
+              aria-current="false"
               aria-label="Slide 2: Dunes and lagoons"
               data-slide-to="1"
             ></button>
             <button
               class="brazil-slider-dot"
               type="button"
-              role="tab"
-              aria-selected="false"
+              aria-current="false"
               aria-label="Slide 3: Forest and river"
               data-slide-to="2"
             ></button>
@@ -263,7 +306,11 @@
         </div>
       </section>
 
-      <section class="journeys section-shell" id="journeys" aria-labelledby="journeys-title">
+      <section
+        class="journeys section-shell"
+        id="journeys"
+        aria-labelledby="journeys-title"
+      >
         <div class="journeys-heading story-column">
           <p class="section-number" data-scrolly>03 / Journeys</p>
           <h2 id="journeys-title" data-scrolly>
@@ -271,9 +318,9 @@
           </h2>
           <p class="journeys-intro" data-scrolly>
             Eight to ten guests, seven nights, and days paced by the elements.
-            Each SILENCE journey stays with one region—a considered boutique base,
-            local dining, and generous unscheduled hours where silence is the heart
-            of the experience.
+            Each SILENCE journey stays with one region—a considered boutique
+            base, local dining, and generous unscheduled hours where silence is
+            the heart of the experience.
           </p>
         </div>
 
@@ -289,7 +336,7 @@
             <div class="journey-image">
               <img
                 src="assets/images/journeys/algodoes.webp"
-                alt="Golden hour over calm waters and palm trees at Praia de Algodões, Maraú Peninsula, Bahia"
+                alt="Golden hour over calm waters and palm trees at Praia de Algodões, Bahia"
                 loading="lazy"
                 decoding="async"
               />
@@ -319,7 +366,7 @@
             <div class="journey-image">
               <img
                 src="assets/images/journeys/atins.webp"
-                alt="White sand dunes and fresh water lagoons in Atins, Lençóis Maranhenses, Maranhão"
+                alt="White sand dunes and fresh water lagoons in Atins, Lençóis Maranhenses"
                 loading="lazy"
                 decoding="async"
               />
@@ -359,7 +406,8 @@
               <h3>The Amazon</h3>
               <p class="journey-region">Boutique lodge</p>
               <p class="journey-axiom" data-field="axiom">
-                Morning mist over mirrored waters, where the river sets the pace.
+                Morning mist over mirrored waters, where the river sets the
+                pace.
               </p>
               <span class="journey-expand-hint">
                 <span>Explore journey</span>
@@ -398,7 +446,11 @@
           aria-labelledby="dossier-title"
           hidden
         >
-          <div class="journey-dossier-backdrop" data-dossier-close tabindex="-1"></div>
+          <div
+            class="journey-dossier-backdrop"
+            data-dossier-close
+            tabindex="-1"
+          ></div>
           <article class="journey-dossier-panel" id="journey-dossier-panel">
             <div class="dossier-media">
               <div class="dossier-image" id="dossier-image"></div>
@@ -434,8 +486,13 @@
               <p class="dossier-axiom" id="dossier-axiom"></p>
               <span class="aside-line"></span>
               <p class="dossier-description" id="dossier-description"></p>
-              <div class="dossier-highlights-wrap" id="dossier-highlights-wrap">
-                <p class="dossier-highlights-title">Sensory notes &amp; presence</p>
+              <div
+                class="dossier-highlights-wrap"
+                id="dossier-highlights-wrap"
+              >
+                <p class="dossier-highlights-title">
+                  Sensory notes &amp; presence
+                </p>
                 <ul class="dossier-highlights" id="dossier-highlights"></ul>
               </div>
               <div class="dossier-actions">
@@ -454,11 +511,16 @@
         </div>
 
         <p class="journeys-note" data-scrolly>
-          Flights, ground transport, curated meals, and attentive hosting are held with care across all journeys.
+          Flights, ground transport, curated meals, and attentive hosting are
+          held with care across all journeys.
         </p>
       </section>
 
-      <section class="audience section-shell" id="for-you" aria-labelledby="audience-title">
+      <section
+        class="audience section-shell"
+        id="for-you"
+        aria-labelledby="audience-title"
+      >
         <div class="audience-heading story-column">
           <p class="section-number" data-scrolly>04 / Who it’s for</p>
           <h2 id="audience-title" data-scrolly>
@@ -471,32 +533,32 @@
           </p>
         </div>
         <div class="selection story-column" data-scrolly>
-          <p class="eyebrow">A considered way to begin</p>
-          <ol>
-            <li>
-              <span>01</span>
+          <p class="eyebrow selection-eyebrow">A considered way to begin</p>
+          <ol class="selection-list">
+            <li class="selection-item">
+              <span class="selection-step">01</span>
               <div>
-                <h3>A personal invitation</h3>
-                <p>
+                <h3 class="selection-title">A personal invitation</h3>
+                <p class="selection-text">
                   We reach out to practitioners whose work and interests align
                   with the journey.
                 </p>
               </div>
             </li>
-            <li>
-              <span>02</span>
+            <li class="selection-item">
+              <span class="selection-step">02</span>
               <div>
-                <h3>An interest form</h3>
-                <p>
+                <h3 class="selection-title">An interest form</h3>
+                <p class="selection-text">
                   Tell us about your practice and what draws you to slow travel.
                 </p>
               </div>
             </li>
-            <li>
-              <span>03</span>
+            <li class="selection-item">
+              <span class="selection-step">03</span>
               <div>
-                <h3>A conversation</h3>
-                <p>
+                <h3 class="selection-title">A conversation</h3>
+                <p class="selection-text">
                   A one-to-one exchange to share details and see whether the
                   journey feels right.
                 </p>
@@ -506,58 +568,104 @@
         </div>
       </section>
 
-      <section class="testimonials section-shell" id="testimonials" aria-labelledby="testimonials-title">
+      <section
+        class="testimonials section-shell"
+        id="testimonials"
+        aria-labelledby="testimonials-title"
+      >
         <div class="testimonials-heading story-column">
           <p class="section-number" data-scrolly>05 / Testimonials</p>
-          <h2 id="testimonials-title" data-scrolly>Reflections on<br /><em>the unspoken.</em></h2>
+          <h2 id="testimonials-title" data-scrolly>
+            Reflections on<br /><em>the unspoken.</em>
+          </h2>
           <p class="testimonials-intro" data-scrolly>
-            Notes from psychoanalysts, psychologists, and psychiatrists who traveled with SILENCE.
+            Notes from psychoanalysts, psychologists, and psychiatrists who
+            traveled with SILENCE.
           </p>
         </div>
-        <div class="testimonials-flow" id="testimonials-grid" data-scrolly-children>
+        <div
+          class="testimonials-flow"
+          id="testimonials-grid"
+          data-scrolly-children
+        >
           <article class="testimonial-card" data-id="julian-ross">
             <blockquote class="testimonial-body">
               <p class="testimonial-quote">
-                “In Manhattan, clinical listening is an act of holding back an overwhelming tide of language. At Algodões, between the reef and the coastal forest, silence was no longer something to interpret—it became an unburdened presence. A rare space where attention simply rests.”
+                “In Manhattan, clinical listening is an act of holding back an
+                overwhelming tide of language. At Algodões, between the reef and
+                the coastal forest, silence was no longer something to
+                interpret—it became an unburdened presence. A rare space where
+                attention simply rests.”
               </p>
               <footer class="testimonial-footer">
                 <div class="testimonial-meta">
                   <cite class="testimonial-author">Dr. Julian Ross</cite>
-                  <span class="testimonial-role">Clinical Psychoanalyst · Manhattan, New York</span>
+                  <span class="testimonial-role">
+                    Clinical Psychoanalyst · Manhattan, New York
+                  </span>
                 </div>
-                <span class="testimonial-journey">Praia de Algodões, Bahia</span>
+                <span class="testimonial-journey">
+                  Praia de Algodões, Bahia
+                </span>
               </footer>
             </blockquote>
           </article>
           <article class="testimonial-card" data-id="eleanor-ward">
             <blockquote class="testimonial-body">
               <p class="testimonial-quote">
-                “Academic and social life demand continuous performance. In Atins, sharing the vast dunes and quiet freshwater lagoons with eight peers carried zero social expectation. The silence wasn’t awkward or enforced; it was a generous common ground.”
+                “Academic and social life demand continuous performance. In
+                Atins, sharing the vast dunes and quiet freshwater lagoons with
+                eight peers carried zero social expectation. The silence wasn’t
+                awkward or enforced; it was a generous common ground.”
               </p>
               <footer class="testimonial-footer">
                 <div class="testimonial-meta">
                   <cite class="testimonial-author">Prof. Eleanor Ward</cite>
-                  <span class="testimonial-role">Professor of Social Psychology · Cambridge, United Kingdom</span>
+                  <span class="testimonial-role">
+                    Professor of Social Psychology · Cambridge, United Kingdom
+                  </span>
                 </div>
-                <span class="testimonial-journey">Atins, Lençóis Maranhenses</span>
+                <span class="testimonial-journey">
+                  Atins, Lençóis Maranhenses
+                </span>
               </footer>
             </blockquote>
           </article>
           <article class="testimonial-card" data-id="marcus-reid">
             <blockquote class="testimonial-body">
               <p class="testimonial-quote">
-                “The sensory cadence of the Amazon river at dawn settles chronic clinical vigilance like nothing else. For eight unhurried days, the mind re-calibrates to the slow rhythm of water and canopy. An essential restoration of quiet.”
+                “The sensory cadence of the Amazon river at dawn settles chronic
+                clinical vigilance like nothing else. For eight unhurried days,
+                the mind re-calibrates to the slow rhythm of water and canopy.
+                An essential restoration of quiet.”
               </p>
               <footer class="testimonial-footer">
                 <div class="testimonial-meta">
                   <cite class="testimonial-author">Dr. Marcus Reid</cite>
-                  <span class="testimonial-role">Clinical Psychiatrist · Vancouver, Canada</span>
+                  <span class="testimonial-role">
+                    Clinical Psychiatrist · Vancouver, Canada
+                  </span>
                 </div>
                 <span class="testimonial-journey">The Amazon, Brazil</span>
               </footer>
             </blockquote>
           </article>
         </div>
+
+        <template id="testimonial-card-template">
+          <article class="testimonial-card">
+            <blockquote class="testimonial-body">
+              <p class="testimonial-quote" data-field="quote"></p>
+              <footer class="testimonial-footer">
+                <div class="testimonial-meta">
+                  <cite class="testimonial-author" data-field="author"></cite>
+                  <span class="testimonial-role" data-field="role"></span>
+                </div>
+                <span class="testimonial-journey" data-field="journey"></span>
+              </footer>
+            </blockquote>
+          </article>
+        </template>
       </section>
 
       <section class="founder" aria-labelledby="founder-title">
@@ -581,9 +689,11 @@
           <h2 id="faq-title" data-scrolly>Before you <em>ask.</em></h2>
         </div>
         <div class="faq-list story-column" data-scrolly>
-          <details>
-            <summary>Is SILENCE a clinical seminar or training programme?</summary>
-            <p>
+          <details class="faq-item">
+            <summary class="faq-question">
+              Is SILENCE a clinical seminar or training programme?
+            </summary>
+            <p class="faq-answer">
               No. SILENCE is not a clinical seminar, training programme, or
               performative itinerary—there are no lectures, clinical sessions,
               or continuing education credits. It is an unhurried travel
@@ -591,31 +701,44 @@
               silence is a shared sanctuary.
             </p>
           </details>
-          <details>
-            <summary>Who is invited to join?</summary>
-            <p>
+          <details class="faq-item">
+            <summary class="faq-question">Who is invited to join?</summary>
+            <p class="faq-answer">
               Psychologists, psychotherapists, psychoanalysts, and psychiatrists
               interested in a thoughtful, small-group journey in Brazil.
             </p>
           </details>
-          <details>
-            <summary>How many people travel together?</summary>
-            <p>Each journey is designed for a group of eight to ten guests.</p>
+          <details class="faq-item">
+            <summary class="faq-question">
+              How many people travel together?
+            </summary>
+            <p class="faq-answer">
+              Each journey is designed for a group of eight to ten guests.
+            </p>
           </details>
-          <details>
-            <summary>What is included in the price?</summary>
-            <p>
-              Flights, ground transport, the full meal plan, and attentive hosting are shared
-              transparently with each invitation before a booking is confirmed.
+          <details class="faq-item">
+            <summary class="faq-question">
+              What is included in the price?
+            </summary>
+            <p class="faq-answer">
+              Flights, ground transport, the full meal plan, and attentive
+              hosting are shared transparently with each invitation before a
+              booking is confirmed.
             </p>
           </details>
         </div>
       </section>
 
-      <section class="invitation" id="invitation" aria-labelledby="invitation-title">
+      <section
+        class="invitation"
+        id="invitation"
+        aria-labelledby="invitation-title"
+      >
         <div class="invitation-intro">
           <p class="section-number" data-scrolly>Begin a conversation</p>
-          <h2 id="invitation-title" data-scrolly>Begin with a<br /><em>conversation.</em></h2>
+          <h2 id="invitation-title" data-scrolly>
+            Begin with a<br /><em>conversation.</em>
+          </h2>
           <p class="invitation-body" data-scrolly>
             Share a little about your practice and the kinds of places and
             experiences that interest you. We’ll be in touch personally.
@@ -640,12 +763,12 @@
               aria-valuemax="3"
               aria-valuenow="1"
             >
-              <span></span>
+              <span class="progress-fill"></span>
             </div>
           </div>
 
           <form class="invitation-form" id="invitation-form" novalidate>
-            <!-- Anti-spam honeypot (CONTEXT.md): hidden from humans and assistive tech -->
+            <!-- Anti-spam honeypot: hidden from humans and assistive tech -->
             <input
               type="text"
               name="website"
@@ -656,9 +779,9 @@
             />
 
             <fieldset class="form-step" data-step="0">
-              <legend>First, a few details.</legend>
-              <label>
-                <span>Your name</span>
+              <legend class="form-legend">First, a few details.</legend>
+              <label class="form-field">
+                <span class="form-label">Your name</span>
                 <input
                   class="form-input"
                   name="name"
@@ -667,8 +790,8 @@
                   required
                 />
               </label>
-              <label>
-                <span>Email address</span>
+              <label class="form-field">
+                <span class="form-label">Email address</span>
                 <input
                   class="form-input"
                   name="email"
@@ -678,8 +801,8 @@
                   required
                 />
               </label>
-              <label>
-                <span>Country of residence</span>
+              <label class="form-field">
+                <span class="form-label">Country of residence</span>
                 <input
                   class="form-input"
                   name="country"
@@ -696,11 +819,13 @@
             </fieldset>
 
             <fieldset class="form-step" data-step="1" hidden>
-              <legend>Tell us about your practice.</legend>
-              <label>
-                <span>Your field</span>
-                <select name="profession" required>
-                  <option value="" disabled selected>Select your profession</option>
+              <legend class="form-legend">Tell us about your practice.</legend>
+              <label class="form-field">
+                <span class="form-label">Your field</span>
+                <select class="form-select" name="profession" required>
+                  <option value="" disabled selected>
+                    Select your profession
+                  </option>
                   <option>Psychology</option>
                   <option>Psychotherapy</option>
                   <option>Psychoanalysis</option>
@@ -708,9 +833,9 @@
                   <option>Another mental health profession</option>
                 </select>
               </label>
-              <label>
-                <span>Years in practice</span>
-                <select name="experience" required>
+              <label class="form-field">
+                <span class="form-label">Years in practice</span>
+                <select class="form-select" name="experience" required>
                   <option value="" disabled selected>Select a range</option>
                   <option>Under 5 years</option>
                   <option>5–10 years</option>
@@ -718,9 +843,9 @@
                   <option>More than 20 years</option>
                 </select>
               </label>
-              <label>
-                <span>Preferred language</span>
-                <select name="language" required>
+              <label class="form-field">
+                <span class="form-label">Preferred language</span>
+                <select class="form-select" name="language" required>
                   <option value="" disabled selected>Select a language</option>
                   <option>English</option>
                   <option>Portuguese</option>
@@ -729,7 +854,11 @@
                 </select>
               </label>
               <div class="form-actions">
-                <button class="button button-quiet" type="button" data-previous>
+                <button
+                  class="button button-quiet"
+                  type="button"
+                  data-previous
+                >
                   Back
                 </button>
                 <button class="button button-dark" type="button" data-next>
@@ -739,13 +868,23 @@
             </fieldset>
 
             <fieldset class="form-step" data-step="2" hidden>
-              <legend>What draws you to this kind of journey?</legend>
-              <label>
-                <span>Destination of interest</span>
-                <select name="journey" id="journey-select">
+              <legend class="form-legend">
+                What draws you to this kind of journey?
+              </legend>
+              <label class="form-field">
+                <span class="form-label">Destination of interest</span>
+                <select
+                  class="form-select"
+                  name="journey"
+                  id="journey-select"
+                >
                   <option value="">Open to any destination</option>
-                  <option value="algodoes">Praia de Algodões (Maraú Peninsula, Bahia)</option>
-                  <option value="atins">Atins (Lençóis Maranhenses, Maranhão)</option>
+                  <option value="algodoes">
+                    Praia de Algodões (Maraú Peninsula, Bahia)
+                  </option>
+                  <option value="atins">
+                    Atins (Lençóis Maranhenses, Maranhão)
+                  </option>
                   <option value="amazon">The Amazon (Amazon region)</option>
                 </select>
               </label>
@@ -753,7 +892,7 @@
                 <legend class="visually-hidden">
                   Choose any interests that appeal to you
                 </legend>
-                <label>
+                <label class="interest-option">
                   <input
                     type="checkbox"
                     name="interests"
@@ -761,7 +900,7 @@
                   />
                   <span>Landscape and nature</span>
                 </label>
-                <label>
+                <label class="interest-option">
                   <input
                     type="checkbox"
                     name="interests"
@@ -769,7 +908,7 @@
                   />
                   <span>Architecture and place</span>
                 </label>
-                <label>
+                <label class="interest-option">
                   <input
                     type="checkbox"
                     name="interests"
@@ -777,7 +916,7 @@
                   />
                   <span>Local food and culture</span>
                 </label>
-                <label>
+                <label class="interest-option">
                   <input
                     type="checkbox"
                     name="interests"
@@ -785,7 +924,7 @@
                   />
                   <span>Time for reflection</span>
                 </label>
-                <label>
+                <label class="interest-option">
                   <input
                     type="checkbox"
                     name="interests"
@@ -794,16 +933,21 @@
                   <span>Conversation with peers</span>
                 </label>
               </fieldset>
-              <label>
-                <span>A little more, if you wish</span>
+              <label class="form-field">
+                <span class="form-label">A little more, if you wish</span>
                 <textarea
+                  class="form-textarea"
                   name="motivation"
                   rows="3"
                   placeholder="What would you like us to know about your interests?"
                 ></textarea>
               </label>
               <div class="form-actions">
-                <button class="button button-quiet" type="button" data-previous>
+                <button
+                  class="button button-quiet"
+                  type="button"
+                  data-previous
+                >
                   Back
                 </button>
                 <button class="button button-dark" type="submit">
@@ -833,7 +977,9 @@
       <a class="wordmark" href="#home">SILENCE</a>
       <p class="footer-tagline">Let silence speak.</p>
       <a class="footer-top-link" href="#home">Back to the beginning ↑</a>
-      <small>Curated slow travel in Brazil · © 2026 SILENCE</small>
+      <small class="footer-copyright">
+        Curated slow travel in Brazil · © 2026 SILENCE
+      </small>
     </footer>
   </body>
 </html>

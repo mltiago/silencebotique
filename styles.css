@@ -17,7 +17,7 @@
     --nav-scrolled: #393d38;
     --form-label: #303530;
     --invitation-text: #565b55;
-    --placeholder: #706e6b;
+    --placeholder: #62605d; /* 4.98:1 on --invitation-bg (WCAG 2.2 AA PASS) */
     --field-line: #aaa99f;
     --quiet-line: #9c9e94;
     --note-line: #c6c6bd;
@@ -36,75 +36,78 @@
   }
 }
 
-/* Self-hosted brand fonts (SIL Open Font License 1.1).
-   Subsets: latin + latin-ext (loaded on demand via unicode-range). */
-@font-face {
-  font-family: "DM Sans";
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url("./fonts/DMSans-normal-latin.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "DM Sans";
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url("./fonts/DMSans-normal-latin-ext.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
-    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
-    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 400 500;
-  font-display: swap;
-  src: url("./fonts/PlayfairDisplay-normal-latin.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 400 500;
-  font-display: swap;
-  src: url("./fonts/PlayfairDisplay-normal-latin-ext.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
-    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
-    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "Playfair Display";
-  font-style: italic;
-  font-weight: 400 500;
-  font-display: swap;
-  src: url("./fonts/PlayfairDisplay-italic-latin.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Playfair Display";
-  font-style: italic;
-  font-weight: 400 500;
-  font-display: swap;
-  src: url("./fonts/PlayfairDisplay-italic-latin-ext.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
-    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
-    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
 @layer base {
+  /* Self-hosted brand fonts (SIL Open Font License 1.1).
+     Subsets: latin + latin-ext (loaded on demand via unicode-range). */
+  @font-face {
+    font-family: "DM Sans";
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url("./fonts/DMSans-normal-latin.woff2") format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+      U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+      U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+
+  @font-face {
+    font-family: "DM Sans";
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url("./fonts/DMSans-normal-latin-ext.woff2") format("woff2");
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+      U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+      U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+
+  @font-face {
+    font-family: "Playfair Display";
+    font-style: normal;
+    font-weight: 400 500;
+    font-display: swap;
+    src: url("./fonts/PlayfairDisplay-normal-latin.woff2") format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+      U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+      U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+
+  @font-face {
+    font-family: "Playfair Display";
+    font-style: normal;
+    font-weight: 400 500;
+    font-display: swap;
+    src: url("./fonts/PlayfairDisplay-normal-latin-ext.woff2") format("woff2");
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+      U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+      U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+
+  @font-face {
+    font-family: "Playfair Display";
+    font-style: italic;
+    font-weight: 400 500;
+    font-display: swap;
+    src: url("./fonts/PlayfairDisplay-italic-latin.woff2") format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+      U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+      U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+
+  @font-face {
+    font-family: "Playfair Display";
+    font-style: italic;
+    font-weight: 400 500;
+    font-display: swap;
+    src: url("./fonts/PlayfairDisplay-italic-latin-ext.woff2") format("woff2");
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+      U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+      U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+
   * {
     box-sizing: border-box;
   }
@@ -254,6 +257,10 @@
     background: var(--paper-warm);
   }
 
+  .not-found {
+    min-height: 100svh;
+  }
+
   .story-column {
     max-width: 680px;
     margin-left: auto;
@@ -401,7 +408,6 @@
     color: white;
   }
 
-
   .site-nav {
     display: flex;
     align-items: center;
@@ -503,7 +509,13 @@
   .hero::after {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgb(20 25 22 / 38%) 0%, rgb(20 25 22 / 12%) 28%, rgb(20 25 22 / 12%) 72%, rgb(20 25 22 / 48%) 100%);
+    background: linear-gradient(
+      180deg,
+      rgb(20 25 22 / 38%) 0%,
+      rgb(20 25 22 / 12%) 28%,
+      rgb(20 25 22 / 12%) 72%,
+      rgb(20 25 22 / 48%) 100%
+    );
     content: "";
   }
 
@@ -519,7 +531,6 @@
     text-transform: uppercase;
     text-shadow: 0 1px 16px rgb(0 0 0 / 20%);
   }
-
 
   /* Buttons & Links */
   .button {
@@ -551,17 +562,6 @@
     border-color: var(--green);
   }
 
-  .button-light {
-    color: var(--ink);
-    background: var(--paper);
-  }
-
-  .button-light:hover {
-    color: white;
-    background: transparent;
-    border-color: white;
-  }
-
   .button-quiet {
     color: var(--green);
     background: transparent;
@@ -573,20 +573,7 @@
     border-color: var(--green);
   }
 
-  .text-link {
-    display: inline-block;
-    margin-top: 17px;
-    padding-bottom: 7px;
-    border-bottom: 1px solid var(--green);
-    color: var(--green);
-    font-size: 0.75rem;
-  }
-
-  .text-link-arrow {
-    margin-left: 12px;
-  }
-
-  /* Breather */
+  /* Breather & 404 */
   .breather-overline {
     margin: 0 0 22px;
     color: var(--muted);
@@ -604,6 +591,18 @@
   .breather-mark {
     margin-top: 23px;
     color: var(--earth);
+  }
+
+  .not-found-title {
+    margin: 22px 0 18px;
+  }
+
+  .not-found-body {
+    max-width: 380px;
+    margin: 0 0 32px;
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.75;
   }
 
   /* Philosophy & Continuous Storytelling */
@@ -636,7 +635,6 @@
     font-size: 0.9375rem;
     line-height: 1.9;
   }
-
 
   .brazil-heading .section-number,
   .audience-heading .section-number,
@@ -725,20 +723,21 @@
   .brazil-slider-dots {
     position: absolute;
     z-index: 3;
-    bottom: 20px;
+    bottom: 10px;
     left: 50%;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     transform: translateX(-50%);
   }
 
   .brazil-slider-dot {
-    width: 18px;
-    height: 2px;
-    padding: 0;
+    width: 24px;
+    height: 24px;
+    padding: 11px 3px;
     border: 0;
     background: rgb(255 255 255 / 34%);
+    background-clip: content-box;
     cursor: pointer;
     transition:
       width var(--transition-fast),
@@ -746,8 +745,9 @@
   }
 
   .brazil-slider-dot.is-active {
-    width: 28px;
+    width: 34px;
     background: rgb(255 255 255 / 88%);
+    background-clip: content-box;
   }
 
   .brazil-copy {
@@ -777,47 +777,6 @@
     margin: 0;
     color: rgb(249 248 246 / 88%);
     font: italic 0.875rem / 1.6 var(--serif);
-  }
-
-  .brazil-overline {
-    margin: 0 0 10px;
-    color: rgb(249 248 246 / 68%);
-    font-size: 0.625rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
-
-  .brazil-slide-title {
-    margin: 0 0 10px;
-    color: white;
-    font: 400 clamp(1.5rem, 2.3vw, 2rem) / 1.14 var(--serif);
-    letter-spacing: -0.02em;
-  }
-
-  .brazil-body {
-    margin: 0 0 14px;
-    color: rgb(249 248 246 / 80%);
-    font-size: 0.8125rem;
-    line-height: 1.65;
-  }
-
-  .brazil-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding-bottom: 3px;
-    border-bottom: 1px solid rgb(255 255 255 / 32%);
-    color: rgb(249 248 246 / 88%);
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    transition:
-      color var(--transition-fast),
-      border-color var(--transition-fast);
-  }
-
-  .brazil-link:hover {
-    border-bottom-color: white;
-    color: white;
   }
 
   /* The Journeys (Catalog) */
@@ -864,6 +823,10 @@
     cursor: pointer;
     user-select: none;
     transition: border-color var(--transition-slow);
+  }
+
+  .journeys-flow .journey-card-flagship {
+    border-bottom-color: var(--green);
   }
 
   .journeys-flow .journey-card:hover,
@@ -1122,14 +1085,14 @@
 
   .dossier-content h3 {
     margin: 0 0 10px;
-    font: 400 clamp(2rem, 3.2vw, 2.75rem)/1.1 var(--serif);
+    font: 400 clamp(2rem, 3.2vw, 2.75rem) / 1.1 var(--serif);
     letter-spacing: -0.025em;
   }
 
   .dossier-axiom {
     margin: 0 0 16px;
     color: var(--green);
-    font: italic 0.9375rem/1.6 var(--serif);
+    font: italic 0.9375rem / 1.6 var(--serif);
   }
 
   .dossier-content .aside-line {
@@ -1196,18 +1159,18 @@
     align-self: center;
   }
 
-  .selection > .eyebrow {
+  .selection-eyebrow {
     margin-bottom: 20px;
   }
 
-  .selection ol {
+  .selection-list {
     margin: 0;
     padding: 0;
     list-style: none;
     border-top: 1px solid rgb(217 214 208 / 45%);
   }
 
-  .selection li {
+  .selection-item {
     display: grid;
     grid-template-columns: 35px 1fr;
     gap: 17px;
@@ -1215,7 +1178,7 @@
     border-bottom: 1px solid rgb(217 214 208 / 45%);
   }
 
-  .selection li > span {
+  .selection-step {
     padding-top: 4px;
     color: var(--green);
     font-size: 0.75rem;
@@ -1223,12 +1186,12 @@
     font-weight: 500;
   }
 
-  .selection h3 {
+  .selection-title {
     margin: 0 0 5px;
     font: 400 1.25rem var(--serif);
   }
 
-  .selection li p {
+  .selection-text {
     margin: 0;
     color: var(--muted);
     font-size: 0.8125rem;
@@ -1267,7 +1230,7 @@
     font: italic 0.9375rem var(--serif);
   }
 
-  /* 06 / I'VE BEEN THERE (Guest Feedback) */
+  /* 05 / TESTIMONIALS (Guest Feedback) */
   .testimonials-heading {
     max-width: 720px;
   }
@@ -1320,7 +1283,7 @@
   .testimonial-quote {
     margin: 0 0 26px;
     color: var(--ink);
-    font: 300 italic clamp(1.125rem, 1.35vw, 1.25rem) / 1.8 var(--serif);
+    font: 400 italic clamp(1.125rem, 1.35vw, 1.25rem) / 1.8 var(--serif);
     letter-spacing: -0.01em;
   }
 
@@ -1375,11 +1338,11 @@
     border-top: 1px solid rgb(217 214 208 / 45%);
   }
 
-  .faq-list details {
+  .faq-item {
     border-bottom: 1px solid rgb(217 214 208 / 45%);
   }
 
-  .faq-list summary {
+  .faq-question {
     position: relative;
     padding: 24px 35px 24px 0;
     list-style: none;
@@ -1389,15 +1352,15 @@
     transition: color var(--transition-fast);
   }
 
-  .faq-list summary:hover {
+  .faq-question:hover {
     color: var(--green);
   }
 
-  .faq-list summary::-webkit-details-marker {
+  .faq-question::-webkit-details-marker {
     display: none;
   }
 
-  .faq-list summary::after {
+  .faq-question::after {
     position: absolute;
     top: 24px;
     right: 4px;
@@ -1406,11 +1369,11 @@
     content: "+";
   }
 
-  .faq-list details[open] summary::after {
+  .faq-item[open] .faq-question::after {
     content: "−";
   }
 
-  .faq-list details p {
+  .faq-answer {
     max-width: 610px;
     margin: 0 40px 24px 0;
     color: var(--muted);
@@ -1442,7 +1405,7 @@
     padding-top: 14px;
     border-top: 1px solid var(--note-line);
     color: var(--muted);
-    font: italic 0.875rem/1.7 var(--serif);
+    font: italic 0.875rem / 1.7 var(--serif);
   }
 
   .invitation-form-wrap {
@@ -1467,7 +1430,7 @@
     background: var(--track);
   }
 
-  .progress-track span {
+  .progress-fill {
     display: block;
     width: 33.333%;
     height: 1px;
@@ -1482,27 +1445,27 @@
     border: 0;
   }
 
-  .form-step > legend {
+  .form-legend {
     margin: 0 0 25px;
     padding: 0;
     font: 400 1.5rem var(--serif);
   }
 
-  .form-step > label {
+  .form-field {
     display: grid;
     gap: 7px;
     margin-bottom: 20px;
   }
 
-  .form-step > label > span {
+  .form-label {
     color: var(--form-label);
     font-size: 0.75rem;
     letter-spacing: 0.05em;
   }
 
   .form-input,
-  .form-step select,
-  .form-step textarea {
+  .form-select,
+  .form-textarea {
     width: 100%;
     min-height: 42px;
     padding: 8px 0 10px;
@@ -1514,18 +1477,18 @@
     font-size: 0.9375rem;
   }
 
-  .form-step textarea {
+  .form-textarea {
     min-height: 84px;
     resize: vertical;
   }
 
-  .form-step input::placeholder,
-  .form-step textarea::placeholder {
+  .form-input::placeholder,
+  .form-textarea::placeholder {
     color: var(--placeholder);
-    opacity: 0.9;
+    opacity: 1;
   }
 
-  .form-step select:invalid {
+  .form-select:invalid {
     color: var(--placeholder);
   }
 
@@ -1538,7 +1501,7 @@
     border: 0;
   }
 
-  .interest-options label {
+  .interest-option {
     display: flex;
     align-items: center;
     gap: 9px;
@@ -1547,7 +1510,7 @@
     cursor: pointer;
   }
 
-  .interest-options input {
+  .interest-option input {
     accent-color: var(--green);
   }
 
@@ -1573,7 +1536,7 @@
     padding: 18px;
     border: 1px solid var(--green);
     color: var(--green);
-    font: 400 1.125rem/1.5 var(--serif);
+    font: 400 1.125rem / 1.5 var(--serif);
   }
 
   /* Footer */
@@ -1590,7 +1553,7 @@
     font-size: 0.75rem;
   }
 
-  .site-footer small {
+  .footer-copyright {
     grid-column: 1 / 4;
     color: rgb(255 255 255 / 66%);
     font-size: 0.6875rem;
@@ -1687,8 +1650,6 @@
       padding: 0 5%;
     }
 
-
-
     .site-nav {
       gap: 15px;
       font-size: 0.6875rem;
@@ -1704,11 +1665,6 @@
       padding-right: 7%;
     }
 
-
-    .journeys-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
     .invitation {
       gap: 8%;
       padding-left: 7%;
@@ -1722,7 +1678,7 @@
     }
 
     .site-header {
-      top: var(--hero-header-top, calc(100svh - 110px));
+      top: var(--hero-header-top, calc(100svh - 70px));
       min-height: 70px;
     }
 
@@ -1749,7 +1705,6 @@
       font-size: 0.5625rem;
       letter-spacing: 0.18em;
     }
-
 
     .menu-toggle {
       position: relative;
@@ -1839,7 +1794,8 @@
       box-shadow: 0 -12px 32px rgb(20 25 22 / 12%);
     }
 
-    .site-header.is-scrolled .site-nav {
+    .site-header.is-scrolled .site-nav,
+    .site-header.is-near-top .site-nav {
       top: 0;
       bottom: auto;
       width: 100%;
@@ -1881,8 +1837,6 @@
       padding: 80px 7% clamp(95px, 14vh, 125px);
     }
 
-
-
     .breather {
       min-height: 300px;
     }
@@ -1900,7 +1854,6 @@
     .invitation h2 {
       font-size: clamp(2.6875rem, 12vw, 3.75rem);
     }
-
 
     .journeys-flow {
       gap: 48px;
@@ -1955,7 +1908,6 @@
       font-size: clamp(2.6875rem, 12vw, 3.75rem);
     }
 
-
     .journey-dossier {
       padding: 16px;
     }
@@ -2000,7 +1952,7 @@
       max-width: 420px;
     }
 
-    .selection li {
+    .selection-item {
       grid-template-columns: 28px 1fr;
       gap: 12px;
     }
@@ -2019,7 +1971,7 @@
       margin-bottom: 35px;
     }
 
-    .faq-list summary {
+    .faq-question {
       font-size: 1rem;
     }
 
@@ -2032,14 +1984,14 @@
       margin-bottom: 35px;
     }
 
-    .testimonials-grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
+    .testimonials-grid,
+    .testimonials-flow {
+      gap: 40px;
       margin-top: 40px;
     }
 
     .testimonial-card {
-      padding: 28px 22px 24px;
+      padding: 0 0 36px;
     }
 
     .invitation {
@@ -2056,8 +2008,8 @@
     }
 
     .form-input,
-    .form-step select,
-    .form-step textarea {
+    .form-select,
+    .form-textarea {
       font-size: 1rem;
     }
 
@@ -2080,7 +2032,7 @@
       justify-self: start;
     }
 
-    .site-footer small {
+    .footer-copyright {
       grid-column: 1 / 3;
     }
   }

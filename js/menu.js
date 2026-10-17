@@ -32,6 +32,12 @@ export function initMenu(headerSelector = ".site-header") {
    */
   function setMenuState(isOpen, { restoreFocus = false } = {}) {
     if (!menuToggle || !siteNav || !siteHeader) return;
+
+    if (isOpen) {
+      const headerRect = siteHeader.getBoundingClientRect();
+      siteHeader.classList.toggle("is-near-top", headerRect.top < 320);
+    }
+
     menuToggle.setAttribute("aria-expanded", String(isOpen));
     menuToggle.setAttribute(
       "aria-label",
@@ -53,7 +59,8 @@ export function initMenu(headerSelector = ".site-header") {
     setMenuState(!isExpanded);
   });
 
-  siteNav.addEventListener("click", (event) => {
+  // Close drawer when any navigation link (including header wordmark) is clicked
+  siteHeader.addEventListener("click", (event) => {
     const target = /** @type {HTMLElement | null} */ (event.target);
     if (target && target.closest("a")) {
       setMenuState(false);
